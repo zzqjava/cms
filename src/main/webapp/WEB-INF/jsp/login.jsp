@@ -8,7 +8,7 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="keywords" content="" />
     <meta http-equiv="description" content="" />
-
+	<script src="${ctx}/js/jquery/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 <div>
