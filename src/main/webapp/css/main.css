@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+.login-box{
+    width: 480px;
+    background: none repeat scroll 0 0 #FBFBFB;
+    border: 1px solid #E1E1E1;
+    box-shadow: 0 0 3px #EEEEEE, 0 0 3px #FFFFFF inset;
+    margin: 110px auto 50px;
+    padding: 20px;
+}
+
+.width-270{
+    width: 270px;
+}
+
+.login-single-panel-header{
+
+}
