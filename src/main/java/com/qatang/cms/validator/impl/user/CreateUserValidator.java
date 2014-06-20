@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Created by qatang on 14-6-12.
  */
 @Component
-public class UserValidator extends AbstractValidator<UserForm> {
+public class CreateUserValidator extends AbstractValidator<UserForm> {
     @Override
     public boolean validate(UserForm userForm) throws ValidateFailedException {
         logger.info("开始验证userForm参数");
@@ -26,11 +26,23 @@ public class UserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 16) {
-            String msg = String.format("用户名长度必须在6-16个字符之间");
+        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 128) {
+            String msg = String.format("用户名长度必须在6-128个字符之间");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (!this.checkEmail(userForm.getUsername())) {
+            String msg = String.format("用户名邮箱格式错误");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        //用户名是否已存在验证
+//        if (!this.checkEmail(userForm.getUsername())) {
+//            String msg = String.format("用户名邮箱格式错误");
+//            logger.error(msg);
+//            throw new ValidateFailedException(msg);
+//        }
+
         if (StringUtils.isEmpty(userForm.getPassword())) {
             String msg = String.format("密码不能为空");
             logger.error(msg);

@@ -22,8 +22,10 @@ public class User {
     private String username;
     private String password;
     private String name;
+    private String email;
     @Enumerated
     private Gender gender;
+    private String mobile;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_time", updatable = false)
     private Date createdTime;
@@ -85,5 +87,21 @@ public class User {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
