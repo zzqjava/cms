@@ -1,7 +1,6 @@
 package com.qatang.cms.controller.user;
 
 import com.qatang.cms.entity.user.User;
-import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
@@ -10,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.Date;
 
@@ -19,31 +20,37 @@ import java.util.Date;
  * Created by qatang on 14-6-12.
  */
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@SessionAttributes(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY)
+public class RegisterController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private IValidator<UserForm> userValidator;
+    private IValidator<UserForm> registerValidator;
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(UserForm userForm) {
+    @RequestMapping("/signup")
+    public String signup() {
+        return "/user/signup";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(UserForm userForm, @ModelAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY) String captchaExpected) {
+        userForm.setCaptchaExpected(captchaExpected);
         try {
-            userValidator.validate(userForm);
+            registerValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            return "input";
+            userForm.setErrorMessage(e.getMessage());
+            return "/user/signup";
         }
 
         User user = new User();
         user.setUsername(userForm.getUsername());
         user.setPassword(userForm.getPassword());
-        user.setName(userForm.getName());
-        user.setGender(Gender.get(Integer.valueOf(userForm.getGenderValue())));
+        user.setEmail(userForm.getUsername());
         user.setCreatedTime(new Date());
         userService.save(user);
-        return "success";
+        return "user/signupSuccess";
     }
 }
