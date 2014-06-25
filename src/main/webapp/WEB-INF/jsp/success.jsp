@@ -26,19 +26,8 @@
 <div class="container">
 	<div class="login-box text-center" >
 		<div class="login-single-panel-header">
-			<h3>用户登录</h3>
+			<h3>操作成功！</h3>
 		</div>
-		<form id="theform" class="form-signin-heading" action="${ctx}/login" method="post">
-			<br/>
-			<input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" class="form-control">
-			<br/>
-			<input type="password" id="password" name="password" required="" placeholder="Password" class="form-control">
-			<br/>
-			<input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control width-270">
-			<br/>
-			<input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
-            <a href="${ctx}/signup" target="_blank">用户注册</a>
-		</form>
 	</div>
 </div>
 <div class="text-center bottom">

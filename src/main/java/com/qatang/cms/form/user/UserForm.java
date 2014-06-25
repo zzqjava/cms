@@ -4,10 +4,15 @@ package com.qatang.cms.form.user;
  * Created by qatang on 14-6-12.
  */
 public class UserForm {
+    private String errorMessage;
     private String username;
     private String password;
     private String conPassword;
+    private String captcha;
+    private String captchaExpected;
     private String name;
+    private String email;
+    private String mobile;
     private String genderValue;
 
     public String getUsername() {
@@ -48,5 +53,45 @@ public class UserForm {
 
     public void setGenderValue(String genderValue) {
         this.genderValue = genderValue;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getCaptchaExpected() {
+        return captchaExpected;
+    }
+
+    public void setCaptchaExpected(String captchaExpected) {
+        this.captchaExpected = captchaExpected;
     }
 }
