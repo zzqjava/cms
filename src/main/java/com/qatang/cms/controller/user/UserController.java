@@ -15,28 +15,34 @@ import java.util.List;
  * Created by JSH on 2014/6/26.
  */
 @Controller
+@RequestMapping("/user")
 public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/userList")
+    @RequestMapping(value = "/list")
     public String list(ModelMap model) {
         List<User> userList = userService.getList();
         model.addAttribute(userList);
         return "user/userList";
     }
 
-    @RequestMapping(value = "/userInput")
+    @RequestMapping(value = "/input")
     public String input() {
         return "user/userInput";
     }
 
-    @RequestMapping(value = "/userManage", method = RequestMethod.POST)
-    public String manage() {
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create() {
         return "success";
     }
 
-    @RequestMapping(value = "/userDelete")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update() {
+        return "success";
+    }
+
+    @RequestMapping(value = "/del")
     public String delete(Long id) {
         if (id == null) {
             logger.error("删除用户，id为空");

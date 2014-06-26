@@ -39,7 +39,7 @@
         </div>
         <form id="theform" class="form-signup-heading" action="${ctx}/register" method="post">
             <div class="login-single-panel-header">
-                <h5 style="color:red">${userForm.errorMessage}</h5>
+                <h5 style="color:red">${errorMessage}</h5>
             </div>
             <br/>
             <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户邮箱" value="${userForm.username}" class="form-control">
