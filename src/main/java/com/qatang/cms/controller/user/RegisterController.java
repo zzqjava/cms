@@ -1,12 +1,11 @@
 package com.qatang.cms.controller.user;
 
+import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.IValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,9 +20,7 @@ import java.util.Date;
  */
 @Controller
 @SessionAttributes(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY)
-public class RegisterController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+public class RegisterController extends BaseController {
     @Autowired
     private IValidator<UserForm> registerValidator;
     @Autowired
@@ -44,7 +41,6 @@ public class RegisterController {
             userForm.setErrorMessage(e.getMessage());
             return "/user/signup";
         }
-
         User user = new User();
         user.setUsername(userForm.getUsername());
         user.setPassword(userForm.getPassword());

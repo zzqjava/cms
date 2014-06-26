@@ -15,7 +15,7 @@
     <script src="${ctx}/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(function() {
-            var captchaUrl = "/kaptcha?";
+            var captchaUrl = "${ctx}/kaptcha?";
             $('#captchaImg').prop('src', captchaUrl + (new Date()).getTime());
             $('#captchaImg').click(function () {
                 $(this).prop('src', captchaUrl + (new Date()).getTime());
@@ -59,6 +59,7 @@
                 </div>
             </div>
             <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即注册" type="submit" />
+            <a href="${ctx}/" target="_blank">用户登录</a>
         </form>
     </div>
 </div>
