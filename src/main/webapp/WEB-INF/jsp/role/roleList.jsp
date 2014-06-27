@@ -38,8 +38,5 @@
         </form>
     </div>
 </div>
-<div class="text-center bottom">
-    Copyright &copy; 2007-2014 qatang.com All rights reserved.
-</div>
 </body>
 </html>
