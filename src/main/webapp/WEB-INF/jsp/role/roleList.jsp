@@ -14,13 +14,6 @@
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        $(function() {
-            var captchaUrl = "${ctx}/kaptcha?";
-            $('#captchaImg').prop('src', captchaUrl + (new Date()).getTime());
-            $('#captchaImg').click(function () {
-                $(this).prop('src', captchaUrl + (new Date()).getTime());
-            });
-        });
     </script>
 </head>
 <body>
@@ -35,30 +28,13 @@
 <div class="container">
     <div class="login-box text-center" >
         <div class="login-single-panel-header">
-            <h3>用户注册</h3>
+            <h3>角色列表</h3>
         </div>
         <form id="theform" class="form-signup-heading" action="${ctx}/register" method="post">
             <div class="login-single-panel-header">
                 <h5 style="color:red">${userForm.errorMessage}</h5>
             </div>
             <br/>
-            <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户邮箱" value="${userForm.username}" class="form-control">
-            <br/>
-            <input type="password" id="password" name="password" value="" required="" placeholder="密码" class="form-control">
-            <br/>
-            <input type="password" id="conPassword" name="conPassword" value="" required="" placeholder="确认密码" class="form-control">
-            <br/>
-            <div class="form-group">
-                <div class="col-sm-12">
-                    <input type="text" id="captcha" name="captcha" value="" autofocus="" required="" placeholder="验证码" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-10">
-                    <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
-                </div>
-            </div>
-            <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即注册" type="submit" />
         </form>
     </div>
 </div>
