@@ -23,13 +23,13 @@
         <div class="login-single-panel-header">
             <h3>角色添加</h3>
         </div>
-        <form id="theform" class="form-signup-heading" action="${ctx}/register" method="post">
+        <form id="theform" class="form-signup-heading" action="${ctx}/role/add" method="post">
             <div class="login-single-panel-header">
                 <h5 style="color:red">${userForm.errorMessage}</h5>
             </div>
             <div class="input-group">
                 <span class="input-group-addon">名称：</span>
-                <input type="text" class="form-control" placeholder="角色名称">
+                <input type="text" name="roleName" class="form-control" placeholder="角色名称">
             </div>
             <br/>
             <div class="input-group">
@@ -39,7 +39,7 @@
             <br/>
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button">添加</button>
+                    <button class="btn btn-primary btn-lg" id="sub" name="sub" type="submit">添加</button>
                 </span>
             </div>
         </form>

@@ -24,7 +24,7 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String register(RoleForm roleForm,Model model) {
+    public String add(RoleForm roleForm,Model model) {
         Role role = new Role();
         role.setRoleName(roleForm.getRoleName());
         role.setRoleDesc(roleForm.getRoleDesc());
