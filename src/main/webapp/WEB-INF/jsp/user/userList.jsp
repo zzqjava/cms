@@ -15,31 +15,34 @@
         <script src="${ctx}/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <c:if test="${userList != 'null'}">
-        <table>
-            <thead>
-            <tr>
-                <th>序号</th>
-                <th>用户名</th>
-                <th>性别</th>
-                <th>手机号</th>
-                <th>邮箱</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${userList}" var="user" varStatus="status">
-                <tr>
-                    <td>${status.count}</td>
-                    <td>${user.username}</td>
-                    <td>${user.gender}</td>
-                    <td>${user.mobile}</td>
-                    <td>${user.email}</td>
-                    <td><a href="${ctx}/userDelete?id=${user.id}">删除</a></td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+        <c:if test="${userList != 'null'}">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>用户名</th>
+                            <th>性别</th>
+                            <th>手机号</th>
+                            <th>邮箱</th>
+                            <th colspan="2">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${userList}" var="user" varStatus="status">
+                            <tr>
+                                <td>${status.count}</td>
+                                <td>${user.username}</td>
+                                <td>${user.gender}</td>
+                                <td>${user.mobile}</td>
+                                <td>${user.email}</td>
+                                <td><a href="${ctx}/user/input?id=${user.id}">修改</a></td>
+                                <td><a href="${ctx}/user/del?id=${user.id}">删除</a></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </c:if>
     </body>
 </html>
