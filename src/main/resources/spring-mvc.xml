@@ -23,6 +23,16 @@
     <!-- web.xml使用/拦截所有url，使用tomcat默认servlet来处理静态资源 -->
     <mvc:default-servlet-handler />
 
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/signin"/>
+            <mvc:exclude-mapping path="/signup"/>
+            <bean class="com.qatang.cms.interceptor.UserSessionInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     </bean>
