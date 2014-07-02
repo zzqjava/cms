@@ -21,8 +21,10 @@ public class UserSessionInterceptor extends HandlerInterceptorAdapter {
         User user = (User)request.getSession().getAttribute(CommonConstants.USER_SESSION_KEY);
         if (user == null) {
             String msg = String.format("session超时，请重新登录");
-            logger.error(msg);
-            response.sendRedirect("/signin?errorMessage=" + msg);
+            logger.info(msg);
+
+            response.sendRedirect("/signin");
+
             return false;
         }
 

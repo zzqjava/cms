@@ -9,7 +9,6 @@ import com.qatang.cms.validator.IValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,8 +29,7 @@ public class SigninController extends BaseController {
     private UserService userService;
 
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
-    public String signinPage(String errorMessage ,ModelMap modelMap) {
-        modelMap.addAttribute(ERROR_MESSAGE_KEY, errorMessage);
+    public String signinPage() {
         return "forward:/index.jsp";
     }
 
