@@ -4,23 +4,20 @@
 <html lang="zh-cn">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>角色添加</title>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="keywords" content="" />
-    <meta http-equiv="description" content="" />
     <%
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
     %>
+    <title>角色更新</title>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="keywords" content="" />
+    <meta http-equiv="description" content="" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/css/main.css">
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
-    <script src="${ctx}/js/bootstrap-alert.js"></script>
-    <script src="${ctx}/js/bootstrap-transition.js"></script>
-    <script src="${ctx}/js/bootstrap-button.js"></script>
     <script type="text/javascript">
         $(function(){
             $('#sub').click(function () {
@@ -32,6 +29,12 @@
             if (errorMessage != null && errorMessage != '') {
                 close();
             }
+            //回显
+            $("#status option").each(function() {
+                if ($(this).val() == '${roleForm.status}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
         function close() {
             setTimeout("closeTip()",2000);
@@ -54,21 +57,22 @@
         <div class="login-single-panel-header">
             <h3>角色添加</h3>
         </div>
-        <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
+        <form id="theForm" class="form-signup-heading" action="${ctx}/role/saveUpdate" method="post">
+            <input type="hidden" name="id" value="${roleForm.id}"/>
             <c:if test="${errorMessage != null}" >
                 <div class="alert alert-danger fade in">
                     <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
-                    ${errorMessage}
+                        ${errorMessage}
                 </div>
             </c:if>
             <div class="input-group">
                 <span class="input-group-addon">角色名称：</span>
-                <input type="text" name="roleName" class="form-control" placeholder="角色名称不能为空">
+                <input type="text" name="roleName" value="${roleForm.roleName}" class="form-control" placeholder="角色名称不能为空">
             </div>
             <br/>
             <div class="input-group">
                 <span class="input-group-addon">角色描述：</span>
-                <input type="text" name="roleDesc" class="form-control" placeholder="角色描述">
+                <input type="text" name="roleDesc" value="${roleForm.roleDesc}" class="form-control" placeholder="角色描述">
             </div>
             <br/>
             <div class="input-group col-sm-5">
@@ -82,7 +86,8 @@
             <br/>
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">添加</button>
+                    <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">更新</button>&nbsp;&nbsp;
+                    <button class="btn btn-primary btn-lg" id="return" name="return" type="button" onclick="javascript:history.go(-1);">返回</button>
                 </span>
             </div>
         </form>
