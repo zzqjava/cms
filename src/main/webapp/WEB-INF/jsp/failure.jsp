@@ -26,7 +26,7 @@
         <div class="container">
             <div class="login-box text-center" >
                 <div class="login-single-panel-header">
-                    <h3>操作失败！<span style="color: red">${userForm.errorMessage}</span></h3>
+                    <h3>操作失败！<span style="color: red">${errorMessage}</span></h3>
                 </div>
             </div>
         </div>
