@@ -9,7 +9,6 @@ import com.qatang.cms.validator.IValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +29,7 @@ public class SignupController extends BaseController {
     private UserService userService;
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public String signupPage(ModelMap modelMap) {
+    public String signupPage() {
         return "/user/signup";
     }
 
@@ -47,7 +46,7 @@ public class SignupController extends BaseController {
         User user = new User();
         user.setUsername(userForm.getUsername());
         user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
-        user.setEmail(userForm.getUsername());
+        user.setEmail(userForm.getEmail());
         user.setCreatedTime(new Date());
         userService.save(user);
         return "user/signupSuccess";
