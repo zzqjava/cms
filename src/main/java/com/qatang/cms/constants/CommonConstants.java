@@ -14,7 +14,7 @@ public class CommonConstants {
 
     /**
      * 定义编码格式 GBK
-     */                                                                           git
+     */
     public static final String CHARSET_GBK = "GBK";
     /**
      * 定义编码格式 GB2312
