@@ -41,16 +41,24 @@
             <h5 style="color:red">${errorMessage}</h5>
         </div>
         <form id="theform" class="form-signin-heading" action="${ctx}/signin" method="post">
-            <br/>
-            <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" class="form-control">
-            <br/>
-            <input type="password" id="password" name="password" required="" placeholder="Password" class="form-control">
-            <br/>
-            <input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control width-270">
-            <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
-            <br/>
-            <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
-            <a href="${ctx}/signup" target="_blank">用户注册</a>
+            <div class="form-group">
+                <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" required="" placeholder="Password" class="form-control">
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8" style="padding:0;">
+                    <input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control width-270">
+                </div>
+                <div class="col-sm-4" style="padding:0;">
+                    <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
+                <a href="${ctx}/signup" target="_blank">用户注册</a>
+            </div>
         </form>
     </div>
 </div>
