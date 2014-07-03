@@ -40,7 +40,7 @@
         <div class="login-single-panel-header">
             <h5 style="color:red">${errorMessage}</h5>
         </div>
-        <form id="theform" class="form-signin-heading" action="${ctx}/login" method="post">
+        <form id="theform" class="form-signin-heading" action="${ctx}/signin" method="post">
             <br/>
             <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" class="form-control">
             <br/>

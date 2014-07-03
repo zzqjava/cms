@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller
 @SessionAttributes(CommonConstants.USER_SESSION_KEY)
-public class LoginSuccessController extends BaseController {
-    @RequestMapping("/login/success")
-    public String loginSuccess(@ModelAttribute(CommonConstants.USER_SESSION_KEY) User user, ModelMap modelMap) {
-        if (user == null) {
-//            userForm.setErrorMessage("用户session超时，请重新登录！");
-            return "forward:/index.jsp";
-        }
+public class DashboardController extends BaseController {
+    @RequestMapping("/dashboard")
+    public String dashboard(@ModelAttribute(CommonConstants.USER_SESSION_KEY) User user, ModelMap modelMap) {
+
         modelMap.addAttribute(user);
-        return "/user/loginSuccess";
+        return "/user/dashboard";
     }
 }

@@ -37,7 +37,7 @@
         <div class="login-single-panel-header">
             <h3>用户注册</h3>
         </div>
-        <form id="theform" class="form-signup-heading" action="${ctx}/register" method="post">
+        <form id="theform" class="form-signup-heading" action="${ctx}/signup" method="post">
             <div class="login-single-panel-header">
                 <h5 style="color:red">${errorMessage}</h5>
             </div>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即注册" type="submit" />
-            <a href="${ctx}/" target="_blank">用户登录</a>
+            <a href="${ctx}/signin" target="_blank">用户登录</a>
         </form>
     </div>
 </div>

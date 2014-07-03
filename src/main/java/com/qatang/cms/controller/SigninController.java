@@ -1,7 +1,6 @@
-package com.qatang.cms.controller.user;
+package com.qatang.cms.controller;
 
 import com.qatang.cms.constants.CommonConstants;
-import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
@@ -16,40 +15,41 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by qatang on 14-6-12.
+ * Created by qatang on 14-6-5.
  */
 @Controller
 @SessionAttributes(CommonConstants.KAPTCHA_SESSION_KEY)
-public class RegisterController extends BaseController {
+public class SigninController extends BaseController {
     @Autowired
-    private IValidator<UserForm> registerValidator;
+    private IValidator<UserForm> loginValidator;
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/signup")
-    public String signup(String errorMessage) {
-        return "/user/signup";
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public String signinPage() {
+        return "forward:/index.jsp";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(UserForm userForm, @ModelAttribute(CommonConstants.KAPTCHA_SESSION_KEY) String captchaExpected, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    public String signin(UserForm userForm, @ModelAttribute(CommonConstants.KAPTCHA_SESSION_KEY) String captchaExpected, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         userForm.setCaptchaExpected(captchaExpected);
         try {
-            registerValidator.validate(userForm);
+            loginValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            return "redirect:/signup";
+            return "redirect:/signin";
         }
-        User user = new User();
-        user.setUsername(userForm.getUsername());
-        user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
-        user.setEmail(userForm.getUsername());
-        user.setCreatedTime(new Date());
-        userService.save(user);
-        return "user/signupSuccess";
+
+        User user = userService.getByUsername(userForm.getUsername());
+        if (user == null || !user.getPassword().equals(DigestUtils.md5Hex(userForm.getPassword()))) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "用户名或密码错误！");
+            return "redirect:/signin";
+        }
+        request.getSession().setAttribute(CommonConstants.USER_SESSION_KEY, user);
+        return "redirect:/dashboard";
     }
 }
