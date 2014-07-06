@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * Created by qatang on 14-6-5.
@@ -49,6 +50,9 @@ public class SigninController extends BaseController {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "用户名或密码错误！");
             return "redirect:/signin";
         }
+        user.setLastLoginTime(user.getLoginTime());
+        user.setLoginTime(new Date());
+        userService.update(user);
         request.getSession().setAttribute(CommonConstants.USER_SESSION_KEY, user);
         return "redirect:/dashboard";
     }
