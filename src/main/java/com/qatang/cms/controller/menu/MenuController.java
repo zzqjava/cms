@@ -56,7 +56,6 @@ public class MenuController extends BaseController {
 			menuForm.setErrorMessage(e.getMessage());
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             return "redirect:/menu/input";
-/*			return "/menu/menuInput";*/
 		}
 		Menu menu = null;
 		if (id != null) {
