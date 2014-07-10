@@ -48,7 +48,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <jpa:repositories base-package="com.qatang.cms.dao" />
+    <jpa:repositories base-package="com.qatang.cms.dao" repository-impl-postfix="Impl" />
     <tx:annotation-driven />
 
     <bean id="persistenceExceptionTranslationPostProcessor"

@@ -7,6 +7,8 @@ import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
+import com.qatang.cms.validator.impl.user.QueryUserValidator;
+import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,17 +27,39 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
+
+    protected final static String USER_ID_KEY = "id";
+    protected final static String USER_KEY = "user";
+
+    @Autowired
+    private QueryUserValidator queryUserValidator;
     @Autowired
     private CreateUserValidator createUserValidator;
     @Autowired
     private UpdateUserValidator updateUserValidator;
     @Autowired
+    private UpdatePasswordValidator updatePasswordValidator;
+    @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/list")
-    public String list(ModelMap modelMap) {
-        List<User> userList = userService.getList();
+    @RequestMapping(value = "/query")
+    public String query(UserForm userForm, ModelMap modelMap) {
+        List<User> userList;
+        if (userForm == null) {
+            userList = userService.getList();
+        } else {
+            try {
+                queryUserValidator.validate(userForm);
+                userList = userService.getByCondition(userForm);
+            } catch (ValidateFailedException e) {
+                logger.error(e.getMessage(), e);
+                modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+                modelMap.addAttribute(FORWARD_URL, "/user/query");
+                return "failure";
+            }
+        }
         modelMap.addAttribute(userList);
+        modelMap.addAttribute("genders", Gender.listAll());
         return "user/userList";
     }
 
@@ -43,9 +67,21 @@ public class UserController extends BaseController {
     public String input(Long id, ModelMap modelMap) {
         if (id != null) {
             User user = userService.get(id);
-            modelMap.addAttribute("user", user);
+            modelMap.addAttribute(USER_KEY, user);
         }
         return "user/userInput";
+    }
+
+    @RequestMapping(value = "/passwordInput")
+    public String passwordInput(Long id, ModelMap modelMap) {
+        if (id == null) {
+            logger.error("修改用户密码，用户id为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户密码，用户id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/query");
+            return "failure";
+        }
+        modelMap.addAttribute(USER_ID_KEY, id);
+        return "user/passwordInput";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -55,6 +91,7 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/query");
             return "failure";
         }
         User user = new User();
@@ -69,38 +106,51 @@ public class UserController extends BaseController {
         if (!StringUtils.isEmpty(userForm.getMobile())) {
             user.setMobile(userForm.getMobile());
         }
+        if (!StringUtils.isEmpty(userForm.getQQ())) {
+            user.setQQ(userForm.getQQ());
+        }
         user.setCreatedTime(new Date());
         userService.save(user);
         return "success";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(Long id, UserForm userForm, ModelMap modelMap) {
-        if (id == null) {
-            logger.error("更新用户，id为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "更新用户，id为空");
-            return "failure";
-        }
-        User user = userService.get(id);
-        if (user == null) {
-            logger.error("所要更新的用户不存在");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "所要更新的用户不存在");
-            return "failure";
-        }
+    public String update(User updateUser, ModelMap modelMap) {
         try {
-            updateUserValidator.validate(userForm);
+            updateUserValidator.validate(updateUser);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            return "failure";
+            modelMap.addAttribute(USER_KEY, updateUser);
+            return "/user/userInput";
         }
-        user.setUsername(userForm.getUsername());
-        user.setName(userForm.getName());
-        user.setEmail(userForm.getEmail());
-        user.setMobile(userForm.getMobile());
-        user.setGender(Gender.get(Integer.parseInt(userForm.getGenderValue())));
+        User user = userService.get(updateUser.getId());
+        user.setName(updateUser.getName());
+        if (StringUtils.isNotEmpty(updateUser.getEmail())) {
+            user.setEmail(updateUser.getEmail());
+        }
+        user.setMobile(updateUser.getMobile());
         user.setUpdatedTime(new Date());
-        userService.save(user);
+        userService.update(user);
+        modelMap.addAttribute(FORWARD_URL, "/user/query");
+        return "success";
+    }
+
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+    public String updatePassword(UserForm userForm, ModelMap modelMap) {
+        try {
+            updatePasswordValidator.validate(userForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage(), e);
+            modelMap.addAttribute(USER_ID_KEY, userForm.getId());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            return "/user/passwordInput";
+        }
+        User user = userService.get(userForm.getId());
+        user.setPassword(DigestUtils.md5Hex(userForm.getNewPassword()));
+        userService.update(user);
+        modelMap.addAttribute(FORWARD_URL, "/user/query");
+        modelMap.addAttribute(SUCCESS_MESSAGE_KEY, "修改用户密码成功");
         return "success";
     }
 
@@ -109,9 +159,10 @@ public class UserController extends BaseController {
         if (id == null) {
             logger.error("删除用户，id为空");
             modelMap.addAttribute(ERROR_MESSAGE_KEY, "删除用户，id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/query");
             return "failure";
         }
         userService.delete(id);
-        return "redirect:/user/list";
+        return "redirect:/user/query";
     }
 }
