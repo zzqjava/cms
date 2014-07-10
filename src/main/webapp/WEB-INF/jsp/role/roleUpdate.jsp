@@ -59,6 +59,7 @@
         </div>
         <form id="theForm" class="form-signup-heading" action="${ctx}/role/saveUpdate" method="post">
             <input type="hidden" name="id" value="${roleForm.id}"/>
+            <input type="hidden" name="currentPage" value="${currentPage}"/>
             <c:if test="${errorMessage != null}" >
                 <div class="alert alert-danger fade in">
                     <a class="close" data-dismiss="alert" href="#" id="tip">×</a>

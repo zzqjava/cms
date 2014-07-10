@@ -25,11 +25,11 @@
             var options = {
                 size:"large",
                 bootstrapMajorVersion:3,
-                currentPage:${currentPage},
-                totalPages:${totalPages},
+                currentPage:${pageInfo.currentPage},
+                totalPages:${pageInfo.totalPages},
                 numberOfPages:10,
                 pageUrl:function(type,page){
-                    return null;
+                    return "${ctx}/role/list/"+page;
                 },
                 onPageClicked:null,
                 onPageChanged:null
@@ -58,11 +58,21 @@
         function closeErrorTip(){
             $('#tipError').click();
         }
-
+        //添加
+        function create () {
+            $("#theForm").attr("action", "${ctx}/role/input");
+            $("#theForm").submit();
+        }
+        //修改
+        function update (id) {
+            $("#theForm").attr("action", "${ctx}/role/update/"+id);
+            $("#theForm").submit();
+        }
         //删除
         function del (id) {
             if (confirm('确定删除该条记录?')) {
-                window.location.href='${ctx}/role/del/'+id;
+                $("#theForm").attr("action", "${ctx}/role/del/"+id);
+                $("#theForm").submit();
             }
         }
     </script>
@@ -92,8 +102,8 @@
         </c:if>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list';">角色列表</button>&nbsp;&nbsp;
-                <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
+                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
+                <button class="btn btn-primary" id="input" name="input" type="button" onclick="create()">添加角色</button>
             </span>
         </div>
         <table class="table table-hover table-striped">
@@ -110,7 +120,7 @@
                     <td>${role.roleDesc}</td>
                     <td>${role.status.name}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="window.location.href='${ctx}/role/update/${role.id}';">修改</button>
+                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="update(${role.id})">修改</button>
                         <button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>
                     </td>
                 </tr>
@@ -118,9 +128,8 @@
             </tbody>
         </table>
     </div>
-    <form id="form-paginator" style="display:none;" method="POST">
-        <input type="hidden" id="currentPage" name="currentPage"/>
-        <input type="hidden" id="pageSize" name="pageSize"/>
+    <form id="theForm" style="display:none;" method="post" action="">
+        <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
     </form>
     <div class="pagination-lg">
         <ul id='pageDiv'></ul>

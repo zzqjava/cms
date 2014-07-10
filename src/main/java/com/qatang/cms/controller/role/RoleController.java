@@ -1,5 +1,6 @@
 package com.qatang.cms.controller.role;
 
+import com.qatang.cms.constants.PageInfo;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.YesNoStatus;
@@ -35,31 +36,38 @@ public class RoleController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping(value = "/input", method = RequestMethod.GET)
-    public ModelAndView input() {
+    @RequestMapping(value = "/input", method = RequestMethod.POST)
+    public ModelAndView input(Integer currentPage) {
         List<YesNoStatus> yesNoStatuses = YesNoStatus.list();
         Map map = new HashMap();
         map.put("yesNoStatuses", yesNoStatuses);
+        map.put("currentPage",currentPage);
         return new ModelAndView("/role/roleInput", map);
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView list() {
-        int page = 1 ;
-        int size = 10;
-        PageRequest pageRequest = new PageRequest(page,size);
+    @RequestMapping(value = "/list/{currentPage}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable Integer currentPage,PageInfo pageInfo) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        pageInfo.setCurrentPage(currentPage);
+
+        PageRequest pageRequest = new PageRequest(pageInfo.getCurrentPage(),pageInfo.getPageSize());
         Page<Role> rolePage = roleService.findAllPage(pageRequest);
         List<Role> list = rolePage.getContent();
-        rolePage.getTotalElements();
+        rolePage.getTotalPages();
+        pageInfo.setTotalPages(rolePage.getTotalPages()-1);
         Map map = new HashMap();
         map.put("list", list);
-        map.put("totalPages",rolePage.getTotalPages());
-        map.put("currentPage",page);
+        map.put("pageInfo",pageInfo);
         return new ModelAndView("/role/roleList", map);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(RoleForm roleForm,RedirectAttributes redirectAttributes) {
+    public String create(RoleForm roleForm, Integer currentPage, RedirectAttributes redirectAttributes) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
         try {
             createRoleValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
@@ -74,32 +82,35 @@ public class RoleController extends BaseController {
         role.setCreatedTime(new Date());
         roleService.save(role);
         redirectAttributes.addFlashAttribute("message", "成功添加角色！");
-        return "redirect:/role/list";
+        return "redirect:/role/list/" + currentPage;
     }
 
-    @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
-    public String del(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/del/{id}", method = RequestMethod.POST)
+    public String del(@PathVariable Long id, Integer currentPage, RedirectAttributes redirectAttributes) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
         if (id == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
-            return "redirect:/role/list";
+            return "redirect:/role/list/" + currentPage;
         }
         Role role = new Role();
         role.setId(id);
         roleService.del(role);
         redirectAttributes.addFlashAttribute("message", "成功删除角色！");
-        return "redirect:/role/list";
+        return "redirect:/role/list/" + currentPage;
     }
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public ModelAndView update(RoleForm roleForm, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public ModelAndView update(RoleForm roleForm, @PathVariable Long id, Integer currentPage, RedirectAttributes redirectAttributes) {
         if (id == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
-            return new ModelAndView("redirect:/role/list", new HashMap());
+            return new ModelAndView("redirect:/role/list/" + currentPage, new HashMap());
         }
         Role role = roleService.getRole(id);
         if (role == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "所查询的角色对象不存在！");
-            return new ModelAndView("redirect:/role/list", new HashMap());
+            return new ModelAndView("redirect:/role/list/" + currentPage, new HashMap());
         }
         if (role.getId() != null ) {
             roleForm.setId(role.getId());
@@ -117,11 +128,12 @@ public class RoleController extends BaseController {
         List<YesNoStatus> yesNoStatuses = YesNoStatus.list();
         Map map = new HashMap();
         map.put("yesNoStatuses", yesNoStatuses);
+        map.put("currentPage",currentPage);
         return new ModelAndView("/role/roleUpdate", map);
     }
 
     @RequestMapping(value = "/saveUpdate", method = RequestMethod.POST)
-    public String saveUpdate(RoleForm roleForm,RedirectAttributes redirectAttributes) {
+    public String saveUpdate(RoleForm roleForm, Integer currentPage, RedirectAttributes redirectAttributes) {
         try {
             createRoleValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
@@ -136,6 +148,6 @@ public class RoleController extends BaseController {
         role.setUpdatedTime(new Date());
         roleService.update(role);
         redirectAttributes.addFlashAttribute("message", "成功更新角色！");
-        return "redirect:/role/list";
+        return "redirect:/role/list/" + currentPage;
     }
 }
