@@ -83,7 +83,7 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (!userForm.getEmail().isEmpty()) {
+        if (StringUtils.isNotEmpty(userForm.getEmail())) {
             if (!this.checkEmail(userForm.getEmail())) {
                 String msg = String.format("邮箱格式错误");
                 logger.error(msg);
@@ -95,7 +95,7 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        int genderValue = 0;
+        int genderValue;
         try {
             genderValue = Integer.valueOf(userForm.getGenderValue());
         } catch (Exception e) {
