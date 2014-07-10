@@ -52,11 +52,11 @@ public class RoleController extends BaseController {
         }
         pageInfo.setCurrentPage(currentPage);
 
-        PageRequest pageRequest = new PageRequest(pageInfo.getCurrentPage(),pageInfo.getPageSize());
+        PageRequest pageRequest = new PageRequest(pageInfo.getCurrentPage() - 1, pageInfo.getPageSize());
         Page<Role> rolePage = roleService.findAllPage(pageRequest);
         List<Role> list = rolePage.getContent();
         rolePage.getTotalPages();
-        pageInfo.setTotalPages(rolePage.getTotalPages()-1);
+        pageInfo.setTotalPages(rolePage.getTotalPages());
         Map map = new HashMap();
         map.put("list", list);
         map.put("pageInfo",pageInfo);
