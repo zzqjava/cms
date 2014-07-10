@@ -11,8 +11,8 @@
     </head>
     <body>
         <div>
-            <div>用户名：${user.username} &nbsp;&nbsp;<a href="${ctx}/signout">退出</a></div>
-            <div><a href="${ctx}/user/list">用户列表</a></div>
+            <div>用户名：${user.username} &nbsp;&nbsp;登录时间：<fmt:formatDate value='${user.loginTime}' pattern='yyyy-MM-dd HH:mm:ss'/> &nbsp;&nbsp;上次登录：<fmt:formatDate value='${user.lastLoginTime}' pattern='yyyy-MM-dd HH:mm:ss'/> &nbsp;&nbsp;<a href="${ctx}/signout">退出</a></div>
+            <div><a href="${ctx}/user/query">用户列表</a></div>
         </div>
     </body>
 </html>

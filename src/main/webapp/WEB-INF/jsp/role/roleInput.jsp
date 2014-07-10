@@ -55,6 +55,7 @@
             <h3>角色添加</h3>
         </div>
         <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
+            <input type="hidden" name="currentPage" value="${currentPage}"/>
             <c:if test="${errorMessage != null}" >
                 <div class="alert alert-danger fade in">
                     <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
