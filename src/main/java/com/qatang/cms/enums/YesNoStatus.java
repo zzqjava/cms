@@ -18,11 +18,11 @@ public enum YesNoStatus {
     private static List<YesNoStatus> _LIST = new ArrayList<YesNoStatus>();
     private static List<YesNoStatus> _ALLLIST = new ArrayList<YesNoStatus>();
     static {
-        for(YesNoStatus gender : YesNoStatus.values()){
-            _MAP.put(gender.getValue(), gender);
-            _ALLLIST.add(gender);
-            if (!gender.equals(ALL)) {
-                _LIST.add(gender);
+        for(YesNoStatus yesNoStatus : YesNoStatus.values()){
+            _MAP.put(yesNoStatus.getValue(), yesNoStatus);
+            _ALLLIST.add(yesNoStatus);
+            if (!yesNoStatus.equals(ALL)) {
+                _LIST.add(yesNoStatus);
             }
         }
 
@@ -55,13 +55,6 @@ public enum YesNoStatus {
             logger.error(e.getMessage(), e);
             return null;
         }
-    }
-
-    public static YesNoStatus valueOf(int ordinal) {
-        if (ordinal < 0 || ordinal >= values().length) {
-            throw new IndexOutOfBoundsException("Invalid ordinal");
-        }
-        return values()[ordinal];
     }
 
     public static List<YesNoStatus> list() {
