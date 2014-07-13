@@ -1,6 +1,7 @@
-package com.qatang.cms.dao.user;
+package com.qatang.cms.dao.user.impl.user;
 
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.form.user.UserForm;
 import org.apache.commons.lang3.StringUtils;
@@ -20,16 +21,16 @@ public class UserDaoImpl {
     public List<User> findByCondition(UserForm userForm){
         StringBuffer hql = new StringBuffer("from User u where 1 = 1");
         if (StringUtils.isNotEmpty(userForm.getUsername())) {
-            hql.append(" and u.username=:username");
+            hql.append(" and u.username like :username");
         }
         if (StringUtils.isNotEmpty(userForm.getName())) {
-            hql.append(" and u.name=:name");
+            hql.append(" and u.name like :name");
         }
         if (StringUtils.isNotEmpty(userForm.getEmail())) {
-            hql.append(" and u.email=:email");
+            hql.append(" and u.email like :email");
         }
         if (StringUtils.isNotEmpty(userForm.getMobile())) {
-            hql.append(" and u.mobile=:mobile");
+            hql.append(" and u.mobile like :mobile");
         }
         if (StringUtils.isNotEmpty(userForm.getGenderValue())) {
             int genger = Integer.parseInt(userForm.getGenderValue());
@@ -37,23 +38,41 @@ public class UserDaoImpl {
                 hql.append(" and u.gender=:gender");
             }
         }
+        if (StringUtils.isNotEmpty(userForm.getValidValue())) {
+            int valid = Integer.parseInt(userForm.getValidValue());
+            if (valid != EnableDisableStatus.ALL.getValue()) {
+                hql.append(" and u.valid=:valid");
+            }
+        }
+        if (StringUtils.isNotEmpty(userForm.getOrderType())) {
+            hql.append(" order by u." + userForm.getOrderType());
+        }
+        if (StringUtils.isNotEmpty(userForm.getSortType())) {
+            hql.append(" " + userForm.getSortType());
+        }
         Query q = em.createQuery(hql.toString());
         if (StringUtils.isNotEmpty(userForm.getUsername())) {
-            q.setParameter("username", userForm.getUsername());
+            q.setParameter("username", "%" + userForm.getUsername() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getName())) {
-            q.setParameter("name", userForm.getName());
+            q.setParameter("name", "%" + userForm.getName() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getEmail())) {
-            q.setParameter("email", userForm.getEmail());
+            q.setParameter("email", "%" + userForm.getEmail() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getMobile())) {
-            q.setParameter("mobile", userForm.getMobile());
+            q.setParameter("mobile", "%" + userForm.getMobile() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getGenderValue())) {
             int genger = Integer.parseInt(userForm.getGenderValue());
             if (genger != Gender.ALL.getValue()) {
                 q.setParameter("gender", Gender.get(genger));
+            }
+        }
+        if (StringUtils.isNotEmpty(userForm.getValidValue())) {
+            int valid = Integer.parseInt(userForm.getValidValue());
+            if (valid != EnableDisableStatus.ALL.getValue()) {
+                q.setParameter("valid", EnableDisableStatus.get(valid));
             }
         }
 //        q.setFirstResult(0);
