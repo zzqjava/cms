@@ -26,7 +26,15 @@
 <div class="container">
 	<div class="login-box text-center" >
 		<div class="login-single-panel-header">
-			<h3>操作成功！</h3>
+            <c:choose>
+                <c:when test="${successMessage == null}">
+                    <h3>操作成功</h3>
+                </c:when>
+                <c:otherwise>
+                    <h3>${successMessage}</h3>
+                </c:otherwise>
+            </c:choose>
+            <a class="btn btn-primary btn-sm" href="${ctx}${forwardUrl}">返回列表</a>
 		</div>
 	</div>
 </div>
