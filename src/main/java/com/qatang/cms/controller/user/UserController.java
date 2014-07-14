@@ -14,6 +14,7 @@ import com.qatang.cms.validator.impl.user.UpdateUserValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,19 +48,16 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/list")
     public String list(UserForm userForm, ModelMap modelMap) {
-        List<User> userList;
-        if (userForm == null) {
-            userList = userService.getList();
-        } else {
-            try {
-                queryUserValidator.validate(userForm);
-                userList = userService.getByCondition(userForm);
-            } catch (ValidateFailedException e) {
-                logger.error(e.getMessage(), e);
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
+        List<User> userList = null;
+        try {
+            queryUserValidator.validate(userForm);
+            Page<User> page = userService.getAll(userForm);
+            userList = page.getContent();
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage(), e);
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
         }
         modelMap.addAttribute(userList);
         return "user/userList";

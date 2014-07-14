@@ -5,6 +5,8 @@ import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.form.user.UserForm;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +20,7 @@ public class UserDaoImpl {
 
     @PersistenceContext
     private EntityManager em;
-    public List<User> findByCondition(UserForm userForm){
+    public Page<User> findAll(UserForm userForm) {
         StringBuffer hql = new StringBuffer("from User u where 1 = 1");
         if (StringUtils.isNotEmpty(userForm.getUsername())) {
             hql.append(" and u.username like :username");
@@ -50,34 +52,39 @@ public class UserDaoImpl {
         if (StringUtils.isNotEmpty(userForm.getSortType())) {
             hql.append(" " + userForm.getSortType());
         }
-        Query q = em.createQuery(hql.toString());
+        Query query = em.createQuery(hql.toString());
         if (StringUtils.isNotEmpty(userForm.getUsername())) {
-            q.setParameter("username", "%" + userForm.getUsername() + "%");
+            query.setParameter("username", "%" + userForm.getUsername() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getName())) {
-            q.setParameter("name", "%" + userForm.getName() + "%");
+            query.setParameter("name", "%" + userForm.getName() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getEmail())) {
-            q.setParameter("email", "%" + userForm.getEmail() + "%");
+            query.setParameter("email", "%" + userForm.getEmail() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getMobile())) {
-            q.setParameter("mobile", "%" + userForm.getMobile() + "%");
+            query.setParameter("mobile", "%" + userForm.getMobile() + "%");
         }
         if (StringUtils.isNotEmpty(userForm.getGenderValue())) {
             int genger = Integer.parseInt(userForm.getGenderValue());
             if (genger != Gender.ALL.getValue()) {
-                q.setParameter("gender", Gender.get(genger));
+                query.setParameter("gender", Gender.get(genger));
             }
         }
         if (StringUtils.isNotEmpty(userForm.getValidValue())) {
             int valid = Integer.parseInt(userForm.getValidValue());
             if (valid != EnableDisableStatus.ALL.getValue()) {
-                q.setParameter("valid", EnableDisableStatus.get(valid));
+                query.setParameter("valid", EnableDisableStatus.get(valid));
             }
         }
-//        q.setFirstResult(0);
-//        q.setMaxResults(1);
-//        Page<Object[]> page = new PageImpl<Object[]>(q.getResultList(),new PageRequest(0,1), 3);
-        return q.getResultList();
+        if (userForm.getPageInfo() != null) {
+            query.setFirstResult(userForm.getPageInfo().getOffset());
+            query.setMaxResults(userForm.getPageInfo().getPageSize());
+        }
+        List list = query.getResultList();
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return new PageImpl<User>(list);
     }
 }
