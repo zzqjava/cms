@@ -32,4 +32,8 @@ public class PageInfo {
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
+
+    public int getOffset() {
+        return currentPage * pageSize;
+    }
 }

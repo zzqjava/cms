@@ -4,7 +4,7 @@ CREATE TABLE `c_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(128) NOT NULL DEFAULT '',
   `password` varchar(32) NOT NULL DEFAULT '',
-  `name` varchar(32) NULL DEFAULT '',
+  `name` varchar(32) NOT NULL DEFAULT '',
   `email` varchar(128) NOT NULL DEFAULT '',
   `mobile` varchar(32) NULL DEFAULT '',
   `gender` tinyint(2) NULL DEFAULT 0,
@@ -13,10 +13,12 @@ CREATE TABLE `c_user` (
   `login_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_login_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `qq` varchar(32) NULL DEFAULT '',
+  `valid` tinyint(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE (`username`),
-  KEY `idx_user_gender` (`gender`),
-  KEY `idx_user_created_time` (`created_time`)
+  INDEX `idx_user_name` (`name`),
+  INDEX `idx_user_mobile` (`mobile`),
+  INDEX `idx_user_gender_valid` (`gender`, `valid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `c_role` (
