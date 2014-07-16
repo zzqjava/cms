@@ -23,22 +23,6 @@
     <!-- web.xml使用/拦截所有url，使用tomcat默认servlet来处理静态资源 -->
     <mvc:default-servlet-handler />
 
-    <mvc:resources mapping="/js/**" location="/js/" />
-    <mvc:resources mapping="/font/**" location="/font/" />
-    <mvc:resources mapping="/css/**" location="/css/" />
-
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/js/**"/>
-            <mvc:exclude-mapping path="/font/**"/>
-            <mvc:exclude-mapping path="/css/**"/>
-            <mvc:exclude-mapping path="/signin"/>
-            <mvc:exclude-mapping path="/signup"/>
-            <bean class="com.qatang.cms.interceptor.UserSessionInterceptor" />
-        </mvc:interceptor>
-    </mvc:interceptors>
-
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     </bean>
