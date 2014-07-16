@@ -16,8 +16,9 @@ CREATE TABLE `c_user` (
   `valid` tinyint(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE (`username`),
-  KEY `idx_user_gender` (`gender`),
-  KEY `idx_user_created_time` (`created_time`)
+  INDEX `idx_user_name` (`name`),
+  INDEX `idx_user_mobile` (`mobile`),
+  INDEX `idx_user_gender_valid` (`gender`, `valid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `c_role` (
