@@ -26,8 +26,7 @@
         <div class="container">
             <div class="login-box text-center" >
                 <div class="login-single-panel-header">
-                    <h3>操作失败<span style="color: red">${errorMessage}</span></h3>
-                    <a class="btn btn-primary btn-sm" href="${ctx}${forwardUrl}">返回列表</a>
+                    <h3>操作失败！<span style="color: red">${userForm.errorMessage}</span></h3>
                 </div>
             </div>
         </div>

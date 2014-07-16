@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: JSH
+  Date: 2014/6/25
+  Time: 22:00
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -11,8 +18,8 @@
     </head>
     <body>
         <div>
-            <div>用户名：${user.username} &nbsp;&nbsp;登录时间：<fmt:formatDate value='${user.loginTime}' pattern='yyyy-MM-dd HH:mm:ss'/> &nbsp;&nbsp;上次登录：<fmt:formatDate value='${user.lastLoginTime}' pattern='yyyy-MM-dd HH:mm:ss'/> &nbsp;&nbsp;<a href="${ctx}/signout">退出</a></div>
-            <div><a href="${ctx}/user/query">用户列表</a></div>
+            <div>用户名：${user.username}</div>
+            <div><a href="${ctx}/userList">用户列表</a></div>
         </div>
     </body>
 </html>

@@ -25,8 +25,13 @@ public class LoginValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 32) {
+        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 128) {
             String msg = String.format("用户名长度必须在6-128个字符之间");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        if (!this.checkEmail(userForm.getUsername())) {
+            String msg = String.format("用户名邮箱格式错误");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
