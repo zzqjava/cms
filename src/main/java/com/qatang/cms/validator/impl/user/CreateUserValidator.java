@@ -1,10 +1,13 @@
 package com.qatang.cms.validator.impl.user;
 
+import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
+import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.AbstractValidator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CreateUserValidator extends AbstractValidator<UserForm> {
+    @Autowired
+    private UserService userService;
     @Override
     public boolean validate(UserForm userForm) throws ValidateFailedException {
         logger.info("开始验证userForm参数");
@@ -36,13 +41,12 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        //用户名是否已存在验证
-//        if (!this.checkEmail(userForm.getUsername())) {
-//            String msg = String.format("用户名邮箱格式错误");
-//            logger.error(msg);
-//            throw new ValidateFailedException(msg);
-//        }
-
+        User user = userService.getByUsername(userForm.getUsername());
+        if (user != null) {
+            String msg = String.format("用户名已存在");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         if (StringUtils.isEmpty(userForm.getPassword())) {
             String msg = String.format("密码不能为空");
             logger.error(msg);
@@ -79,12 +83,19 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (StringUtils.isNotEmpty(userForm.getEmail())) {
+            if (!this.checkEmail(userForm.getEmail())) {
+                String msg = String.format("邮箱格式错误");
+                logger.error(msg);
+                throw new ValidateFailedException(msg);
+            }
+        }
         if (StringUtils.isEmpty(userForm.getGenderValue())) {
             String msg = String.format("性别不能为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        int genderValue = 0;
+        int genderValue;
         try {
             genderValue = Integer.valueOf(userForm.getGenderValue());
         } catch (Exception e) {

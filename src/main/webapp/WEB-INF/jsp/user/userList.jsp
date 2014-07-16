@@ -15,31 +15,109 @@
         <script src="${ctx}/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <c:if test="${userList != 'null'}">
-        <table>
-            <thead>
-            <tr>
-                <th>序号</th>
-                <th>用户名</th>
-                <th>性别</th>
-                <th>手机号</th>
-                <th>邮箱</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${userList}" var="user" varStatus="status">
-                <tr>
-                    <td>${status.count}</td>
-                    <td>${user.username}</td>
-                    <td>${user.gender}</td>
-                    <td>${user.mobile}</td>
-                    <td>${user.email}</td>
-                    <td><a href="${ctx}/userDelete?id=${user.id}">删除</a></td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">后台管理系统</a>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top:60px;">
+            <a href="${ctx}/user/input" class="btn btn-primary btn-lg" role="button">创建用户</a>
+        </div>
+        <div class="container">
+            <form class="form-horizontal" action="${ctx}/user/query" method="post">
+                <fieldset>
+                    <div id="legend" class="">
+                        <legend class="">用户查询</legend>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">用户名</label>
+                        <div class="controls">
+                            <input type="text" name="username" class="input-xlarge" value="${userForm.username}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">用户姓名</label>
+                        <div class="controls">
+                            <input type="text" name="name" class="input-xlarge" value="${userForm.name}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">用户邮箱</label>
+                        <div class="controls">
+                            <input type="text" name="email" class="input-xlarge" value="${userForm.email}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">手机号</label>
+                        <div class="controls">
+                            <input type="text" name="mobile" class="input-xlarge" value="${userForm.mobile}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">性别</label>
+                        <div class="controls">
+                            <select name="genderValue">
+                                <c:forEach items="${genders}" var="gender">
+                                    <option value="${gender.value}">${gender.name}</option>
+                                </c:forEach>
+                            </select>
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <button class="btn btn-default">查询</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="container" style="margin-top:10px;">
+            <c:if test="${userList != null}">
+                <div class="text-center">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>用户名</th>
+                                <th>性别</th>
+                                <th>手机号</th>
+                                <th>邮箱</th>
+                                <th colspan="2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${userList}" var="user" varStatus="status">
+                                <tr>
+                                    <td>${status.count}</td>
+                                    <td>${user.username}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${user.gender.value == 1}">
+                                                男
+                                            </c:when>
+                                            <c:otherwise>
+                                                女
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>${user.mobile}</td>
+                                    <td>${user.email}</td>
+                                    <td><a href="${ctx}/user/input?id=${user.id}">修改</a></td>
+                                    <td><a href="${ctx}/user/del?id=${user.id}" onclick="return confirm('确定要删除么？');">删除</a></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
+        </div>
     </body>
 </html>
