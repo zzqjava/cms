@@ -36,9 +36,12 @@ CREATE TABLE `c_menu` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL DEFAULT '',
   `url` varchar(32) NOT NULL DEFAULT '',
-  `orderView` int(11) NOT NULL DEFAULT 0,
+  `order_level` int(11) NOT NULL DEFAULT 0,
   `valid` int(11) NOT NULL DEFAULT 0,
   `memo` varchar(32) NULL DEFAULT '',
+  `created_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  UNIQUE (`name`)
+  KEY `idx_menu_name` (`name`),
+  KEY `idx_menu_created_time` (`created_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
