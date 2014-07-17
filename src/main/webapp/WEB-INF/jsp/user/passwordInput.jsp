@@ -34,24 +34,24 @@
                 <div class="">
                     <legend class=""></legend>
                 </div>
-                <form class="form-horizontal" action="${ctx}/user/updatePassword" method="post">
+                <form class="form-horizontal" action="${ctx}/user/password/update" method="post">
                     <input type="hidden" name="id" value="${id}">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">旧密码</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="password" autofocus="" required="">
+                            <input type="password" class="form-control" name="password" autofocus="" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">新密码</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="newPassword" required="">
+                            <input type="password" class="form-control" name="newPassword" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">确认密码</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="conPassword" required="">
+                            <input type="password" class="form-control" name="conPassword" required="">
                         </div>
                     </div>
                     <div class="">

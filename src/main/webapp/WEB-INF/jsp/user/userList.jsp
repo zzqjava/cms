@@ -131,8 +131,8 @@
                             <select name="sortType">
                                 <c:choose>
                                     <c:when test="${userForm.sortType == 'desc'}">
-                                        <option value="asc">正序</option>
-                                        <option value="desc" selected>倒序</option>
+                                        <option value="asc">升序</option>
+                                        <option value="desc" selected>降序</option>
                                     </c:when>
                                     <c:otherwise>
                                         <option value="asc" selected>正序</option>
@@ -166,7 +166,7 @@
                                 <th>手机号</th>
                                 <th>邮箱</th>
                                 <th>是否有效</th>
-                                <th colspan="4">操作</th>
+                                <th colspan="3">操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,18 +189,18 @@
                                     <td>${user.email}</td>
                                     <td>${user.valid.name}</td>
                                     <td><a href="${ctx}/user/input/${user.id}">修改</a></td>
-                                    <td><a href="${ctx}/user/passwordInput/${user.id}">重置密码</a></td>
+                                    <td><a href="${ctx}/user/password/input/${user.id}">重置密码</a></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${user.valid.value == 1}">
-                                                <a href="${ctx}/user/forbidden/${user.id}">禁用</a>
+                                                <a href="${ctx}/user/disable/${user.id}">禁用</a>
                                             </c:when>
                                             <c:otherwise>
-                                                禁用
+                                                <a href="${ctx}/user/enable/${user.id}">启用</a>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <td><a href="${ctx}/user/del/${user.id}" onclick="return confirm('确定要删除么？');">删除</a></td>
+                                    <%--<td><a href="${ctx}/user/del/${user.id}" onclick="return confirm('确定要删除么？');">删除</a></td>--%>
                                 </tr>
                             </c:forEach>
                         </tbody>

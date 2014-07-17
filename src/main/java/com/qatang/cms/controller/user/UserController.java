@@ -5,8 +5,10 @@ import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
+import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
+import com.qatang.cms.utils.PageUtil;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
@@ -31,10 +33,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-    private final static String USER_ID_KEY = "id";
-    private final static String USER_KEY = "user";
-    private final static String USERFORM_KEY = "userForm";
-
     @Autowired
     private QueryUserValidator queryUserValidator;
     @Autowired
@@ -52,28 +50,40 @@ public class UserController extends BaseController {
         try {
             queryUserValidator.validate(userForm);
             Page<User> page = userService.getAll(userForm);
-            userList = page.getContent();
+            if (page != null) {
+                userList = page.getContent();
+                modelMap.addAttribute(userList);
+            }
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        modelMap.addAttribute(userList);
         return "user/userList";
     }
 
     @RequestMapping(value = "/input")
-    public String input() {
+    public String input(ModelMap modelMap) {
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
 
-    @RequestMapping(value = "/input/{id}")
-    public String input(@PathVariable Long id, ModelMap modelMap) {
-        if (id != null) {
+    @RequestMapping(value = "/input/{userId}")
+    public String input(@PathVariable String userId, ModelMap modelMap) {
+        if (StringUtils.isNotEmpty(userId)) {
+            Long id;
+            try {
+                id = Long.parseLong(userId);
+            } catch (NumberFormatException e) {
+                logger.error("修改用户，用户id不合法");
+                modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户，用户id不合法");
+                modelMap.addAttribute(FORWARD_URL, "/user/list");
+                return "failure";
+            }
             User user = userService.get(id);
             UserForm userForm = new UserForm();
-            userForm.setId(user.getId());
+            userForm.setId(userId);
             if (StringUtils.isEmpty(user.getUsername())) {
                 logger.error("用户名为空");
                 modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户名为空");
@@ -111,16 +121,26 @@ public class UserController extends BaseController {
                 return "failure";
             }
             userForm.setValidValue(String.valueOf(user.getValid().getValue()));
-            modelMap.addAttribute(USERFORM_KEY, userForm);
+            modelMap.addAttribute(userForm);
         }
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
 
-    @RequestMapping(value = "/forbidden/{id}")
-    public String forbidden(@PathVariable Long id, ModelMap modelMap) {
-        if (id == null) {
+    @RequestMapping(value = "/disable/{userId}")
+    public String disable(@PathVariable String userId, ModelMap modelMap) {
+        if (StringUtils.isEmpty(userId)) {
             logger.error("禁用用户，用户id为空");
             modelMap.addAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException e) {
+            logger.error("禁用用户，用户id不合法");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
@@ -130,15 +150,38 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/passwordInput/{id}")
-    public String passwordInput(@PathVariable Long id, ModelMap modelMap) {
-        if (id == null) {
+    @RequestMapping(value = "/enable/{userId}")
+    public String enable(@PathVariable String userId, ModelMap modelMap) {
+        if (StringUtils.isEmpty(userId)) {
+            logger.error("启用用户，用户id为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException e) {
+            logger.error("启用用户，用户id不合法");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        User user = userService.get(id);
+        user.setValid(EnableDisableStatus.ENABLE);
+        userService.update(user);
+        return "redirect:/user/list";
+    }
+
+    @RequestMapping(value = "/password/input/{id}")
+    public String inputPassword(@PathVariable String id, ModelMap modelMap) {
+        if (StringUtils.isEmpty(id)) {
             logger.error("修改用户密码，用户id为空");
             modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户密码，用户id为空");
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        modelMap.addAttribute(USER_ID_KEY, id);
+        modelMap.addAttribute(id);
         return "user/passwordInput";
     }
 
@@ -149,7 +192,7 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(USERFORM_KEY, userForm);
+            modelMap.addAttribute(userForm);
             return "/user/userInput";
         }
         User user = new User();
@@ -158,12 +201,8 @@ public class UserController extends BaseController {
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
         user.setGender(Gender.get(Integer.parseInt(userForm.getGenderValue())));
-        if (!StringUtils.isEmpty(userForm.getMobile())) {
-            user.setMobile(userForm.getMobile());
-        }
-        if (!StringUtils.isEmpty(userForm.getQQ())) {
-            user.setQQ(userForm.getQQ());
-        }
+        user.setMobile(userForm.getMobile());
+        user.setQQ(userForm.getQQ());
         user.setCreatedTime(new Date());
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.save(user);
@@ -178,19 +217,16 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(USERFORM_KEY, userForm);
+            modelMap.addAttribute(userForm);
             return "/user/userInput";
         }
-        User user = userService.get(userForm.getId());
+        Long id = Long.parseLong(userForm.getId());
+        User user = userService.get(id);
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
         user.setGender(Gender.get(Integer.parseInt(userForm.getGenderValue())));
-        if (StringUtils.isNotEmpty(userForm.getMobile())) {
-            user.setMobile(userForm.getMobile());
-        }
-        if (StringUtils.isNotEmpty(userForm.getQQ())) {
-            user.setQQ(userForm.getQQ());
-        }
+        user.setMobile(userForm.getMobile());
+        user.setQQ(userForm.getQQ());
         user.setUpdatedTime(new Date());
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.update(user);
@@ -198,17 +234,18 @@ public class UserController extends BaseController {
         return "success";
     }
 
-    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/password/update", method = RequestMethod.POST)
     public String updatePassword(UserForm userForm, ModelMap modelMap) {
         try {
             updatePasswordValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            modelMap.addAttribute(USER_ID_KEY, userForm.getId());
+            modelMap.addAttribute(userForm.getId());
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             return "/user/passwordInput";
         }
-        User user = userService.get(userForm.getId());
+        Long id = Long.parseLong(userForm.getId());
+        User user = userService.get(id);
         user.setPassword(DigestUtils.md5Hex(userForm.getNewPassword()));
         userService.update(user);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
@@ -216,11 +253,20 @@ public class UserController extends BaseController {
         return "success";
     }
 
-    @RequestMapping(value = "/del/{id}")
-    public String delete(@PathVariable Long id, ModelMap modelMap) {
-        if (id == null) {
+    @RequestMapping(value = "/del/{userId}")
+    public String delete(@PathVariable String userId, ModelMap modelMap) {
+        if (StringUtils.isEmpty(userId)) {
             logger.error("删除用户，id为空");
             modelMap.addAttribute(ERROR_MESSAGE_KEY, "删除用户，id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException e) {
+            logger.error("启用用户，用户id不合法");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
@@ -228,16 +274,25 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/view/{id}")
-    public String view(@PathVariable Long id, ModelMap modelMap) {
-        if (id == null) {
+    @RequestMapping(value = "/view/{userId}")
+    public String view(@PathVariable String userId, ModelMap modelMap) {
+        if (StringUtils.isEmpty(userId)) {
             logger.error("查看用户，id为空");
             modelMap.addAttribute(ERROR_MESSAGE_KEY, "查看用户，id为空");
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException e) {
+            logger.error("启用用户，用户id不合法");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
         User user = userService.get(id);
-        modelMap.addAttribute(USER_KEY, user);
+        modelMap.addAttribute(user);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userView";
     }
