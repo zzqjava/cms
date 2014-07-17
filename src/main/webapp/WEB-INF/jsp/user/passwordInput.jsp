@@ -64,6 +64,9 @@
                     </div>
                 </form>
             </div>
+            <div class="text-center">
+                <a class="btn btn-primary btn-sm" href="${ctx}${forwardUrl}">返回列表</a>
+            </div>
         </div>
     </body>
 </html>

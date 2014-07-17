@@ -5,10 +5,8 @@ import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
-import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
-import com.qatang.cms.utils.PageUtil;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
@@ -63,13 +61,13 @@ public class UserController extends BaseController {
         return "user/userList";
     }
 
-    @RequestMapping(value = "/input")
+    @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
 
-    @RequestMapping(value = "/input/{userId}")
+    @RequestMapping(value = "/input/{userId}", method = RequestMethod.GET)
     public String input(@PathVariable String userId, ModelMap modelMap) {
         if (StringUtils.isNotEmpty(userId)) {
             Long id;
@@ -127,7 +125,7 @@ public class UserController extends BaseController {
         return "user/userInput";
     }
 
-    @RequestMapping(value = "/disable/{userId}")
+    @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
     public String disable(@PathVariable String userId, ModelMap modelMap) {
         if (StringUtils.isEmpty(userId)) {
             logger.error("禁用用户，用户id为空");
@@ -150,7 +148,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/enable/{userId}")
+    @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
     public String enable(@PathVariable String userId, ModelMap modelMap) {
         if (StringUtils.isEmpty(userId)) {
             logger.error("启用用户，用户id为空");
@@ -173,7 +171,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/password/input/{id}")
+    @RequestMapping(value = "/password/input/{id}", method = RequestMethod.GET)
     public String inputPassword(@PathVariable String id, ModelMap modelMap) {
         if (StringUtils.isEmpty(id)) {
             logger.error("修改用户密码，用户id为空");
@@ -181,7 +179,8 @@ public class UserController extends BaseController {
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        modelMap.addAttribute(id);
+        modelMap.addAttribute("id", id);
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/passwordInput";
     }
 
@@ -191,8 +190,9 @@ public class UserController extends BaseController {
             createUserValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(userForm);
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "/user/userInput";
         }
         User user = new User();
@@ -253,7 +253,7 @@ public class UserController extends BaseController {
         return "success";
     }
 
-    @RequestMapping(value = "/del/{userId}")
+    @RequestMapping(value = "/del/{userId}", method = RequestMethod.GET)
     public String delete(@PathVariable String userId, ModelMap modelMap) {
         if (StringUtils.isEmpty(userId)) {
             logger.error("删除用户，id为空");
@@ -274,7 +274,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/view/{userId}")
+    @RequestMapping(value = "/view/{userId}", method = RequestMethod.GET)
     public String view(@PathVariable String userId, ModelMap modelMap) {
         if (StringUtils.isEmpty(userId)) {
             logger.error("查看用户，id为空");
