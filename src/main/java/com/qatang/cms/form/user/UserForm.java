@@ -1,6 +1,7 @@
 package com.qatang.cms.form.user;
 
-import com.qatang.cms.constants.PageInfo;
+
+import com.qatang.cms.form.PageInfo;
 
 /**
  * Created by qatang on 14-6-12.

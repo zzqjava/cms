@@ -25,8 +25,8 @@
             var options = {
                 size:"large",
                 bootstrapMajorVersion:3,
-                currentPage:${pageInfo.currentPage},
-                totalPages:${pageInfo.totalPages},
+                currentPage:${roleForm.pageInfo.currentPage},
+                totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
                 pageUrl:function(type,page){
                     return "${ctx}/role/list/"+page;
@@ -65,7 +65,8 @@
         }
         //修改
         function update (id) {
-            $("#theForm").attr("action", "${ctx}/role/update/"+id);
+            $("#theForm").attr("action", "${ctx}/role/input");
+            $("#roleId").val(id);
             $("#theForm").submit();
         }
         //删除
@@ -103,7 +104,7 @@
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
                 <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
-                <button class="btn btn-primary" id="input" name="input" type="button" onclick="create()">添加角色</button>
+                <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
             </span>
         </div>
         <table class="table table-hover table-striped">
@@ -118,7 +119,7 @@
                     <td>${role.id}</td>
                     <td>${role.roleName}</td>
                     <td>${role.roleDesc}</td>
-                    <td>${role.status.name}</td>
+                    <td>${role.valid.name}</td>
                     <td>
                         <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="update(${role.id})">修改</button>
                         <button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>
@@ -130,6 +131,7 @@
     </div>
     <form id="theForm" style="display:none;" method="post" action="">
         <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
+        <input type="hidden" id="roleId" name="id" />
     </form>
     <div class="pagination-lg">
         <ul id='pageDiv'></ul>

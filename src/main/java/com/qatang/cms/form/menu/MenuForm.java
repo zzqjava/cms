@@ -8,7 +8,7 @@ public class MenuForm {
 	private Long id;
 	private String name;
 	private String url;
-	private String orderValue;
+	private String orderLevelValue;
 	private String validValue;
 	private String memo;
 	private String errorMessage;
@@ -53,12 +53,12 @@ public class MenuForm {
 		this.validValue = validValue;
 	}
 
-	public String getOrderValue() {
-		return orderValue;
+	public String getOrderLevelValue() {
+		return orderLevelValue;
 	}
 
-	public void setOrderValue(String orderValue) {
-		this.orderValue = orderValue;
+	public void setOrderLevelValue(String orderLevelValue) {
+		this.orderLevelValue = orderLevelValue;
 	}
 
 	public String getUrl() {
