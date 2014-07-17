@@ -15,34 +15,34 @@
     <script src="${ctx}/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div>
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">后台管理系统</a>
-                </div>
+<div>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">后台管理系统</a>
             </div>
         </div>
-        <div class="container">
-            <div class="login-box text-center" >
-                <div class="login-single-panel-header">
-                    <c:choose>
-                        <c:when test="${menu.id == null}">
-                            <div class="titlediv"><h3>添加菜单</h3></div>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="titlediv"><h3>修改菜单</h3></div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-                <div class="">
-                    <legend class=""></legend>
-                </div>
-                <div>
-                    <h5 style="color:red">${errorMessage}</h5>
-                </div>
+    </div>
+    <div class="container">
+        <div class="login-box text-center" >
+            <div class="login-single-panel-header">
                 <c:choose>
-                <c:when test="${menu.id == null} " >
+                    <c:when test="${menuForm.id == null}">
+                        <div class="titlediv"><h3>添加菜单</h3></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="titlediv"><h3>修改菜单</h3></div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="">
+                <legend class=""></legend>
+            </div>
+            <div>
+                <h5 style="color:red">${errorMessage}</h5>
+            </div>
+            <c:choose>
+                <c:when test="${menuForm.id == null}">
                     <form id="theform" class="form-signup-heading" action="${ctx}/menu/create" method="post">
                         <div class="form-group">
                             <div class="input-group">
@@ -70,13 +70,12 @@
                                         <option value="${ed.value}">${ed.name}</option>
                                     </c:forEach>
                                 </select>
-    <%--                            <input class="form-control" type="text" name="validValue" placeholder="${menu.valid}" value="${menu.valid}">--%>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">备注：</div>
-                                <input class="form-control" type="text" name="memo" placeholder="${menuForm.memo}" value="${menuForm.memo}">
+                                <textarea class="form-control" rows="3" name="memo">${menuForm.memo}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -119,7 +118,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">备注：</div>
-                                <input class="form-control" type="text" name="memo" placeholder="${menuForm.memo}" value="${menuForm.memo}">
+                                <textarea class="form-control" rows="3" name="memo">${menuForm.memo}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -128,9 +127,9 @@
                         </div>
                     </form>
                 </c:otherwise>
-                </c:choose>
-            </div>
+            </c:choose>
         </div>
     </div>
+</div>
 </body>
 </html>
