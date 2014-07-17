@@ -32,6 +32,12 @@
             if (errorMessage != null && errorMessage != '') {
                 close();
             }
+            //回显
+            $("#valid option").each(function() {
+                if ($(this).val() == '${role.valid.value}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
         function close() {
             setTimeout("closeTip()",2000);
@@ -52,41 +58,95 @@
 <div class="container">
     <div class="login-box text-center" >
         <div class="login-single-panel-header">
-            <h3>角色添加</h3>
+            <c:choose>
+                <c:when test="${role.id == null}">
+                    <h3>角色添加</h3>
+                </c:when>
+                <c:otherwise>
+                    <h3>角色修改</h3>
+                </c:otherwise>
+            </c:choose>
         </div>
-        <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
-            <input type="hidden" name="currentPage" value="${currentPage}"/>
-            <c:if test="${errorMessage != null}" >
-                <div class="alert alert-danger fade in">
-                    <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
-                    ${errorMessage}
-                </div>
-            </c:if>
-            <div class="input-group">
-                <span class="input-group-addon">角色名称：</span>
-                <input type="text" name="roleName" class="form-control" placeholder="角色名称不能为空">
-            </div>
-            <br/>
-            <div class="input-group">
-                <span class="input-group-addon">角色描述：</span>
-                <input type="text" name="roleDesc" class="form-control" placeholder="角色描述">
-            </div>
-            <br/>
-            <div class="input-group col-sm-5">
-                <span class="input-group-addon ">是否有效：</span>
-                <select class="form-control" name="status" id="status">
-                    <c:forEach items="${yesNoStatuses}" var="yesNoStatuse">
-                        <option value="${yesNoStatuse.value}">${yesNoStatuse.name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            <br/>
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">添加</button>
-                </span>
-            </div>
-        </form>
+        <c:choose>
+            <c:when test="${role.id == null}">
+                <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
+                    <input type="hidden" name="currentPage" value="${currentPage}"/>
+                    <c:if test="${errorMessage != null}" >
+                        <div class="alert alert-danger fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
+                                ${errorMessage}
+                        </div>
+                    </c:if>
+                    <div class="input-group">
+                        <span class="input-group-addon">角色名称：</span>
+                        <input type="text" name="roleName" value="${role.roleName}" class="form-control" placeholder="角色名称不能为空">
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon">角色描述：</span>
+                        <input type="text" name="roleDesc" value="${role.roleDesc}" class="form-control" placeholder="角色描述">
+                    </div>
+                    <br/>
+                    <div class="input-group col-sm-5">
+                        <span class="input-group-addon ">是否有效：</span>
+                        <select class="form-control" name="valid" id="valid">
+                            <c:forEach items="${enableDisableStatus}" var="enableDisableStatus">
+                                <option value="${enableDisableStatus.value}">${enableDisableStatus.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">添加</button>
+                        </span>
+                    </div>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form id="theForm" class="form-signup-heading" action="${ctx}/role/update" method="post">
+                    <input type="hidden" name="id" value="${role.id}"/>
+                    <c:if test="${errorMessage != null}" >
+                        <div class="alert alert-danger fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
+                                ${errorMessage}
+                        </div>
+                    </c:if>
+                    <div class="input-group">
+                        <span class="input-group-addon">角色名称：</span>
+                        <input type="text" name="roleName" value="${role.roleName}" class="form-control" placeholder="角色名称不能为空">
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon">角色描述：</span>
+                        <input type="text" name="roleDesc" value="${role.roleDesc}" class="form-control" placeholder="角色描述">
+                    </div>
+                    <br/>
+                    <div class="input-group col-sm-5">
+                        <span class="input-group-addon ">是否有效：</span>
+                        <select class="form-control" name="valid" id="valid">
+                            <c:forEach items="${enableDisableStatus}" var="enableDisableStatus">
+                                <option value="${enableDisableStatus.value}">${enableDisableStatus.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                             <c:choose>
+                                 <c:when test="${role.id == null}">
+                                     <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">添加</button>
+                                 </c:when>
+                                 <c:otherwise>
+                                     <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">修改</button>
+                                 </c:otherwise>
+                             </c:choose>
+
+                        </span>
+                    </div>
+                </form>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 <div class="text-center bottom">
