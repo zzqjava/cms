@@ -27,7 +27,7 @@
             <div class="login-box text-center">
                 <div class="login-single-panel-header">
                     <c:choose>
-                        <c:when test="${user.id == null}">
+                        <c:when test="${userForm.id == null}">
                             <h3>用户添加</h3>
                         </c:when>
                         <c:otherwise>
@@ -42,55 +42,55 @@
                     <legend class=""></legend>
                 </div>
                 <c:choose>
-                    <c:when test="${user.id == null}">
+                    <c:when test="${userForm.id == null}">
                         <form class="form-horizontal" action="${ctx}/user/create" method="post">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">用户名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="username" autofocus="" required="">
+                                    <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">密码</label>
                                 <div class="col-sm-9">
-                                    <input type="password" class="form-control" name="password" required="">
+                                    <input type="password" class="form-control" name="password" value="${userForm.name}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">确认密码</label>
                                 <div class="col-sm-9">
-                                    <input type="password" class="form-control" name="conPassword" required="">
+                                    <input type="password" class="form-control" name="conPassword" value="${userForm.name}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">姓名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="name" required="">
+                                    <input type="text" class="form-control" name="name" value="${userForm.name}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">邮箱</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="email">
+                                    <input type="text" class="form-control" name="email" value="${userForm.name}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">手机号</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="mobile">
+                                    <input type="text" class="form-control" name="mobile" value="${userForm.name}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">QQ</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="QQ">
+                                    <input type="text" class="form-control" name="QQ" value="${userForm.name}">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="col-sm-3 control-label" style="width:23%;">性别</label>
                                 <div class="form-group">
                                     <c:choose>
-                                        <c:when test="${user.gender.name == '男'}">
+                                        <c:when test="${userForm.genderValue == '1'}">
                                             <label class="radio-inline">
                                                 <input type="radio" name="genderValue" checked value="1"> 男
                                             </label>
@@ -109,6 +109,29 @@
                                     </c:choose>
                                 </div>
                             </div>
+                            <div class="control-group">
+                                <label class="col-sm-3 control-label" style="width:23%;">是否有效</label>
+                                <div class="form-group">
+                                    <c:choose>
+                                        <c:when test="${userForm.validValue == '1'}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" checked value="1"> 是
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" value="2"> 否
+                                            </label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" value="1"> 是
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" checked value="2"> 否
+                                            </label>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
                             <div class="">
                                 <legend class=""></legend>
                             </div>
@@ -121,35 +144,81 @@
                     </c:when>
                     <c:otherwise>
                         <form class="form-horizontal" action="${ctx}/user/update" method="post">
-                            <input type="hidden" name="id" value="${user.id}">
+                            <input type="hidden" name="id" value="${userForm.id}">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">用户名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="username" value="${user.username}" readonly="readonly">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">密码</label>
-                                <div class="col-sm-9 text-left">
-                                    <a class="btn btn-default btn-sm" href="${ctx}/user/passwordInput?id=${user.id}">修改</a>
+                                    <input type="text" class="form-control" name="username" value="${userForm.username}" required="" readonly="readonly">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">姓名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="name" required="" value="${user.name}">
+                                    <input type="text" class="form-control" name="name" required="" value="${userForm.name}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">邮箱</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="email" value="${user.email}">
+                                    <input type="text" class="form-control" name="email" value="${userForm.email}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">手机号</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="mobile" value="${user.mobile}">
+                                    <input type="text" class="form-control" name="mobile" value="${userForm.mobile}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">QQ</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="QQ" value="${userForm.QQ}">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="col-sm-3 control-label" style="width:23%;">性别</label>
+                                <div class="form-group">
+                                    <c:choose>
+                                        <c:when test="${userForm.genderValue == '1'}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="genderValue" checked value="1"> 男
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="genderValue" value="2"> 女
+                                            </label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="genderValue" value="1"> 男
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="genderValue" checked value="2"> 女
+                                            </label>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="col-sm-3 control-label" style="width:23%;">是否有效</label>
+                                <div class="form-group">
+                                    <c:choose>
+                                        <c:when test="${userForm.validValue == '1'}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" checked value="1"> 是
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" value="2"> 否
+                                            </label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" value="1"> 是
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="validValue" checked value="2"> 否
+                                            </label>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                             <div class="">

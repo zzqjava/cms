@@ -1,5 +1,6 @@
 package com.qatang.cms.entity.user;
 
+import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -38,6 +39,8 @@ public class User {
     private Date lastLoginTime;
     @Column(name = "qq")
     private String QQ;
+    @Enumerated
+    private EnableDisableStatus valid;
 
     public Long getId() {
         return id;
@@ -133,5 +136,13 @@ public class User {
 
     public void setQQ(String QQ) {
         this.QQ = QQ;
+    }
+
+    public EnableDisableStatus getValid() {
+        return valid;
+    }
+
+    public void setValid(EnableDisableStatus valid) {
+        this.valid = valid;
     }
 }

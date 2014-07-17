@@ -1,5 +1,8 @@
 package com.qatang.cms.form.user;
 
+
+import com.qatang.cms.form.PageInfo;
+
 /**
  * Created by qatang on 14-6-12.
  */
@@ -17,6 +20,10 @@ public class UserForm {
     private String mobile;
     private String genderValue;
     private String QQ;
+    private String validValue;
+    private String orderType;
+    private String sortType;
+    private PageInfo pageInfo;
 
     public Long getId() {
         return id;
@@ -120,5 +127,37 @@ public class UserForm {
 
     public void setQQ(String QQ) {
         this.QQ = QQ;
+    }
+
+    public String getValidValue() {
+        return validValue;
+    }
+
+    public void setValidValue(String validValue) {
+        this.validValue = validValue;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+    }
+
+    public PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
     }
 }
