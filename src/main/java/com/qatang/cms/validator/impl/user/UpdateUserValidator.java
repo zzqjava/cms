@@ -26,12 +26,20 @@ public class UpdateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getId() == null) {
+        if (StringUtils.isEmpty(userForm.getId())) {
             String msg = String.format("更新用户，用户id为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        User user = userService.get(userForm.getId());
+        Long id;
+        try {
+            id = Long.parseLong(userForm.getId());
+        } catch (NumberFormatException e) {
+            String msg = String.format("id字段不合法");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        User user = userService.get(id);
         if (user == null) {
             String msg = String.format("所要更新的用户不存在");
             logger.error(msg);
