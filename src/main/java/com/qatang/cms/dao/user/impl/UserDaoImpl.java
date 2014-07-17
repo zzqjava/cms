@@ -1,8 +1,9 @@
-package com.qatang.cms.dao.user.impl.user;
+package com.qatang.cms.dao.user.impl;
 
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
+import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -78,8 +79,9 @@ public class UserDaoImpl {
             }
         }
         if (userForm.getPageInfo() != null) {
-            query.setFirstResult(userForm.getPageInfo().getOffset());
-            query.setMaxResults(userForm.getPageInfo().getPageSize());
+            PageInfo pageInfo = userForm.getPageInfo();
+            query.setFirstResult(pageInfo.getOffset());
+            query.setMaxResults(pageInfo.getPageSize());
         }
         List list = query.getResultList();
         if (list == null || list.isEmpty()) {
