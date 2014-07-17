@@ -10,4 +10,6 @@ public class BaseController {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected final static String ERROR_MESSAGE_KEY = "errorMessage";
+    protected final static String SUCCESS_MESSAGE_KEY = "successMessage";
+    protected final static String FORWARD_URL = "forwardUrl";
 }

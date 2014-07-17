@@ -9,7 +9,6 @@ import com.qatang.cms.validator.IValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * Created by qatang on 14-6-5.
@@ -25,13 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 @SessionAttributes(CommonConstants.KAPTCHA_SESSION_KEY)
 public class SigninController extends BaseController {
     @Autowired
-    private IValidator<UserForm> loginValidator;
+    private IValidator<UserForm> signinValidator;
     @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
-    public String signinPage(String errorMessage ,ModelMap modelMap) {
-        modelMap.addAttribute(ERROR_MESSAGE_KEY, errorMessage);
+    public String signinPage() {
         return "forward:/index.jsp";
     }
 
@@ -39,7 +38,7 @@ public class SigninController extends BaseController {
     public String signin(UserForm userForm, @ModelAttribute(CommonConstants.KAPTCHA_SESSION_KEY) String captchaExpected, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         userForm.setCaptchaExpected(captchaExpected);
         try {
-            loginValidator.validate(userForm);
+            signinValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
@@ -51,6 +50,9 @@ public class SigninController extends BaseController {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "用户名或密码错误！");
             return "redirect:/signin";
         }
+        user.setLastLoginTime(user.getLoginTime());
+        user.setLoginTime(new Date());
+        userService.update(user);
         request.getSession().setAttribute(CommonConstants.USER_SESSION_KEY, user);
         return "redirect:/dashboard";
     }

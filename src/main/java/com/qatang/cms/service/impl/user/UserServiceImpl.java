@@ -2,8 +2,12 @@ package com.qatang.cms.service.impl.user;
 
 import com.qatang.cms.dao.user.UserDao;
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,5 +50,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Override
+    public Page<User> getAll(UserForm userForm) {
+        return userDao.findAll(userForm);
     }
 }

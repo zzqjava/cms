@@ -1,12 +1,17 @@
 package com.qatang.cms.form.user;
 
+
+import com.qatang.cms.form.PageInfo;
+
 /**
  * Created by qatang on 14-6-12.
  */
 public class UserForm {
+    private Long id;
     private String errorMessage;
     private String username;
     private String password;
+    private String newPassword;
     private String conPassword;
     private String captcha;
     private String captchaExpected;
@@ -14,6 +19,19 @@ public class UserForm {
     private String email;
     private String mobile;
     private String genderValue;
+    private String QQ;
+    private String validValue;
+    private String orderType;
+    private String sortType;
+    private PageInfo pageInfo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -29,6 +47,14 @@ public class UserForm {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getConPassword() {
@@ -93,5 +119,45 @@ public class UserForm {
 
     public void setCaptchaExpected(String captchaExpected) {
         this.captchaExpected = captchaExpected;
+    }
+
+    public String getQQ() {
+        return QQ;
+    }
+
+    public void setQQ(String QQ) {
+        this.QQ = QQ;
+    }
+
+    public String getValidValue() {
+        return validValue;
+    }
+
+    public void setValidValue(String validValue) {
+        this.validValue = validValue;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+    }
+
+    public PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
     }
 }

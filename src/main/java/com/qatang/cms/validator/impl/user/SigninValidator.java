@@ -1,16 +1,22 @@
 package com.qatang.cms.validator.impl.user;
 
+import com.qatang.cms.entity.user.User;
+import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
+import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.AbstractValidator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by qatang on 14-6-12.
  */
 @Component
-public class LoginValidator extends AbstractValidator<UserForm> {
+public class SigninValidator extends AbstractValidator<UserForm> {
+    @Autowired
+    private UserService userService;
     @Override
     public boolean validate(UserForm userForm) throws ValidateFailedException {
         logger.info("开始验证userForm参数");
@@ -25,13 +31,14 @@ public class LoginValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 128) {
+        if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 32) {
             String msg = String.format("用户名长度必须在6-128个字符之间");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (!this.checkEmail(userForm.getUsername())) {
-            String msg = String.format("用户名邮箱格式错误");
+        User user = userService.getByUsername(userForm.getUsername());
+        if (user.getValid() == EnableDisableStatus.DISABLE) {
+            String msg = String.format("该用户无效");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }

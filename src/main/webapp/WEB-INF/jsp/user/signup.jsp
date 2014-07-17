@@ -42,7 +42,9 @@
                 <h5 style="color:red">${errorMessage}</h5>
             </div>
             <br/>
-            <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户邮箱" value="${userForm.username}" class="form-control">
+            <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" value="${userForm.username}" class="form-control">
+            <br/>
+            <input type="text" id="email" name="email" autofocus="" required="" placeholder="用户邮箱" value="${userForm.email}" class="form-control">
             <br/>
             <input type="password" id="password" name="password" value="" required="" placeholder="密码" class="form-control">
             <br/>
@@ -59,7 +61,6 @@
                 </div>
             </div>
             <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即注册" type="submit" />
-            <a href="${ctx}/signin" target="_blank">用户登录</a>
         </form>
     </div>
 </div>

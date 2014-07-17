@@ -1,5 +1,6 @@
 package com.qatang.cms.entity.user;
 
+import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -32,6 +33,14 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_time")
     private Date updatedTime;
+    @Column(name = "login_time")
+    private Date loginTime;
+    @Column(name = "last_login_time")
+    private Date lastLoginTime;
+    @Column(name = "qq")
+    private String QQ;
+    @Enumerated
+    private EnableDisableStatus valid;
 
     public Long getId() {
         return id;
@@ -103,5 +112,37 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getQQ() {
+        return QQ;
+    }
+
+    public void setQQ(String QQ) {
+        this.QQ = QQ;
+    }
+
+    public EnableDisableStatus getValid() {
+        return valid;
+    }
+
+    public void setValid(EnableDisableStatus valid) {
+        this.valid = valid;
     }
 }
