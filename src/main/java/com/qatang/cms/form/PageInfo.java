@@ -1,11 +1,11 @@
-package com.qatang.cms.constants;
+package com.qatang.cms.form;
 
 /**
  * Created by zhangzq on 14-7-8.
  */
 public class PageInfo {
 
-    private Integer currentPage = 1;
+    public Integer currentPage = 1;
     private Integer totalPages;
     private Integer pageSize = 5;
 
