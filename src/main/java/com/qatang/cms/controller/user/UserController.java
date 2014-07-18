@@ -1,10 +1,12 @@
 package com.qatang.cms.controller.user;
 
+import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
+import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
@@ -17,10 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import java.util.List;
  * Created by JSH on 2014/6/26.
  */
 @Controller
+@SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
@@ -42,22 +44,41 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/list")
-    public String list(UserForm userForm, ModelMap modelMap) {
-        List<User> userList = null;
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(ModelMap modelMap, HttpServletRequest request) {
+        UserForm userForm = new UserForm();
+        Page<User> page = userService.getAll(userForm);
+        if (page.getContent() != null) {
+            List<User> userList = page.getContent();
+            modelMap.addAttribute(userList);
+        }
+        PageInfo pageInfo = userForm.getPageInfo();
+        pageInfo.setTotalPages(page.getTotalPages());
+        userForm.setPageInfo(pageInfo);
+        modelMap.addAttribute(userForm);
+        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
+        return "user/userList";
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public String list(@ModelAttribute(CommonConstants.QUERY_CONDITION_KEY) UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
         try {
             queryUserValidator.validate(userForm);
-            Page<User> page = userService.getAll(userForm);
-            if (page != null) {
-                userList = page.getContent();
-                modelMap.addAttribute(userList);
-            }
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
+        Page<User> page = userService.getAll(userForm);
+        if (page.getContent() != null) {
+            List<User> userList = page.getContent();
+            modelMap.addAttribute(userList);
+        }
+        PageInfo pageInfo = userForm.getPageInfo();
+        pageInfo.setTotalPages(page.getTotalPages());
+        modelMap.addAttribute(userForm);
+        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
         return "user/userList";
     }
 

@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getList() {
-        return userDao.findAll();
-    }
-
-    @Override
     public User save(User user) {
         return userDao.save(user);
     }

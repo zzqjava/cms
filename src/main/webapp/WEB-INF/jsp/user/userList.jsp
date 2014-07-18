@@ -184,24 +184,19 @@
         </div>
         <div class="container">
             <div style="float:right;">
-                <%--<form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">--%>
-                    <%--<input type="hidden" name="username" value="${userForm.username}">--%>
-                    <%--<input type="hidden" name="name" value="${userForm.name}">--%>
-                    <%--<input type="hidden" name="email" value="${userForm.email}">--%>
-                    <%--<input type="hidden" name="mobile" value="${userForm.mobile}">--%>
-                    <%--<input type="hidden" name="genderValue" value="${userForm.genderValue}">--%>
-                    <%--<input type="hidden" name="validValue" value="${userForm.validValue}">--%>
-                    <%--<input type="hidden" name="orderType" value="${userForm.orderType}">--%>
-                    <%--<input type="hidden" name="sortType" value="${userForm.sortType}">--%>
-                    <%--<ul class="pagination">--%>
-                        <%--<li><a href="#">&laquo;</a></li>--%>
-                        <%--<li><a href="#">1</a></li>--%>
-                        <%--<li><a href="#">1</a></li>--%>
-                        <%--<li><a href="#">1</a></li>--%>
-                        <%--<li><a href="#">&raquo;</a></li>--%>
-                    <%--</ul>--%>
-                <%--</form>--%>
-                ${pageString}
+                <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
+                    <ul class="pagination">
+                        <c:if test="${userForm.pageInfo.currentPage > 1}">
+                            <li><a href="#">&laquo;</a></li>
+                        </c:if>
+                        <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
+                            <li><a href="#">${i}</a></li>
+                        </c:forEach>
+                        <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
+                            <li><a href="#">&raquo;</a></li>
+                        </c:if>
+                    </ul>
+                </form>
             </div>
         </div>
     </body>
