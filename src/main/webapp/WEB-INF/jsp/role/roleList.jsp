@@ -38,8 +38,8 @@
         })
 
         //定时关闭提示信息
-        var message = '${message}';
-        if (message != null && message != '') {
+        var successMessage = '${successMessage}';
+        if (successMessage != null && successMessage != '') {
             closeSuccess();
         }
         function closeSuccess() {
@@ -89,10 +89,10 @@
 <br /><br /><br />
 <div style="width: 60%;text-align: center;margin-left: auto; margin-right: auto;">
     <div class="panel panel-default">
-        <c:if test="${message != null}" >
+        <c:if test="${successMessage != null}" >
             <div class="alert alert-success fade in">
                 <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
-                    ${message}
+                    ${successMessage}
             </div>
         </c:if>
         <c:if test="${errorMessage != null}" >
@@ -114,7 +114,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${list}" var="role" varStatus="status">
+            <c:forEach items="${roleList}" var="role" varStatus="status">
                 <tr <c:if test="${status.count%2==0}">class="warning"</c:if>>
                     <td>${role.id}</td>
                     <td>${role.roleName}</td>
