@@ -13,6 +13,12 @@
         <link rel="stylesheet" href="${ctx}/css/main.css">
         <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
         <script src="${ctx}/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            var goPage = function(page) {
+                $("#page").val(page);
+                $("#pageForm").submit();
+            }
+        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -46,74 +52,30 @@
                                 <td class="text-right"><span>性别：</span></td>
                                 <td class="text-left">
                                     <select name="genderValue">
-                                        <c:choose>
-                                            <c:when test="${userForm.genderValue == 1}">
-                                                <option value="0">全部</option>
-                                                <option value="1" selected>男</option>
-                                                <option value="2">女</option>
-                                            </c:when>
-                                            <c:when test="${userForm.genderValue == 2}">
-                                                <option value="0">全部</option>
-                                                <option value="1">男</option>
-                                                <option value="2" selected>女</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="0" selected>全部</option>
-                                                <option value="1">男</option>
-                                                <option value="2">女</option>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <option value="0">全部</option>
+                                        <option value="1" <c:if test="${userForm.genderValue == 1}">selected="selected"</c:if>>男</option>
+                                        <option value="2" <c:if test="${userForm.genderValue == 2}">selected="selected"</c:if>>女</option>
                                     </select>
                                 </td>
                                 <td class="text-right"><span>是否有效</span></td>
                                 <td class="text-left">
                                     <select name="validValue">
-                                        <c:choose>
-                                            <c:when test="${userForm.validValue == 1}">
-                                                <option value="0" selected>全部</option>
-                                                <option value="1" selected>是</option>
-                                                <option value="2">否</option>
-                                            </c:when>
-                                            <c:when test="${userForm.validValue == 2}">
-                                                <option value="0" selected>全部</option>
-                                                <option value="1">是</option>
-                                                <option value="2" selected>否</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="0" selected>全部</option>
-                                                <option value="1">是</option>
-                                                <option value="2">否</option>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <option value="0">全部</option>
+                                        <option value="1" <c:if test="${userForm.validValue == 1}">selected="selected"</c:if>>是</option>
+                                        <option value="2" <c:if test="${userForm.validValue == 2}">selected="selected"</c:if>>否</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4"><span>将</span>
                                     <select name="orderType">
-                                        <c:choose>
-                                            <c:when test="${userForm.genderValue == 'createdTime'}">
-                                                <option value="id">id</option>
-                                                <option value="createdTime" selected>创建时间</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="id" selected>id</option>
-                                                <option value="createdTime">创建时间</option>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <option value="id">id</option>
+                                        <option value="createdTime" <c:if test="${userForm.orderType == 'createdTime'}">selected="selected"</c:if>>创建时间</option>
                                     </select>
                                     <span>字段，按</span>
                                     <select name="sortType">
-                                        <c:choose>
-                                            <c:when test="${userForm.sortType == 'desc'}">
-                                                <option value="asc">升序</option>
-                                                <option value="desc" selected>降序</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="asc" selected>正序</option>
-                                                <option value="desc">倒序</option>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <option value="asc">升序</option>
+                                        <option value="desc" <c:if test="${userForm.sortType == 'desc'}">selected="selected"</c:if>>降序</option>
                                     </select>
                                     <span>排列</span>
                                 </td>
@@ -150,14 +112,8 @@
                                     <td><a href="${ctx}/user/view/${user.id}">${user.username}</a></td>
                                     <td>${user.name}</td>
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${user.gender.value == 1}">
-                                                男
-                                            </c:when>
-                                            <c:otherwise>
-                                                女
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <c:if test="${user.gender.value == 1}">男</c:if>
+                                        <c:if test="${user.gender.value == 2}">女</c:if>
                                     </td>
                                     <td>${user.mobile}</td>
                                     <td>${user.email}</td>
@@ -165,16 +121,13 @@
                                     <td><a href="${ctx}/user/input/${user.id}">修改</a></td>
                                     <td><a href="${ctx}/user/password/input/${user.id}">重置密码</a></td>
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${user.valid.value == 1}">
-                                                <a href="${ctx}/user/disable/${user.id}">禁用</a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <a href="${ctx}/user/enable/${user.id}">启用</a>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <c:if test="${user.valid.value == 1}">
+                                            <a href="${ctx}/user/disable/${user.id}">禁用</a>
+                                        </c:if>
+                                        <c:if test="${user.valid.value == 2}">
+                                            <a href="${ctx}/user/enable/${user.id}">启用</a>
+                                        </c:if>
                                     </td>
-                                    <%--<td><a href="${ctx}/user/del/${user.id}" onclick="return confirm('确定要删除么？');">删除</a></td>--%>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -185,15 +138,16 @@
         <div class="container">
             <div style="float:right;">
                 <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
+                    <input id="page" type="hidden" name="pageInfo.currentPage">
                     <ul class="pagination">
                         <c:if test="${userForm.pageInfo.currentPage > 1}">
-                            <li><a href="#">&laquo;</a></li>
+                            <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});">&laquo;</a></li>
                         </c:if>
                         <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
-                            <li><a href="#">${i}</a></li>
+                            <li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>
                         </c:forEach>
                         <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
-                            <li><a href="#">&raquo;</a></li>
+                            <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});">&raquo;</a></li>
                         </c:if>
                     </ul>
                 </form>
