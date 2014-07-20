@@ -12,15 +12,28 @@ import java.util.regex.Pattern;
 public abstract class AbstractValidator<T> implements IValidator<T> {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected boolean checkEmail(String email){
+    protected boolean checkEmail(String email) {
         boolean flag = false;
-        try{
+        try {
             String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
             Pattern regex = Pattern.compile(check);
             Matcher matcher = regex.matcher(email);
             flag = matcher.matches();
-        }catch(Exception e){
+        } catch(Exception e) {
             logger.error("验证邮箱地址错误");
+        }
+        return flag;
+    }
+
+    protected boolean checkMobile(String mobile) {
+        boolean flag = false;
+        try {
+            String check = "^[1][3-8]\\d{9}$";
+            Pattern regex = Pattern.compile(check);
+            Matcher matcher = regex.matcher(mobile);
+            flag = matcher.matches();
+        } catch(Exception e) {
+            logger.error("验证手机号错误");
         }
         return flag;
     }

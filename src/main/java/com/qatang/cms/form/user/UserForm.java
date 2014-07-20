@@ -1,10 +1,12 @@
 package com.qatang.cms.form.user;
 
+import com.qatang.cms.form.AbstractPagingForm;
+
 /**
  * Created by qatang on 14-6-12.
  */
-public class UserForm {
-    private Long id;
+public class UserForm extends AbstractPagingForm {
+    private String id;
     private String errorMessage;
     private String username;
     private String password;
@@ -17,12 +19,15 @@ public class UserForm {
     private String mobile;
     private String genderValue;
     private String QQ;
+    private String validValue;
+    private String orderType;
+    private String sortType;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -120,5 +125,29 @@ public class UserForm {
 
     public void setQQ(String QQ) {
         this.QQ = QQ;
+    }
+
+    public String getValidValue() {
+        return validValue;
+    }
+
+    public void setValidValue(String validValue) {
+        this.validValue = validValue;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
     }
 }
