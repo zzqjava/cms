@@ -192,19 +192,6 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value = "/password/input/{id}", method = RequestMethod.GET)
-    public String inputPassword(@PathVariable String id, ModelMap modelMap) {
-        if (StringUtils.isEmpty(id)) {
-            logger.error("修改用户密码，用户id为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户密码，用户id为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        modelMap.addAttribute("id", id);
-        modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/passwordInput";
-    }
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(UserForm userForm, ModelMap modelMap) {
         try {
@@ -214,7 +201,7 @@ public class UserController extends BaseController {
             modelMap.addAttribute(userForm);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "/user/userInput";
+            return "user/userInput";
         }
         User user = new User();
         user.setUsername(userForm.getUsername());
@@ -240,7 +227,7 @@ public class UserController extends BaseController {
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             modelMap.addAttribute(userForm);
-            return "/user/userInput";
+            return "user/userInput";
         }
         Long id = Long.parseLong(userForm.getId());
         User user = userService.get(id);
@@ -253,26 +240,6 @@ public class UserController extends BaseController {
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.update(user);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "success";
-    }
-
-    @RequestMapping(value = "/password/update", method = RequestMethod.POST)
-    public String updatePassword(UserForm userForm, ModelMap modelMap) {
-        try {
-            updatePasswordValidator.validate(userForm);
-        } catch (ValidateFailedException e) {
-            logger.error(e.getMessage(), e);
-            modelMap.addAttribute(userForm.getId());
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "/user/passwordInput";
-        }
-        Long id = Long.parseLong(userForm.getId());
-        User user = userService.get(id);
-        user.setPassword(DigestUtils.md5Hex(userForm.getNewPassword()));
-        userService.update(user);
-        modelMap.addAttribute(FORWARD_URL, "/user/list");
-        modelMap.addAttribute(SUCCESS_MESSAGE_KEY, "修改用户密码成功");
         return "success";
     }
 
@@ -318,5 +285,49 @@ public class UserController extends BaseController {
         modelMap.addAttribute(user);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userView";
+    }
+
+    @RequestMapping(value = "/password/input/{id}", method = RequestMethod.GET)
+    public String inputPassword(@PathVariable String id, ModelMap modelMap) {
+        if (StringUtils.isEmpty(id)) {
+            logger.error("修改用户密码，用户id为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户密码，用户id为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        modelMap.addAttribute("id", id);
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
+        return "user/passwordInput";
+    }
+
+    @RequestMapping(value = "/password/update", method = RequestMethod.POST)
+    public String updatePassword(UserForm userForm, ModelMap modelMap) {
+        try {
+            updatePasswordValidator.validate(userForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage(), e);
+            modelMap.addAttribute(userForm.getId());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "user/passwordInput";
+        }
+        Long id = Long.parseLong(userForm.getId());
+        User user = userService.get(id);
+        user.setPassword(DigestUtils.md5Hex(userForm.getNewPassword()));
+        userService.update(user);
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
+        modelMap.addAttribute(SUCCESS_MESSAGE_KEY, "修改用户密码成功");
+        return "success";
+    }
+
+    @RequestMapping(value = "/password/forget", method = RequestMethod.GET)
+    public String forgetPassword(ModelMap modelMap) {
+        modelMap.addAttribute(FORWARD_URL, "/signin");
+        return "user/passwordReset";
+    }
+
+    @RequestMapping(value = "/password/reset", method = RequestMethod.GET)
+    public String resetPassword() {
+        return "success";
     }
 }

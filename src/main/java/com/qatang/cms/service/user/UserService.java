@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 public interface UserService {
     public User getByUsername(String username);
 
+    public User getByEmail(String email);
+
     public User get(Long id);
 
     public User save(User user);
