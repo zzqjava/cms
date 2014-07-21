@@ -238,6 +238,7 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
             modelMap.addAttribute(userForm);
             return "/user/userInput";
         }
@@ -263,6 +264,7 @@ public class UserController extends BaseController {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(userForm.getId());
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "/user/passwordInput";
         }
         Long id = Long.parseLong(userForm.getId());

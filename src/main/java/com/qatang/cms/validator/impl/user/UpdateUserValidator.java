@@ -91,6 +91,11 @@ public class UpdateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (StringUtils.isEmpty(userForm.getValidValue())) {
+            String msg = String.format("是否有效不能为空");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         int validValue;
         try {
             validValue = Integer.valueOf(userForm.getValidValue());
