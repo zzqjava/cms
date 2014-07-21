@@ -46,7 +46,12 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
-        UserForm userForm = new UserForm();
+        UserForm userForm;
+        if (modelMap.containsKey(CommonConstants.QUERY_CONDITION_KEY)) {
+            userForm = (UserForm) modelMap.get(CommonConstants.QUERY_CONDITION_KEY);
+        } else {
+            userForm = new UserForm();
+        }
         Page<User> page = userService.getAll(userForm);
         if (page.getContent() != null) {
             List<User> userList = page.getContent();
