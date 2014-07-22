@@ -1,7 +1,6 @@
 package com.qatang.cms.service.impl.role;
 
 import com.qatang.cms.dao.role.RoleDao;
-import com.qatang.cms.dao.role.RoleRepository;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.form.role.RoleForm;
@@ -45,7 +44,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<Role> findAllPage(RoleForm roleForm) {
-        PageRequest pageRequest = new PageRequest(roleForm.getPageInfo().getCurrentPage() - 1, roleForm.getPageInfo().getPageSize());
-        return roleDao.findAll(pageRequest);
+        return roleDao.findAllPage(roleForm);
     }
 }

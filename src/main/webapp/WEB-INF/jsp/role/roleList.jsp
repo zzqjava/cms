@@ -35,6 +35,13 @@
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
+
+            //回显
+            $("#queryValid option").each(function() {
+                if ($(this).val() == '${roleForm.queryValid}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
 
         //定时关闭提示信息
@@ -72,7 +79,8 @@
         //删除
         function del (id) {
             if (confirm('确定删除该条记录?')) {
-                $("#theForm").attr("action", "${ctx}/role/del/"+id);
+                $("#theForm").attr("action", "${ctx}/role/del");
+                $("#roleId").val(id);
                 $("#theForm").submit();
             }
         }
@@ -101,6 +109,34 @@
                     ${errorMessage}
             </div>
         </c:if>
+        <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
+            <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
+            <input type="hidden" id="roleId" name="id" />
+            <div class="text-center">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <span class="input-group-addon">角色名称：</span>
+                                <input type="text" name="queryRoleName" value="${roleForm.queryRoleName}" class="form-control" placeholder="角色名称不能为空">
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group col-sm-5">
+                                <span class="input-group-addon ">是否有效：</span>
+                                <select class="form-control" name="queryValid" id="queryValid">
+                                    <c:forEach items="${queryEnableDisableStatus}" var="queryEnableDisableStatus">
+                                        <option value="${queryEnableDisableStatus.value}">${queryEnableDisableStatus.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-primary" id="query" name="query" type="submit" onclick="">查询</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
                 <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
@@ -129,10 +165,6 @@
             </tbody>
         </table>
     </div>
-    <form id="theForm" style="display:none;" method="post" action="">
-        <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
-        <input type="hidden" id="roleId" name="id" />
-    </form>
     <div class="pagination-lg">
         <ul id='pageDiv'></ul>
     </div>

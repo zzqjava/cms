@@ -34,7 +34,7 @@ public class RoleController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping(value = "/input")
+    @RequestMapping(value = "/input", method = {RequestMethod.POST, RequestMethod.GET})
     public String input(RoleForm roleForm, ModelMap modelMap) {
         if (roleForm != null && roleForm.getId() != null && !"".equals(roleForm.getId())) {
             Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
@@ -48,13 +48,13 @@ public class RoleController extends BaseController {
         return "/role/roleInput";
     }
 
-    @RequestMapping(value = "/list/{currentPage}")
+    @RequestMapping(value = "/list/{currentPage}", method = {RequestMethod.POST, RequestMethod.GET})
     public String list(@PathVariable String currentPage, RoleForm roleForm, ModelMap modelMap) {
         getModelMap(roleForm, currentPage, modelMap);
         return "role/roleList";
     }
 
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public String list(RoleForm roleForm, ModelMap modelMap) {
         getModelMap(roleForm, "", modelMap);
         return "role/roleList";
@@ -99,19 +99,20 @@ public class RoleController extends BaseController {
         return "redirect:/role/list";
     }
 
-    @RequestMapping(value = "/del/{id}", method = RequestMethod.POST)
-    public String del(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (id == null) {
+    @RequestMapping(value = "/del", method = RequestMethod.POST)
+    public String del(RoleForm roleForm, RedirectAttributes redirectAttributes) {
+        if (roleForm == null || roleForm.getId() == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
             return "redirect:/role/list" ;
         }
-        Role role = roleService.getRole(id);
+        Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
         if (role == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要删除的角色对象不存在！");
         }
         role.setValid(EnableDisableStatus.DISABLE);
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功删除角色！");
+        redirectAttributes.addFlashAttribute(roleForm);
         return "redirect:/role/list";
     }
 
@@ -132,12 +133,23 @@ public class RoleController extends BaseController {
         role.setUpdatedTime(new Date());
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功更新角色！");
+        redirectAttributes.addFlashAttribute(roleForm);
         return "redirect:/role/list" ;
     }
-
+    /**
+     * 新增与修改时候使用
+     * */
     @ModelAttribute("enableDisableStatus")
     public List<EnableDisableStatus> enableDisableStatus() {
         List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.list();
+        return enableDisableStatus;
+    }
+    /**
+     * 查询时候使用
+     * */
+    @ModelAttribute("queryEnableDisableStatus")
+    public List<EnableDisableStatus> queryEnableDisableStatus() {
+        List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.listAll();
         return enableDisableStatus;
     }
 }
