@@ -40,8 +40,8 @@ public class RoleDaoImpl {
         Query q = em.createQuery(hql.toString());
         Query qc = em.createQuery(hqlCount.toString());
         if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            q.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName());
-            qc.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName());
+            q.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
+            qc.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
         }
         if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
             int valid = Integer.parseInt(roleForm.getQueryValid());

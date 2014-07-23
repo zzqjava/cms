@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -67,10 +68,21 @@ public class RoleController extends BaseController {
         if (currentPage == null || "".equals(currentPage) || Integer.parseInt(currentPage) < 1) {
             currentPage = 1 + "";
         }
+        if (roleForm.getQueryRoleName() != null) {
+            try {
+                String queryRoleName = java.net.URLDecoder.decode(roleForm.getQueryRoleName(),"UTF-8");
+                roleForm.setQueryRoleName(queryRoleName);
+            } catch (UnsupportedEncodingException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
         PageInfo pageInfo = roleForm.getPageInfo();
         pageInfo.setCurrentPage(Integer.parseInt(currentPage));
         roleForm.setPageInfo(pageInfo);
         Page<Role> rolePage = roleService.findAllPage(roleForm);
+        if (rolePage == null) {
+            return null;
+        }
         List<Role> roleList = rolePage.getContent();
         rolePage.getTotalPages();
         roleForm.getPageInfo().setTotalPages(rolePage.getTotalPages());

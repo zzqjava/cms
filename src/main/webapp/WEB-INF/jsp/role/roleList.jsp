@@ -28,10 +28,68 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                pageUrl:function(type,page){
-                    return "${ctx}/role/list/"+page;
+                pageUrl:function(type,page) {
+                    var queryRoleName = $("#queryRoleName").val();
+                    var queryValid = '${roleForm.queryValid}';
+                    var url = "${ctx}/role/list/" + page +"?1=1";
+                    if (queryRoleName != null && queryRoleName != "") {
+                        queryRoleName = encodeURI(encodeURI(queryRoleName));
+                        url = url + "&queryRoleName=" + queryRoleName;
+                    }
+                    if (queryValid != null && queryValid != "") {
+                        url = url + "&queryValid=" + queryValid;
+                    }
+                    return url;
                 },
-                onPageClicked:null,
+                tooltipTitles:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return (page === current) ? "当前页 " : "第" + page + "页";
+                    }
+                },
+                itemTexts:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return page;
+                    }
+                },
+                onPageClicked:function (event, originalEvent, type, page) {
+                    var currentTarget = $(event.currentTarget);
+                    switch (type) {
+                        case "first":
+                            currentTarget.bootstrapPaginator("showFirst");
+                            break;
+                        case "prev":
+                            currentTarget.bootstrapPaginator("showPrevious");
+                            break;
+                        case "next":
+                            currentTarget.bootstrapPaginator("showNext");
+                            break;
+                        case "last":
+                            currentTarget.bootstrapPaginator("showLast");
+                            break;
+                        case "page":
+                            currentTarget.bootstrapPaginator("show", page);
+                            break;
+                    }
+                },
+//                onPageClicked:null,
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
@@ -118,7 +176,7 @@
                         <td class="text-center">
                             <div class="input-group">
                                 <span class="input-group-addon">角色名称：</span>
-                                <input type="text" name="queryRoleName" value="${roleForm.queryRoleName}" class="form-control" placeholder="角色名称不能为空">
+                                <input type="text" name="queryRoleName" id="queryRoleName" value="${roleForm.queryRoleName}" class="form-control" placeholder="角色名称不能为空">
                             </div>
                         </td>
                         <td class="text-center">
