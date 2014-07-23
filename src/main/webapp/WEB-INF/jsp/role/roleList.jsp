@@ -69,27 +69,7 @@
                             return page;
                     }
                 },
-                onPageClicked:function (event, originalEvent, type, page) {
-                    var currentTarget = $(event.currentTarget);
-                    switch (type) {
-                        case "first":
-                            currentTarget.bootstrapPaginator("showFirst");
-                            break;
-                        case "prev":
-                            currentTarget.bootstrapPaginator("showPrevious");
-                            break;
-                        case "next":
-                            currentTarget.bootstrapPaginator("showNext");
-                            break;
-                        case "last":
-                            currentTarget.bootstrapPaginator("showLast");
-                            break;
-                        case "page":
-                            currentTarget.bootstrapPaginator("show", page);
-                            break;
-                    }
-                },
-//                onPageClicked:null,
+                onPageClicked:null,
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
