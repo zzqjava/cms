@@ -31,7 +31,7 @@
                 pageUrl:function(type,page) {
                     var queryRoleName = $("#queryRoleName").val();
                     var queryValid = '${roleForm.queryValid}';
-                    var url = "${ctx}/role/list/" + page +"?1=1";
+                    var url = "${ctx}/role/list/" + page +"?time="+new Date().getMilliseconds();
                     if (queryRoleName != null && queryRoleName != "") {
                         queryRoleName = encodeURI(encodeURI(queryRoleName));
                         url = url + "&queryRoleName=" + queryRoleName;
