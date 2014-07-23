@@ -3,7 +3,6 @@ package com.qatang.cms.controller.menu;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.enums.EnableDisableStatus;
-import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.menu.MenuForm;
 import com.qatang.cms.service.menu.MenuService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 import java.util.List;
@@ -133,6 +131,93 @@ public class MenuController extends BaseController {
 		}
 		modelMap.addAttribute(FORWARD_URL, "/menu/list");
 		return "success";
+	}
+
+	@RequestMapping(value = "/disable/{menuId}", method = RequestMethod.GET)
+	public String disable(@PathVariable String menuId, ModelMap modelMap) {
+		if (StringUtils.isEmpty(menuId)) {
+			logger.error("传递的参数菜单id为空！");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "传递的参数菜单id为空！");
+			return "/menu/input";
+		}
+		Long id = null;
+		try {
+			id = Long.parseLong(menuId);
+		} catch (NumberFormatException e) {
+			logger.error("禁用的菜单id不合法");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "禁用的菜单id不合法");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		Menu menu = menuService.get(id);
+		if (menu == null) {
+			logger.error("根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		menu.setValid(EnableDisableStatus.DISABLE);
+		menu.setUpdatedTime(new Date());
+		menuService.update(menu);
+		return "redirect:/menu/list";
+	}
+
+	@RequestMapping(value = "/enable/{menuId}", method = RequestMethod.GET)
+	public String enable(@PathVariable String menuId, ModelMap modelMap) {
+		if (StringUtils.isEmpty(menuId)) {
+			logger.error("传递的参数菜单id为空！");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "传递的参数菜单id为空！");
+			return "/menu/input";
+		}
+		Long id = null;
+		try {
+			id = Long.parseLong(menuId);
+		} catch (NumberFormatException e) {
+			logger.error("启用的菜单id不合法");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用的菜单id不合法");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		Menu menu = menuService.get(id);
+		if (menu == null) {
+			logger.error("根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		menu.setValid(EnableDisableStatus.ENABLE);
+		menu.setUpdatedTime(new Date());
+		menuService.update(menu);
+		return "redirect:/menu/list";
+	}
+
+	@RequestMapping(value = "/view/{menuId}", method = RequestMethod.GET)
+	public String view(@PathVariable String menuId, ModelMap modelMap) {
+		if (StringUtils.isEmpty(menuId)) {
+			logger.error("查看用户，id为空");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "查看用户，id为空");
+			modelMap.addAttribute(FORWARD_URL, "/user/list");
+			return "failure";
+		}
+		Long id = null;
+		try {
+			id = Long.parseLong(menuId);
+		} catch (NumberFormatException e) {
+			logger.error("查看菜单，菜单id不合法");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "查看菜单，菜单id不合法");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		Menu menu = menuService.get(id);
+		if (menu == null) {
+			logger.error("根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(ERROR_MESSAGE_KEY, "根据菜单id,没有查询到该菜单信息！");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
+		}
+		modelMap.addAttribute(menu);
+		modelMap.addAttribute(FORWARD_URL, "/menu/list");
+		return "menu/menuView";
 	}
 
 	@RequestMapping(value = "/delete/{menuId}", method = RequestMethod.GET)

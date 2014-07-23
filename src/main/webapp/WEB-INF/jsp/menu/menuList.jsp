@@ -47,13 +47,22 @@
                             <c:forEach var="menu" items="${menuList}" varStatus="status">
                                 <tr>
                                     <td class="text-center">${status.count}</td>
-                                    <td class="text-center">${menu.name}</td>
+                                    <td class="text-center"><a href="view/${menu.id}">${menu.name}</a></td>
                                     <td class="text-center">${menu.url}</td>
                                     <td class="text-center">${menu.orderLevel}</td>
                                     <td class="text-center">${menu.valid.name}</td>
                                     <td class="text-center">${menu.memo}</td>
                                     <td class="text-center"><a href="input/${menu.id}">修改</a></td>
-                                    <td class="text-center"><a href="delete/${menu.id}">删除</a></td>
+                                    <td class="text-center">
+                                    <c:choose>
+                                        <c:when test="${menu.valid.value == 1}">
+                                            <a href="disable/${menu.id}">无效</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="enable/${menu.id}">有效</a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    </td>
                                     <td class="text-center"><a href="#">权限管理</a></td>
                                 </tr>
                             </c:forEach>
