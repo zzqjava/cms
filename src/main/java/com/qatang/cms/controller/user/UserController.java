@@ -4,6 +4,7 @@ import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
+import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
@@ -17,10 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +45,12 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/list")
+	@ModelAttribute("userForm")        //① 暴露表单引用对象为模型数据
+	public UserForm getUserForm() {
+		return new UserForm();
+	}
+
+	@RequestMapping(value = "/list")
     public String list(UserForm userForm, ModelMap modelMap) {
         List<User> userList = null;
         try {
@@ -121,6 +129,8 @@ public class UserController extends BaseController {
             userForm.setValidValue(String.valueOf(user.getValid().getValue()));
             modelMap.addAttribute(userForm);
         }
+	    modelMap.addAttribute("genderList", Gender.list());
+	    modelMap.addAttribute("validList", YesNoStatus.list());
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }

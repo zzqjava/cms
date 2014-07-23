@@ -35,13 +35,13 @@
         <div class="col-lg-10">
             <ol class="breadcrumb">
                 <li><a href="#">系统管理</a></li>
-                <li><a href="#">用户管理</a></li>
+                <li><a href="${ctx}/user/list">用户管理</a></li>
                 <li class="active">用户列表</li>
             </ol>
             <div class="container-fluid">
                 <form class="form-horizontal" action="${ctx}/user/list" method="post">
                     <div class="form-group">
-                        <a href="${ctx}/user/input" class="btn btn-primary btn-sm" role="button">创建用户</a>
+                        <a href="${ctx}/user/input" class="btn btn-primary" role="button">创建用户</a>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-4">
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <button class="btn btn-sm btn-success">查询</button>
+                        <button class="btn btn-default">查询</button>
                     </div>
                 </form>
             </div>
