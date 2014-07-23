@@ -1,4 +1,5 @@
 <%@page contentType="text/html; charset=utf-8"%>
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
 <div class="panel-group" id="accordion">
     <div class="panel panel-default">
         <div class="panel-heading">
