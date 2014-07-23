@@ -1,6 +1,6 @@
 package com.qatang.cms.entity.role;
 
-import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.EnableDisableStatus;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -22,10 +22,8 @@ public class Role {
     private String roleName;
     @Column(name = "role_desc")
     private String roleDesc;
-    @Column(name = "user_id")
-    private Long userId;
     @Enumerated
-    private YesNoStatus status;
+    private EnableDisableStatus valid;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_time", updatable = false)
     private Date createdTime;
@@ -57,20 +55,12 @@ public class Role {
         this.roleDesc = roleDesc;
     }
 
-    public Long getUserId() {
-        return userId;
+    public EnableDisableStatus getValid() {
+        return valid;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public YesNoStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(YesNoStatus status) {
-        this.status = status;
+    public void setValid(EnableDisableStatus valid) {
+        this.valid = valid;
     }
 
     public Date getCreatedTime() {
