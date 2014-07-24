@@ -2,6 +2,7 @@ package com.qatang.cms.service.user;
 
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.form.user.UserForm;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface UserService {
 
     public void delete(Long id);
 
-    public List<User> getByCondition(UserForm userForm);
+    public Page<User> getAll(UserForm userForm);
 }
