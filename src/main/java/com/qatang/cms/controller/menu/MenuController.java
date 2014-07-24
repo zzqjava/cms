@@ -3,7 +3,6 @@ package com.qatang.cms.controller.menu;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.enums.EnableDisableStatus;
-import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.menu.MenuForm;
 import com.qatang.cms.service.menu.MenuService;
@@ -14,7 +13,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 import java.util.List;
@@ -73,13 +71,13 @@ public class MenuController extends BaseController {
 			List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.list();
 			modelMap.addAttribute("enableDisableStatus", enableDisableStatus);
 			modelMap.addAttribute("menuForm", menuForm);
-            return "menu/menuInput";
+			return "menu/menuInput";
 		}
 		Menu menu = new Menu();
 		menu.setName(menuForm.getName());
 		menu.setUrl(menuForm.getUrl());
 		menu.setOrderLevel(Integer.valueOf(menuForm.getOrderLevelValue()));
-        menu.setValid(EnableDisableStatus.get(Integer.valueOf(menuForm.getValidValue())));
+		menu.setValid(EnableDisableStatus.get(Integer.valueOf(menuForm.getValidValue())));
 		menu.setMemo(menuForm.getMemo());
 		menu.setCreatedTime(new Date());
 		menu.setUpdatedTime(new Date());

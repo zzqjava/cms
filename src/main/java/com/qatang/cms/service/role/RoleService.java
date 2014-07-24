@@ -9,10 +9,10 @@ import org.springframework.data.domain.Page;
  */
 public interface RoleService {
 
-    public Role save(Role user);
-    public Role update(Role user);
-    public void del(Role role);
-    public Role getRole(Long id);
-    public Page<Role> findAllPage(RoleForm roleForm);
+	public Role save(Role user);
+	public Role update(Role user);
+	public void del(Role role);
+	public Role getRole(Long id);
+	public Page<Role> findAllPage(RoleForm roleForm);
 
 }

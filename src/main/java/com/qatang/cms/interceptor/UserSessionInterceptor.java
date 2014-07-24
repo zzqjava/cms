@@ -23,12 +23,9 @@ public class UserSessionInterceptor extends HandlerInterceptorAdapter {
         if (user == null) {
             String msg = String.format("session超时，请重新登录");
             logger.info(msg);
-
-            response.sendRedirect("/signin");
-
+            response.sendRedirect(request.getContextPath() + "/signin");
             return false;
         }
-
         return true;
     }
 }

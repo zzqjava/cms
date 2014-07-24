@@ -15,67 +15,67 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 public class Role {
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Column(name = "role_name")
-    private String roleName;
-    @Column(name = "role_desc")
-    private String roleDesc;
-    @Enumerated
-    private EnableDisableStatus valid;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_time", updatable = false)
-    private Date createdTime;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_time")
-    private Date updatedTime;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column(name = "role_name")
+	private String roleName;
+	@Column(name = "role_desc")
+	private String roleDesc;
+	@Enumerated
+	private EnableDisableStatus valid;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_time", updatable = false)
+	private Date createdTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updated_time")
+	private Date updatedTime;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getRoleName() {
-        return roleName;
-    }
+	public String getRoleName() {
+		return roleName;
+	}
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
-    public String getRoleDesc() {
-        return roleDesc;
-    }
+	public String getRoleDesc() {
+		return roleDesc;
+	}
 
-    public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc;
-    }
+	public void setRoleDesc(String roleDesc) {
+		this.roleDesc = roleDesc;
+	}
 
-    public EnableDisableStatus getValid() {
-        return valid;
-    }
+	public EnableDisableStatus getValid() {
+		return valid;
+	}
 
-    public void setValid(EnableDisableStatus valid) {
-        this.valid = valid;
-    }
+	public void setValid(EnableDisableStatus valid) {
+		this.valid = valid;
+	}
 
-    public Date getCreatedTime() {
-        return createdTime;
-    }
+	public Date getCreatedTime() {
+		return createdTime;
+	}
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
 
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
-    }
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
 }

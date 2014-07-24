@@ -15,22 +15,22 @@
     <script src="${ctx}/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div>
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">后台管理系统</a>
-                </div>
+<div>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">后台管理系统</a>
             </div>
         </div>
-        <div>
-            <div class="container">
-                <div style="margin-top:60px;">
-                    <a href="input" class="btn btn-primary btn-lg">添加菜单</a>
-                </div>
-                <div style="margin-top:10px;">
-                    <div class="text-center">
-                        <c:if test="${menuList != null && menuList.size() > 0}">
+    </div>
+    <div>
+        <div class="container">
+            <div style="margin-top:60px;">
+                <a href="input" class="btn btn-primary btn-lg">添加菜单</a>
+            </div>
+            <div style="margin-top:10px;">
+                <div class="text-center">
+                    <c:if test="${menuList != null && menuList.size() > 0}">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -59,11 +59,11 @@
                             </c:forEach>
                             </tbody>
                         </table>
-                        </c:if>
-                    </div>
+                    </c:if>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
