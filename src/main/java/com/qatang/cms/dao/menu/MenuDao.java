@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MenuDao extends JpaRepository<Menu, Long> {
 
-	/*public Menu findByMenuname(String name);*/
+/*public Menu findByMenuname(String name);*/
 
 }

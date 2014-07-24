@@ -19,6 +19,18 @@
                 $("#pageForm").submit();
             }
         </script>
+        <script type="application/javascript">
+            $(function(){
+            });
+
+            function collapse (subId) {
+                if ($('#' + subId).hasClass('in')) {
+                    $('#' + subId).removeClass('in')
+                } else {
+                    $('#' + subId).addClass('in')
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -28,59 +40,123 @@
                 </div>
             </div>
         </div>
-        <div class="container" style="margin:60px auto 10px;">
-            <a href="${ctx}/user/input" class="btn btn-primary btn-lg" role="button">创建用户</a>
-        </div>
-        <div class="container">
-            <form class="form-inline" action="${ctx}/user/list" method="post">
-                <fieldset>
-                    <div class="text-center">
-                        <table class="table table-bordered">
-                            <tr>
-                                <td class="text-right"><span>用户名：</span></td>
-                                <td class="text-left"><input type="text" name="username" class="form-control" style="width:50%;" value="${userForm.username}"></td>
-                                <td class="text-right"><span>用户姓名：</span></td>
-                                <td class="text-left"><input type="text" name="name" class="form-control" style="width:50%;" value="${userForm.name}"></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right"><span>用户邮箱：</span></td>
-                                <td class="text-left"><input type="text" name="email" class="form-control" style="width:50%;" value="${userForm.email}"></td>
-                                <td class="text-right"><span>手机号：</span></td>
-                                <td class="text-left"><input type="text" name="mobile" class="form-control" style="width:50%;" value="${userForm.mobile}"></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right"><span>性别：</span></td>
-                                <td class="text-left">
-                                    <select name="genderValue">
-                                        <option value="0">全部</option>
-                                        <option value="1" <c:if test="${userForm.genderValue == 1}">selected="selected"</c:if>>男</option>
-                                        <option value="2" <c:if test="${userForm.genderValue == 2}">selected="selected"</c:if>>女</option>
-                                    </select>
-                                </td>
-                                <td class="text-right"><span>是否有效</span></td>
-                                <td class="text-left">
-                                    <select name="validValue">
-                                        <option value="0">全部</option>
-                                        <option value="1" <c:if test="${userForm.validValue == 1}">selected="selected"</c:if>>是</option>
-                                        <option value="2" <c:if test="${userForm.validValue == 2}">selected="selected"</c:if>>否</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"><span>将</span>
-                                    <select name="orderType">
-                                        <option value="id">id</option>
-                                        <option value="createdTime" <c:if test="${userForm.orderType == 'createdTime'}">selected="selected"</c:if>>创建时间</option>
-                                    </select>
-                                    <span>字段，按</span>
-                                    <select name="sortType">
-                                        <option value="asc">升序</option>
-                                        <option value="desc" <c:if test="${userForm.sortType == 'desc'}">selected="selected"</c:if>>降序</option>
-                                    </select>
-                                    <span>排列</span>
-                                </td>
-                            </tr>
-                        </table>
+        <div class="col-lg-10">
+            <ol class="breadcrumb">
+                <li><a href="#">系统管理</a></li>
+                <li><a href="${ctx}/user/list">用户管理</a></li>
+                <li class="active">用户列表</li>
+            </ol>
+            <div class="container-fluid">
+                <form class="form-horizontal" action="${ctx}/user/list" method="post">
+                    <div class="form-group">
+                        <a href="${ctx}/user/input" class="btn btn-primary" role="button">创建用户</a>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-10">
+                                <span class="input-group-addon">用户名：</span>
+                                <input type="text" name="username" class="form-control col-xs-4" value="${userForm.username}">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-10">
+                                <span class="input-group-addon">用户姓名：</span>
+                                <input type="text" name="name" class="form-control" value="${userForm.name}">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-10">
+                                <span class="input-group-addon">用户邮箱：</span>
+                                <input type="text" name="email" class="form-control" value="${userForm.email}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-10">
+                                <span class="input-group-addon">手机号：</span>
+                                <input type="text" name="mobile" class="form-control" value="${userForm.mobile}">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-10">
+                                <span class="input-group-addon">性别：</span>
+                                <select type="text" class="form-control" >
+                                    <option value="-1">全部</option>
+                                    <option value="0">男</option>
+                                    <option value="1">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-6">
+                                <span class="input-group-addon">是否有效：</span>
+                                <select name="validValue" class="form-control">
+                                    <option value="0">全部</option>
+                                    <option value="1" <c:if test="${userForm.validValue == 1}"> selected="selected" </c:if> >是</option>
+                                    <option value="2" <c:if test="${userForm.validValue == 2}"> selected="selected" </c:if>>否</option>
+                                    <c:choose>
+                                        <c:when test="">
+                                        </c:when>
+                                        <c:when test="${userForm.validValue == 2}">
+                                            <option value="0" selected>全部</option>
+                                            <option value="1">是</option>
+                                            <option value="2" selected>否</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="0" selected>全部</option>
+                                            <option value="1">是</option>
+                                            <option value="2">否</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <div class="input-group col-xs-6">
+                                <span class="input-group-addon">性别：</span>
+                                <select type="text" class="form-control col-xs-1" >
+                                    <option value="-1">全部</option>
+                                    <option value="0">男</option>
+                                    <option value="1">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="input-group col-xs-6">
+                                <span class="input-group-addon">排序方式：将</span>
+                                <select name="orderType" class="form-control col-xs-4">
+                                    <c:choose>
+                                        <c:when test="${userForm.genderValue == 'createdTime'}">
+                                            <option value="id">id</option>
+                                            <option value="createdTime" selected>创建时间</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="id" selected>id</option>
+                                            <option value="createdTime">创建时间</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </select>
+                                <span class="input-group-addon">字段，按</span>
+                                <select name="sortType" class="form-control" placeholder=".col-xs-2">
+                                    <c:choose>
+                                        <c:when test="${userForm.sortType == 'desc'}">
+                                            <option value="asc">升序</option>
+                                            <option value="desc" selected>降序</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="asc" selected>正序</option>
+                                            <option value="desc">倒序</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </select>
+                                <span class="input-group-addon">排序</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
                         <button class="btn btn-default">查询</button>
                     </div>
                 </fieldset>
@@ -112,8 +188,14 @@
                                     <td><a href="${ctx}/user/view/${user.id}">${user.username}</a></td>
                                     <td>${user.name}</td>
                                     <td>
-                                        <c:if test="${user.gender.value == 1}">男</c:if>
-                                        <c:if test="${user.gender.value == 2}">女</c:if>
+                                        <c:choose>
+                                            <c:when test="${user.gender.value == 1}">
+                                                男
+                                            </c:when>
+                                            <c:otherwise>
+                                                女
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                     <td>${user.mobile}</td>
                                     <td>${user.email}</td>
@@ -121,13 +203,16 @@
                                     <td><a href="${ctx}/user/input/${user.id}">修改</a></td>
                                     <td><a href="${ctx}/user/password/input/${user.id}">重置密码</a></td>
                                     <td>
-                                        <c:if test="${user.valid.value == 1}">
-                                            <a href="${ctx}/user/disable/${user.id}">禁用</a>
-                                        </c:if>
-                                        <c:if test="${user.valid.value == 2}">
-                                            <a href="${ctx}/user/enable/${user.id}">启用</a>
-                                        </c:if>
+                                        <c:choose>
+                                            <c:when test="${user.valid.value == 1}">
+                                                <a href="${ctx}/user/disable/${user.id}">禁用</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="${ctx}/user/enable/${user.id}">启用</a>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
+                                    <%--<td><a href="${ctx}/user/del/${user.id}" onclick="return confirm('确定要删除么？');">删除</a></td>--%>
                                 </tr>
                             </c:forEach>
                         </tbody>
