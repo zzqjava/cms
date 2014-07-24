@@ -8,15 +8,18 @@ import com.qatang.cms.form.AbstractPagingForm;
  */
 public class RoleForm extends AbstractPagingForm {
 
-    private Long id;
+    private String id;
     private String roleName;
     private String roleDesc;
-    private Integer valid;
+    private String valid;
 
-    public Long getId() {
+    private String queryRoleName;
+    private String queryValid;
+
+    public String getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getRoleName() {
@@ -35,11 +38,27 @@ public class RoleForm extends AbstractPagingForm {
         this.roleDesc = roleDesc;
     }
 
-    public Integer getValid() {
+    public String getValid() {
         return valid;
     }
 
-    public void setValid(Integer valid) {
+    public void setValid(String valid) {
         this.valid = valid;
+    }
+
+    public String getQueryRoleName() {
+        return queryRoleName;
+    }
+
+    public void setQueryRoleName(String queryRoleName) {
+        this.queryRoleName = queryRoleName;
+    }
+
+    public String getQueryValid() {
+        return queryValid;
+    }
+
+    public void setQueryValid(String queryValid) {
+        this.queryValid = queryValid;
     }
 }
