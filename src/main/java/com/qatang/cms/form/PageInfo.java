@@ -34,6 +34,6 @@ public class PageInfo {
     }
 
     public int getOffset() {
-        return currentPage * pageSize;
+        return (currentPage - 1) * pageSize;
     }
 }

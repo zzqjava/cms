@@ -25,7 +25,6 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getUsername())) {
             String msg = String.format("用户名不能为空");
             logger.error(msg);
@@ -43,7 +42,6 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getEmail())) {
             String msg = String.format("用户邮箱不能为空");
             logger.error(msg);
@@ -59,7 +57,13 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
+        //邮箱是否已存在验证
+        user = userService.getByEmail(userForm.getEmail());
+        if (user != null) {
+            String msg = String.format("该邮箱已被使用，请更换其他邮箱");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         if (StringUtils.isEmpty(userForm.getPassword())) {
             String msg = String.format("密码不能为空");
             logger.error(msg);
@@ -85,25 +89,21 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getCaptcha())) {
             String msg = String.format("验证码不能为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (userForm.getCaptcha().length() != 5) {
             String msg = String.format("验证码长度错误");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getCaptchaExpected())) {
             String msg = String.format("内部验证码不能为空，请联系管理员处理！");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         logger.info("expected captcha : {}", userForm.getCaptchaExpected());
         logger.info("input captcha : {}", userForm.getCaptcha());
         if (!userForm.getCaptcha().equals(userForm.getCaptchaExpected())) {
@@ -111,7 +111,6 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         return true;
     }
 }

@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,133 +30,138 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController extends BaseController {
 
-	protected final static String ROLE_KEY = "role";
+    @Autowired
+    private IValidator<RoleForm> createRoleValidator;
+    @Autowired
+    private RoleService roleService;
 
-	@Autowired
-	private IValidator<RoleForm> createRoleValidator;
-	@Autowired
-	private RoleService roleService;
+    @RequestMapping(value = "/input", method = {RequestMethod.POST, RequestMethod.GET})
+    public String input(RoleForm roleForm, ModelMap modelMap) {
+        if (roleForm != null && roleForm.getId() != null && !"".equals(roleForm.getId())) {
+            Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
+            modelMap.addAttribute(role);
+            if (role != null) {
+                roleForm.setRoleName(role.getRoleName());
+                roleForm.setRoleDesc(role.getRoleDesc());
+                roleForm.setValid(role.getValid().getValue() + "");
+            }
+        }
+        return "/role/roleInput";
+    }
 
-	@RequestMapping(value = "/input")
-	public String input(RoleForm roleForm, ModelMap modelMap) {
-		List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.list();
-		modelMap.put("enableDisableStatus",enableDisableStatus);
-		if (roleForm != null && roleForm.getId() != null) {
-			Role role = roleService.getRole(roleForm.getId());
-			modelMap.addAttribute(ROLE_KEY, role);
-		}
-		//处理新增时 验证不通过，回显用户已经填写的记录
-		if (roleForm != null && roleForm.getId() == null) {
-			Role role = new Role();
-			if (roleForm.getRoleName() != null) {
-				role.setRoleName(roleForm.getRoleName());
-			}
-			if (roleForm.getRoleDesc() != null) {
-				role.setRoleDesc(roleForm.getRoleDesc());
-			}
-			if (roleForm.getValid() != null) {
-				role.setValid(EnableDisableStatus.get(roleForm.getValid()));
-			}
-			modelMap.addAttribute(ROLE_KEY, role);
-		}
-		return "/role/roleInput";
-	}
+    @RequestMapping(value = "/list/{currentPage}", method = {RequestMethod.POST, RequestMethod.GET})
+    public String list(@PathVariable String currentPage, RoleForm roleForm, ModelMap modelMap) {
+        getModelMap(roleForm, currentPage, modelMap);
+        return "role/roleList";
+    }
 
-	@RequestMapping(value = "/list/{currentPage}")
-	public String list(@PathVariable Integer currentPage, RoleForm roleForm, ModelMap modelMap) {
-		if (currentPage == null || currentPage < 1) {
-			currentPage = 1;
-		}
-		if (roleForm == null) {
-			roleForm = new RoleForm();
-		}
-		PageInfo pageInfo = roleForm.getPageInfo();
-		if (pageInfo == null) {
-			pageInfo = new PageInfo();
-		}
-		pageInfo.setCurrentPage(currentPage);
-		roleForm.setPageInfo(pageInfo);
-		Page<Role> rolePage = roleService.findAllPage(roleForm);
-		List<Role> list = rolePage.getContent();
-		rolePage.getTotalPages();
-		roleForm.getPageInfo().setTotalPages(rolePage.getTotalPages());
-		modelMap.put("list",list);
-		modelMap.put("roleForm",roleForm);
-		return "role/roleList";
-	}
+    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
+    public String list(RoleForm roleForm, ModelMap modelMap) {
+        getModelMap(roleForm, "", modelMap);
+        return "role/roleList";
+    }
 
-	@RequestMapping(value = "/list")
-	public String list(RoleForm roleForm, ModelMap modelMap) {
-		if (roleForm == null) {
-			roleForm = new RoleForm();
-		}
-		PageInfo pageInfo = roleForm.getPageInfo();
-		if (pageInfo == null) {
-			pageInfo = new PageInfo();
-		}
-		roleForm.setPageInfo(pageInfo);
-		Page<Role> rolePage = roleService.findAllPage(roleForm);
-		List<Role> list = rolePage.getContent();
-		rolePage.getTotalPages();
-		roleForm.getPageInfo().setTotalPages(rolePage.getTotalPages());
-		modelMap.put("list",list);
-		modelMap.put("roleForm",roleForm);
-		return "role/roleList";
-	}
+    private ModelMap getModelMap (RoleForm roleForm, String currentPage, ModelMap modelMap) {
+        if (roleForm == null) {
+            roleForm = new RoleForm();
+        }
+        if (currentPage == null || "".equals(currentPage) || Integer.parseInt(currentPage) < 1) {
+            currentPage = 1 + "";
+        }
+        if (roleForm.getQueryRoleName() != null) {
+            try {
+                String queryRoleName = java.net.URLDecoder.decode(roleForm.getQueryRoleName(),"UTF-8");
+                roleForm.setQueryRoleName(queryRoleName);
+            } catch (UnsupportedEncodingException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        PageInfo pageInfo = roleForm.getPageInfo();
+        pageInfo.setCurrentPage(Integer.parseInt(currentPage));
+        roleForm.setPageInfo(pageInfo);
+        Page<Role> rolePage = roleService.findAllPage(roleForm);
+        if (rolePage == null) {
+            return null;
+        }
+        List<Role> roleList = rolePage.getContent();
+        rolePage.getTotalPages();
+        roleForm.getPageInfo().setTotalPages(rolePage.getTotalPages());
+        modelMap.addAttribute(roleList);
+        modelMap.addAttribute(roleForm);
+        return modelMap;
+    }
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(RoleForm roleForm, RedirectAttributes redirectAttributes) {
-		try {
-			createRoleValidator.validate(roleForm);
-		} catch (ValidateFailedException e) {
-			logger.error(e.getMessage());
-			redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-			redirectAttributes.addFlashAttribute("roleForm", roleForm);
-			return "redirect:/role/input";
-		}
-		Role role = new Role();
-		role.setRoleName(roleForm.getRoleName());
-		role.setRoleDesc(roleForm.getRoleDesc());
-		role.setValid(EnableDisableStatus.get(roleForm.getValid()));
-		role.setCreatedTime(new Date());
-		roleService.save(role);
-		redirectAttributes.addFlashAttribute("message", "成功添加角色！");
-		return "redirect:/role/list";
-	}
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(RoleForm roleForm, RedirectAttributes redirectAttributes, ModelMap modelMap) {
+        try {
+            createRoleValidator.validate(roleForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(roleForm);
+            return "/role/roleInput";
+        }
+        Role role = new Role();
+        role.setRoleName(roleForm.getRoleName());
+        role.setRoleDesc(roleForm.getRoleDesc());
+        role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
+        role.setCreatedTime(new Date());
+        roleService.save(role);
+        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功添加角色！");
+        return "redirect:/role/list";
+    }
 
-	@RequestMapping(value = "/del/{id}", method = RequestMethod.POST)
-	public String del(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-		if (id == null) {
-			redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
-			return "redirect:/role/list" ;
-		}
-		Role role = roleService.getRole(id);
-		if (role == null) {
-			redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要删除的角色对象不存在！");
-		}
-		role.setValid(EnableDisableStatus.DISABLE);
-		roleService.update(role);
-		redirectAttributes.addFlashAttribute("message", "成功删除角色！");
-		return "redirect:/role/list";
-	}
+    @RequestMapping(value = "/del", method = RequestMethod.POST)
+    public String del(RoleForm roleForm, RedirectAttributes redirectAttributes) {
+        if (roleForm == null || roleForm.getId() == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
+            return "redirect:/role/list" ;
+        }
+        Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
+        if (role == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要删除的角色对象不存在！");
+        }
+        role.setValid(EnableDisableStatus.DISABLE);
+        roleService.update(role);
+        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功删除角色！");
+        redirectAttributes.addFlashAttribute(roleForm);
+        return "redirect:/role/list";
+    }
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(RoleForm roleForm, RedirectAttributes redirectAttributes) {
-		try {
-			createRoleValidator.validate(roleForm);
-		} catch (ValidateFailedException e) {
-			logger.error(e.getMessage());
-			redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-			redirectAttributes.addFlashAttribute("roleForm", roleForm);
-			return "redirect:/role/input";
-		}
-		Role role = roleService.getRole(roleForm.getId());
-		role.setRoleName(roleForm.getRoleName());
-		role.setRoleDesc(roleForm.getRoleDesc());
-		role.setValid(EnableDisableStatus.get(roleForm.getValid()));
-		role.setUpdatedTime(new Date());
-		roleService.update(role);
-		redirectAttributes.addFlashAttribute("message", "成功更新角色！");
-		return "redirect:/role/list" ;
-	}
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(RoleForm roleForm, RedirectAttributes redirectAttributes, ModelMap modelMap) {
+        try {
+            createRoleValidator.validate(roleForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(roleForm);
+            return "/role/roleInput";
+        }
+        Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
+        role.setRoleName(roleForm.getRoleName());
+        role.setRoleDesc(roleForm.getRoleDesc());
+        role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
+        role.setUpdatedTime(new Date());
+        roleService.update(role);
+        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功更新角色！");
+        redirectAttributes.addFlashAttribute(roleForm);
+        return "redirect:/role/list" ;
+    }
+    /**
+     * 新增与修改时候使用
+     * */
+    @ModelAttribute("enableDisableStatus")
+    public List<EnableDisableStatus> enableDisableStatus() {
+        List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.list();
+        return enableDisableStatus;
+    }
+    /**
+     * 查询时候使用
+     * */
+    @ModelAttribute("queryEnableDisableStatus")
+    public List<EnableDisableStatus> queryEnableDisableStatus() {
+        List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.listAll();
+        return enableDisableStatus;
+    }
 }

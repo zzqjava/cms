@@ -1,5 +1,6 @@
 package com.qatang.cms.form.role;
 
+
 import com.qatang.cms.form.AbstractPagingForm;
 
 /**
@@ -7,38 +8,57 @@ import com.qatang.cms.form.AbstractPagingForm;
  */
 public class RoleForm extends AbstractPagingForm {
 
-	private Long id;
-	private String roleName;
-	private String roleDesc;
-	private Integer valid;
+    private String id;
+    private String roleName;
+    private String roleDesc;
+    private String valid;
 
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
+    private String queryRoleName;
+    private String queryValid;
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getRoleName() {
+        return roleName;
+    }
 
-	public String getRoleDesc() {
-		return roleDesc;
-	}
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
-	public void setRoleDesc(String roleDesc) {
-		this.roleDesc = roleDesc;
-	}
+    public String getRoleDesc() {
+        return roleDesc;
+    }
 
-	public Integer getValid() {
-		return valid;
-	}
+    public void setRoleDesc(String roleDesc) {
+        this.roleDesc = roleDesc;
+    }
 
-	public void setValid(Integer valid) {
-		this.valid = valid;
-	}
+    public String getValid() {
+        return valid;
+    }
+
+    public void setValid(String valid) {
+        this.valid = valid;
+    }
+
+    public String getQueryRoleName() {
+        return queryRoleName;
+    }
+
+    public void setQueryRoleName(String queryRoleName) {
+        this.queryRoleName = queryRoleName;
+    }
+
+    public String getQueryValid() {
+        return queryValid;
+    }
+
+    public void setQueryValid(String queryValid) {
+        this.queryValid = queryValid;
+    }
 }

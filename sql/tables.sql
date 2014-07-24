@@ -16,6 +16,7 @@ CREATE TABLE `c_user` (
   `valid` tinyint(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE (`username`),
+  UNIQUE (`email`),
   INDEX `idx_user_name` (`name`),
   INDEX `idx_user_mobile` (`mobile`),
   INDEX `idx_user_gender_valid` (`gender`, `valid`)

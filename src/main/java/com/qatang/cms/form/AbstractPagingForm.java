@@ -5,13 +5,16 @@ package com.qatang.cms.form;
  */
 public class AbstractPagingForm extends AbstactForm {
 
-	private PageInfo pageInfo;
+    private PageInfo pageInfo;
 
-	public PageInfo getPageInfo() {
-		return pageInfo;
-	}
+    public PageInfo getPageInfo() {
+        if (pageInfo == null) {
+            pageInfo = new PageInfo();
+        }
+        return pageInfo;
+    }
 
-	public void setPageInfo(PageInfo pageInfo) {
-		this.pageInfo = pageInfo;
-	}
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
+    }
 }
