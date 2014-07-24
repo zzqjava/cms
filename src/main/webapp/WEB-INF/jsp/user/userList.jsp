@@ -33,12 +33,10 @@
         </script>
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">后台管理系统</a>
-                </div>
-            </div>
+        <jsp:include page="/WEB-INF/jsp/navi.jsp"/>
+        <div class="container-fluid">
+        <div class="col-lg-2">
+            <jsp:include page="/WEB-INF/jsp/menu.jsp"/>
         </div>
         <div class="col-lg-10">
             <ol class="breadcrumb">
@@ -162,9 +160,9 @@
                 </fieldset>
             </form>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="">
-                <legend class="">用户列表</legend>
+                <legend class=""><h4>用户列表</h4></legend>
             </div>
             <c:if test="${userList != null}">
                 <div class="text-center">
