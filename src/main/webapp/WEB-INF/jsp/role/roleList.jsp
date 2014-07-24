@@ -31,13 +31,22 @@
                 pageUrl:function(type,page) {
                     var queryRoleName = $("#queryRoleName").val();
                     var queryValid = '${roleForm.queryValid}';
-                    var url = "${ctx}/role/list/" + page +"?time="+new Date().getMilliseconds();
+                    var url = "${ctx}/role/list/" + page ;
                     if (queryRoleName != null && queryRoleName != "") {
                         queryRoleName = encodeURI(encodeURI(queryRoleName));
-                        url = url + "&queryRoleName=" + queryRoleName;
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryRoleName=" + queryRoleName;
+                        } else {
+                            url = url + "?queryRoleName=" + queryRoleName;
+                        }
                     }
                     if (queryValid != null && queryValid != "") {
-                        url = url + "&queryValid=" + queryValid;
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryValid=" + queryValid;
+                        } else {
+                            url = url + "?queryValid=" + queryValid;
+                        }
+
                     }
                     return url;
                 },
