@@ -6,12 +6,9 @@ import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 /**
  * Created by qatang on 14-6-12.
@@ -25,11 +22,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(Long id) {
         return userDao.findOne(id);
-    }
-
-    @Override
-    public List<User> getList() {
-        return userDao.findAll();
     }
 
     @Override
@@ -50,6 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userDao.findByEmail(email);
     }
 
     @Override

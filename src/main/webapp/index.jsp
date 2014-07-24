@@ -24,42 +24,41 @@
     </script>
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">后台管理系统</a>
-        </div>
-    </div>
-</div>
-
+<jsp:include page="/WEB-INF/jsp/navi.jsp"/>
 <div class="container">
-    <div class="login-box text-center" >
-        <div class="login-single-panel-header">
-            <h3>用户登录</h3>
-        </div>
-        <div class="login-single-panel-header">
-            <h5 style="color:red">${errorMessage}</h5>
-        </div>
-        <form id="theform" class="form-signin-heading" action="${ctx}/signin" method="post">
-            <div class="form-group">
-                <input type="text" id="username" name="username" autofocus="" required="" placeholder="用户名" class="form-control">
-            </div>
-            <div class="form-group">
-                <input type="password" id="password" name="password" required="" placeholder="Password" class="form-control">
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8" style="padding:0;">
-                    <input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control width-270">
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 login-box">
+            <h3 class="text-center">用户登录</h3>
+            <form id="theform" class="form-horizontal" action="${ctx}/signin" method="post" role="form">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="username">用户名</label>
+                    <div class="col-lg-9">
+                        <input type="text" id="username" name="username" autofocus="" placeholder="用户名" class="form-control">
+                    </div>
                 </div>
-                <div class="col-sm-4" style="padding:0;">
-                    <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="password">密码</label>
+                    <div class="col-lg-9">
+                        <input type="password" id="password" name="password" required="" placeholder="Password" class="form-control">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
-                <a href="${ctx}/signup" target="_blank">用户注册</a>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="captcha">验证码</label>
+                    <div class="col-lg-4">
+                        <input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control">
+                    </div>
+                    <div class="col-lg-4">
+                        <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
+                    &nbsp;
+                    <a href="${ctx}/signup" target="_blank">用户注册</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <div class="text-center bottom">
