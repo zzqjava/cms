@@ -69,6 +69,11 @@ public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (userForm.getNewPassword().equals(userForm.getPassword())) {
+            String msg = String.format("新密码与旧密码相同");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         if (StringUtils.isEmpty(userForm.getConPassword())) {
             String msg = String.format("确认密码不能为空");
             logger.error(msg);

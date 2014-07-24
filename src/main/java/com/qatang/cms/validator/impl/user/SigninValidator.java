@@ -37,6 +37,11 @@ public class SigninValidator extends AbstractValidator<UserForm> {
             throw new ValidateFailedException(msg);
         }
         User user = userService.getByUsername(userForm.getUsername());
+        if (user == null) {
+            String msg = String.format("用户不存在");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         if (user.getValid() == EnableDisableStatus.DISABLE) {
             String msg = String.format("该用户无效");
             logger.error(msg);
