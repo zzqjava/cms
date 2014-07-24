@@ -8,6 +8,9 @@ public class AbstractPagingForm extends AbstactForm {
     private PageInfo pageInfo;
 
     public PageInfo getPageInfo() {
+        if (pageInfo == null) {
+            pageInfo = new PageInfo();
+        }
         return pageInfo;
     }
 

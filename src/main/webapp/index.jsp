@@ -57,7 +57,8 @@
             </div>
             <div class="form-group">
                 <input class="btn btn-primary btn-lg" id="sub" name="sub" value="立即登录" type="submit" />
-                <a href="${ctx}/signup" target="_blank">用户注册</a>
+                <a href="${ctx}/signup" target="_blank">用户注册</a> |
+                <a href="${ctx}/user/password/forget" target="_blank">忘记密码</a>
             </div>
         </form>
     </div>
