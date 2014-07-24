@@ -26,7 +26,6 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getUsername())) {
             String msg = String.format("用户名不能为空");
             logger.error(msg);
@@ -68,7 +67,6 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-
         if (StringUtils.isEmpty(userForm.getName())) {
             String msg = String.format("姓名不能为空");
             logger.error(msg);
@@ -86,6 +84,13 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
         }
         if (!this.checkEmail(userForm.getEmail())) {
             String msg = String.format("邮箱格式错误");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        //邮箱是否已存在验证
+        user = userService.getByEmail(userForm.getEmail());
+        if (user != null) {
+            String msg = String.format("该邮箱已被使用，请更换其他邮箱");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
@@ -112,6 +117,11 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
         Gender gender = Gender.get(genderValue);
         if (gender == null) {
             String msg = String.format("性别字段格式不合法");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        if (StringUtils.isEmpty(userForm.getValidValue())) {
+            String msg = String.format("是否有效不能为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }

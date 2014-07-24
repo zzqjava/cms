@@ -36,28 +36,28 @@ public class MenuValidator extends AbstractValidator<MenuForm> {
 			logger.error(msg);
 			throw new ValidateFailedException(msg);
 		}
-/*		if (StringUtils.isEmpty(menuForm.getUrl())) {
-			String msg = String.format("url不能为空");
-			logger.error(msg);
-			throw new ValidateFailedException(msg);
+/* if (StringUtils.isEmpty(menuForm.getUrl())) {
+String msg = String.format("url不能为空");
+logger.error(msg);
+throw new ValidateFailedException(msg);
+}
+if (StringUtils.isEmpty(menuForm.getOrderLevelValue())) {
+String msg = String.format("菜单排序值不能为空");
+logger.error(msg);
+throw new ValidateFailedException(msg);
+}*/
+		if (StringUtils.isNotEmpty(menuForm.getOrderLevelValue())) {
+			int orderLevelValue = 0;
+			try {
+				orderLevelValue = Integer.valueOf(menuForm.getOrderLevelValue());
+			} catch (Exception e) {
+				String msg = String.format("菜单排序值字段格式不合法");
+				logger.error(msg);
+				throw new ValidateFailedException(msg);
+			}
+		} else {
+			menuForm.setOrderLevelValue("0");
 		}
-		if (StringUtils.isEmpty(menuForm.getOrderLevelValue())) {
-			String msg = String.format("菜单排序值不能为空");
-			logger.error(msg);
-			throw new ValidateFailedException(msg);
-		}*/
-        if (StringUtils.isNotEmpty(menuForm.getOrderLevelValue())) {
-            int orderLevelValue = 0;
-            try {
-                orderLevelValue = Integer.valueOf(menuForm.getOrderLevelValue());
-            } catch (Exception e) {
-                String msg = String.format("菜单排序值字段格式不合法");
-                logger.error(msg);
-                throw new ValidateFailedException(msg);
-            }
-        } else {
-	        menuForm.setOrderLevelValue("0");
-        }
 		if (StringUtils.isEmpty(menuForm.getValidValue())) {
 			String msg = String.format("是否有效状态不能为空");
 			logger.error(msg);

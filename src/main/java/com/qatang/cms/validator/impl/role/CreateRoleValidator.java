@@ -14,8 +14,14 @@ public class CreateRoleValidator extends AbstractValidator<RoleForm> {
 
     @Override
     public boolean validate(RoleForm roleForm) throws ValidateFailedException {
+
         if (StringUtils.isEmpty(roleForm.getRoleName())) {
             String msg = String.format("角色名称不能为空");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        if (StringUtils.isEmpty(roleForm.getValid())) {
+            String msg = String.format("是否有效必须选");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
