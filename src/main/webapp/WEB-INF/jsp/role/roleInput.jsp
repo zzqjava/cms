@@ -34,7 +34,7 @@
             }
             //回显
             $("#valid option").each(function() {
-                if ($(this).val() == '${role.valid.value}') {
+                if ($(this).val() == '${roleForm.valid}') {
                     $(this).attr("selected", "selected");
                 }
             });
@@ -59,7 +59,7 @@
     <div class="login-box text-center" >
         <div class="login-single-panel-header">
             <c:choose>
-                <c:when test="${role.id == null}">
+                <c:when test="${roleForm.id == null}">
                     <h3>角色添加</h3>
                 </c:when>
                 <c:otherwise>
@@ -68,7 +68,7 @@
             </c:choose>
         </div>
         <c:choose>
-            <c:when test="${role.id == null}">
+            <c:when test="${roleForm.id == null}">
                 <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
                     <input type="hidden" name="currentPage" value="${currentPage}"/>
                     <c:if test="${errorMessage != null}" >
@@ -79,12 +79,12 @@
                     </c:if>
                     <div class="input-group">
                         <span class="input-group-addon">角色名称：</span>
-                        <input type="text" name="roleName" value="${role.roleName}" class="form-control" placeholder="角色名称不能为空">
+                        <input type="text" name="roleName" value="${roleForm.roleName}" class="form-control" placeholder="角色名称不能为空">
                     </div>
                     <br/>
                     <div class="input-group">
                         <span class="input-group-addon">角色描述：</span>
-                        <input type="text" name="roleDesc" value="${role.roleDesc}" class="form-control" placeholder="角色描述">
+                        <input type="text" name="roleDesc" value="${roleForm.roleDesc}" class="form-control" placeholder="角色描述">
                     </div>
                     <br/>
                     <div class="input-group col-sm-5">
@@ -105,7 +105,9 @@
             </c:when>
             <c:otherwise>
                 <form id="theForm" class="form-signup-heading" action="${ctx}/role/update" method="post">
-                    <input type="hidden" name="id" value="${role.id}"/>
+                    <input type="hidden" name="id" value="${roleForm.id}"/>
+                    <input type="hidden" id="queryRoleName" name="queryRoleName" value="${roleForm.queryRoleName}"/>
+                    <input type="hidden" id="queryValid" name="queryValid" value="${roleForm.queryValid}"/>
                     <c:if test="${errorMessage != null}" >
                         <div class="alert alert-danger fade in">
                             <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
@@ -114,12 +116,12 @@
                     </c:if>
                     <div class="input-group">
                         <span class="input-group-addon">角色名称：</span>
-                        <input type="text" name="roleName" value="${role.roleName}" class="form-control" placeholder="角色名称不能为空">
+                        <input type="text" name="roleName" value="${roleForm.roleName}" class="form-control" placeholder="角色名称不能为空">
                     </div>
                     <br/>
                     <div class="input-group">
                         <span class="input-group-addon">角色描述：</span>
-                        <input type="text" name="roleDesc" value="${role.roleDesc}" class="form-control" placeholder="角色描述">
+                        <input type="text" name="roleDesc" value="${roleForm.roleDesc}" class="form-control" placeholder="角色描述">
                     </div>
                     <br/>
                     <div class="input-group col-sm-5">
@@ -134,7 +136,7 @@
                     <div class="input-group">
                         <span class="input-group-btn">
                              <c:choose>
-                                 <c:when test="${role.id == null}">
+                                 <c:when test="${roleForm.id == null}">
                                      <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">添加</button>
                                  </c:when>
                                  <c:otherwise>

@@ -35,12 +35,20 @@ public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getId() == null) {
+        if (StringUtils.isEmpty(userForm.getId())) {
             String msg = String.format("更改密码，用户id为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        User user = userService.get(userForm.getId());
+        Long id;
+        try {
+            id = Long.parseLong(userForm.getId());
+        } catch (NumberFormatException e) {
+            String msg = String.format("id字段不合法");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        User user = userService.get(id);
         if (user == null) {
             String msg = String.format("所要更改密码的用户不存在");
             logger.error(msg);
@@ -58,6 +66,11 @@ public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
         }
         if (userForm.getNewPassword().length() < 6 || userForm.getNewPassword().length() > 16) {
             String msg = String.format("密码长度必须在6-16个字符之间");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        if (userForm.getNewPassword().equals(userForm.getPassword())) {
+            String msg = String.format("新密码与旧密码相同");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }

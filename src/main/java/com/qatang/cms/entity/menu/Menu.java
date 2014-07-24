@@ -23,7 +23,7 @@ public class Menu {
 	private String url;
 	@Column(name = "order_level")
 	private Integer orderLevel;
-    @Enumerated
+	@Enumerated
 	private EnableDisableStatus valid;
 	private String memo;
 	@Temporal(TemporalType.TIMESTAMP)

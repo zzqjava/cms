@@ -26,7 +26,7 @@
         <div class="container">
             <div class="login-box text-center">
                 <div class="login-single-panel-header">
-                    <h3>用户密码修改</h3>
+                    <h3>忘记密码</h3>
                 </div>
                 <div class="login-single-panel-header">
                     <h5 style="color:red">${errorMessage}</h5>
@@ -34,24 +34,12 @@
                 <div class="">
                     <legend class=""></legend>
                 </div>
-                <form class="form-horizontal" action="${ctx}/user/password/update" method="post">
+                <form class="form-horizontal" action="${ctx}/user/password/reset" method="post">
                     <input type="hidden" name="id" value="${id}">
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">旧密码</label>
+                        <label class="col-sm-3 control-label">邮箱</label>
                         <div class="col-sm-9">
                             <input type="password" class="form-control" name="password" autofocus="" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">新密码</label>
-                        <div class="col-sm-9">
-                            <input type="password" class="form-control" name="newPassword" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">确认密码</label>
-                        <div class="col-sm-9">
-                            <input type="password" class="form-control" name="conPassword" required="">
                         </div>
                     </div>
                     <div class="">
