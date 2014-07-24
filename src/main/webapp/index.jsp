@@ -32,7 +32,7 @@
             <h3 class="text-center">用户登录zhangzq</h3>
             <form id="theform" class="form-horizontal" action="${ctx}/signin" method="post" role="form">
                 <div class="form-group">
-                    <label class="col-lg-2 control-label" for="username">用户名</label>
+                    <label class="col-lg-2 control-label" for="username">用户名123</label>
                     <div class="col-lg-9">
                         <input type="text" id="username" name="username" autofocus="" placeholder="用户名" class="form-control">
                     </div>
