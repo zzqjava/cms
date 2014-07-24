@@ -138,7 +138,8 @@ public class MenuController extends BaseController {
 		if (StringUtils.isEmpty(menuId)) {
 			logger.error("传递的参数菜单id为空！");
 			modelMap.addAttribute(ERROR_MESSAGE_KEY, "传递的参数菜单id为空！");
-			return "/menu/input";
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
 		}
 		Long id = null;
 		try {
@@ -167,7 +168,8 @@ public class MenuController extends BaseController {
 		if (StringUtils.isEmpty(menuId)) {
 			logger.error("传递的参数菜单id为空！");
 			modelMap.addAttribute(ERROR_MESSAGE_KEY, "传递的参数菜单id为空！");
-			return "/menu/input";
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
 		}
 		Long id = null;
 		try {
@@ -196,7 +198,7 @@ public class MenuController extends BaseController {
 		if (StringUtils.isEmpty(menuId)) {
 			logger.error("查看用户，id为空");
 			modelMap.addAttribute(ERROR_MESSAGE_KEY, "查看用户，id为空");
-			modelMap.addAttribute(FORWARD_URL, "/user/list");
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
 			return "failure";
 		}
 		Long id = null;
@@ -225,7 +227,8 @@ public class MenuController extends BaseController {
 		if (StringUtils.isEmpty(menuId)) {
 			logger.error("传递的参数菜单id为空！");
 			modelMap.addAttribute(ERROR_MESSAGE_KEY, "传递的参数菜单id为空！");
-			return "/menu/input";
+			modelMap.addAttribute(FORWARD_URL, "/menu/list");
+			return "failure";
 		}
 		Long id = null;
 		try {
