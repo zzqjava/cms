@@ -28,18 +28,72 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                pageUrl:function(type,page){
-                    return "${ctx}/role/list/"+page;
+                pageUrl:function(type,page) {
+                    var queryRoleName = $("#queryRoleName").val();
+                    var queryValid = '${roleForm.queryValid}';
+                    var url = "${ctx}/role/list/" + page ;
+                    if (queryRoleName != null && queryRoleName != "") {
+                        queryRoleName = encodeURI(encodeURI(queryRoleName));
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryRoleName=" + queryRoleName;
+                        } else {
+                            url = url + "?queryRoleName=" + queryRoleName;
+                        }
+                    }
+                    if (queryValid != null && queryValid != "") {
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryValid=" + queryValid;
+                        } else {
+                            url = url + "?queryValid=" + queryValid;
+                        }
+
+                    }
+                    return url;
+                },
+                tooltipTitles:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return (page === current) ? "当前页 " : "第" + page + "页";
+                    }
+                },
+                itemTexts:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return page;
+                    }
                 },
                 onPageClicked:null,
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
+
+            //回显
+            $("#queryValid option").each(function() {
+                if ($(this).val() == '${roleForm.queryValid}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
 
         //定时关闭提示信息
-        var message = '${message}';
-        if (message != null && message != '') {
+        var successMessage = '${successMessage}';
+        if (successMessage != null && successMessage != '') {
             closeSuccess();
         }
         function closeSuccess() {
@@ -72,7 +126,8 @@
         //删除
         function del (id) {
             if (confirm('确定删除该条记录?')) {
-                $("#theForm").attr("action", "${ctx}/role/del/"+id);
+                $("#theForm").attr("action", "${ctx}/role/del");
+                $("#roleId").val(id);
                 $("#theForm").submit();
             }
         }
@@ -89,10 +144,10 @@
 <br /><br /><br />
 <div style="width: 60%;text-align: center;margin-left: auto; margin-right: auto;">
     <div class="panel panel-default">
-        <c:if test="${message != null}" >
+        <c:if test="${successMessage != null}" >
             <div class="alert alert-success fade in">
                 <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
-                    ${message}
+                    ${successMessage}
             </div>
         </c:if>
         <c:if test="${errorMessage != null}" >
@@ -101,6 +156,34 @@
                     ${errorMessage}
             </div>
         </c:if>
+        <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
+            <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
+            <input type="hidden" id="roleId" name="id" />
+            <div class="text-center">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <span class="input-group-addon">角色名称：</span>
+                                <input type="text" name="queryRoleName" id="queryRoleName" value="${roleForm.queryRoleName}" class="form-control" placeholder="角色名称不能为空">
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group col-sm-5">
+                                <span class="input-group-addon ">是否有效：</span>
+                                <select class="form-control" name="queryValid" id="queryValid">
+                                    <c:forEach items="${queryEnableDisableStatus}" var="queryEnableDisableStatus">
+                                        <option value="${queryEnableDisableStatus.value}">${queryEnableDisableStatus.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-primary" id="query" name="query" type="submit" onclick="">查询</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
                 <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
@@ -114,7 +197,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${list}" var="role" varStatus="status">
+            <c:forEach items="${roleList}" var="role" varStatus="status">
                 <tr <c:if test="${status.count%2==0}">class="warning"</c:if>>
                     <td>${role.id}</td>
                     <td>${role.roleName}</td>
@@ -129,10 +212,6 @@
             </tbody>
         </table>
     </div>
-    <form id="theForm" style="display:none;" method="post" action="">
-        <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
-        <input type="hidden" id="roleId" name="id" />
-    </form>
     <div class="pagination-lg">
         <ul id='pageDiv'></ul>
     </div>

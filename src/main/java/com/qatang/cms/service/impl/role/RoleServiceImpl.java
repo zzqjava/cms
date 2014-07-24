@@ -1,7 +1,6 @@
 package com.qatang.cms.service.impl.role;
 
 import com.qatang.cms.dao.role.RoleDao;
-import com.qatang.cms.dao.role.RoleRepository;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.form.role.RoleForm;
@@ -21,31 +20,30 @@ import javax.transaction.Transactional;
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleDao roleDao;
 
     @Override
     public Role save(Role user) {
-        return roleRepository.save(user);
+        return roleDao.save(user);
     }
 
     @Override
     public Role update(Role user) {
-        return roleRepository.save(user);
+        return roleDao.save(user);
     }
 
     @Override
     public void del(Role role) {
-        roleRepository.delete(role);
+        roleDao.delete(role);
     }
 
     @Override
     public Role getRole(Long id) {
-        return roleRepository.findOne(id);
+        return roleDao.findOne(id);
     }
 
     @Override
     public Page<Role> findAllPage(RoleForm roleForm) {
-        PageRequest pageRequest = new PageRequest(roleForm.getPageInfo().getCurrentPage() - 1, roleForm.getPageInfo().getPageSize());
-        return roleRepository.findByValid(EnableDisableStatus.ENABLE, pageRequest);
+        return roleDao.findAllPage(roleForm);
     }
 }
