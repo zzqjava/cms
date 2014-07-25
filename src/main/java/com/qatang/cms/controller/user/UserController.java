@@ -61,6 +61,10 @@ public class UserController extends BaseController {
         pageInfo.setTotalPages(page.getTotalPages());
         userForm.setPageInfo(pageInfo);
         modelMap.addAttribute(userForm);
+        List<Gender> genderList = Gender.listAll();
+        List<EnableDisableStatus> validList = EnableDisableStatus.listAll();
+        modelMap.addAttribute(genderList);
+        modelMap.addAttribute(validList);
         request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
         return "user/userList";
     }
@@ -89,64 +93,70 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
+        List<Gender> genderList = Gender.list();
+        List<EnableDisableStatus> validList = EnableDisableStatus.list();
+        modelMap.addAttribute(genderList);
+        modelMap.addAttribute(validList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
 
     @RequestMapping(value = "/input/{userId}", method = RequestMethod.GET)
     public String input(@PathVariable String userId, ModelMap modelMap) {
-        if (StringUtils.isNotEmpty(userId)) {
-            Long id;
-            try {
-                id = Long.parseLong(userId);
-            } catch (NumberFormatException e) {
-                logger.error("修改用户，用户id不合法");
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户，用户id不合法");
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
-            User user = userService.get(id);
-            UserForm userForm = new UserForm();
-            userForm.setId(userId);
-            if (StringUtils.isEmpty(user.getUsername())) {
-                logger.error("用户名为空");
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户名为空");
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
-            userForm.setUsername(user.getUsername());
-            if (StringUtils.isNotEmpty(user.getName())) {
-                userForm.setName(user.getName());
-            }
-            if (StringUtils.isEmpty(user.getEmail())) {
-                logger.error("用户邮箱为空");
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户邮箱为空");
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
-            userForm.setEmail(user.getEmail());
-            if (StringUtils.isNotEmpty(user.getMobile())) {
-                userForm.setMobile(user.getMobile());
-            }
-            if (user.getGender() == null) {
-                logger.error("用户性别为空");
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户性别为空");
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
-            userForm.setGenderValue(String.valueOf(user.getGender().getValue()));
-            if (StringUtils.isNotEmpty(user.getQQ())) {
-                userForm.setQQ(user.getQQ());
-            }
-            if (user.getValid() == null) {
-                logger.error("用户是否有效状态为空");
-                modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户是否有效状态为空");
-                modelMap.addAttribute(FORWARD_URL, "/user/list");
-                return "failure";
-            }
-            userForm.setValidValue(String.valueOf(user.getValid().getValue()));
-            modelMap.addAttribute(userForm);
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException e) {
+            logger.error("修改用户，用户id不合法");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "修改用户，用户id不合法");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
         }
+        User user = userService.get(id);
+        UserForm userForm = new UserForm();
+        userForm.setId(userId);
+        if (StringUtils.isEmpty(user.getUsername())) {
+            logger.error("用户名为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户名为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        userForm.setUsername(user.getUsername());
+        if (StringUtils.isNotEmpty(user.getName())) {
+            userForm.setName(user.getName());
+        }
+        if (StringUtils.isEmpty(user.getEmail())) {
+            logger.error("用户邮箱为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户邮箱为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        userForm.setEmail(user.getEmail());
+        if (StringUtils.isNotEmpty(user.getMobile())) {
+            userForm.setMobile(user.getMobile());
+        }
+        if (user.getGender() == null) {
+            logger.error("用户性别为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户性别为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        userForm.setGenderValue(String.valueOf(user.getGender().getValue()));
+        if (StringUtils.isNotEmpty(user.getQQ())) {
+            userForm.setQQ(user.getQQ());
+        }
+        if (user.getValid() == null) {
+            logger.error("用户是否有效状态为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户是否有效状态为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            return "failure";
+        }
+        userForm.setValidValue(String.valueOf(user.getValid().getValue()));
+        modelMap.addAttribute(userForm);
+        List<Gender> genderList = Gender.list();
+        List<EnableDisableStatus> validList = EnableDisableStatus.list();
+        modelMap.addAttribute("genderList", genderList);
+        modelMap.addAttribute("validList", validList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }

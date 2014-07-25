@@ -89,25 +89,28 @@
                         <div class="col-xs-4">
                             <div class="input-group col-xs-6">
                                 <span class="input-group-addon">是否有效：</span>
-                                <select name="validValue" class="form-control">
-                                    <option value="0">全部</option>
-                                    <option value="1" <c:if test="${userForm.validValue == 1}"> selected="selected" </c:if> >是</option>
-                                    <option value="2" <c:if test="${userForm.validValue == 2}"> selected="selected" </c:if>>否</option>
-                                    <c:choose>
-                                        <c:when test="">
-                                        </c:when>
-                                        <c:when test="${userForm.validValue == 2}">
-                                            <option value="0" selected>全部</option>
-                                            <option value="1">是</option>
-                                            <option value="2" selected>否</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="0" selected>全部</option>
-                                            <option value="1">是</option>
-                                            <option value="2">否</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </select>
+                                <form:select name="validValue" path="validValue" items="validList" class="form-control" itemValue="value" itemLabel="name">
+
+                                </form:select>
+                                <%--<select name="validValue" class="form-control">--%>
+                                    <%--<option value="0">全部</option>--%>
+                                    <%--<option value="1" <c:if test="${userForm.validValue == 1}"> selected="selected" </c:if> >是</option>--%>
+                                    <%--<option value="2" <c:if test="${userForm.validValue == 2}"> selected="selected" </c:if>>否</option>--%>
+                                    <%--<c:choose>--%>
+                                        <%--<c:when test="">--%>
+                                        <%--</c:when>--%>
+                                        <%--<c:when test="${userForm.validValue == 2}">--%>
+                                            <%--<option value="0" selected>全部</option>--%>
+                                            <%--<option value="1">是</option>--%>
+                                            <%--<option value="2" selected>否</option>--%>
+                                        <%--</c:when>--%>
+                                        <%--<c:otherwise>--%>
+                                            <%--<option value="0" selected>全部</option>--%>
+                                            <%--<option value="1">是</option>--%>
+                                            <%--<option value="2">否</option>--%>
+                                        <%--</c:otherwise>--%>
+                                    <%--</c:choose>--%>
+                                <%--</select>--%>
                             </div>
                         </div>
                     </div>
