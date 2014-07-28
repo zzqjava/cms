@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@page contentType="text/html; charset=utf-8"%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -171,11 +172,7 @@
                         <td class="text-center">
                             <div class="input-group col-sm-5">
                                 <span class="input-group-addon ">是否有效：</span>
-                                <select class="form-control" name="queryValid" id="queryValid">
-                                    <c:forEach items="${queryEnableDisableStatus}" var="queryEnableDisableStatus">
-                                        <option value="${queryEnableDisableStatus.value}">${queryEnableDisableStatus.name}</option>
-                                    </c:forEach>
-                                </select>
+                                <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
                             </div>
                             &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
                             <button class="btn btn-primary" id="query" name="query" type="submit" onclick="">查询</button>
