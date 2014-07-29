@@ -108,7 +108,7 @@
             </div>
         </c:if>
         <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
-            <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
+            <input type="hidden" id="currentPage" name="pageInfo.currentPage" value="${roleForm.pageInfo.currentPage}"/>
             <input type="hidden" id="roleId" name="id" />
             <div class="text-center">
                 <table class="table table-hover table-striped">
@@ -133,7 +133,7 @@
         </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
+                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list';">角色列表</button>&nbsp;&nbsp;
                 <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
             </span>
         </div>

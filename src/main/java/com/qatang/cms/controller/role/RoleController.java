@@ -125,6 +125,9 @@ public class RoleController extends BaseController {
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功删除角色！");
         redirectAttributes.addFlashAttribute(roleForm);
+        if (roleForm.getPageInfo() != null && roleForm.getPageInfo().currentPage != null) {
+            return "redirect:/role/list/" + roleForm.getPageInfo().currentPage;
+        }
         return "redirect:/role/list";
     }
 
@@ -146,6 +149,9 @@ public class RoleController extends BaseController {
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功更新角色！");
         redirectAttributes.addFlashAttribute(roleForm);
+        if (roleForm.getPageInfo() != null && roleForm.getPageInfo().currentPage != null) {
+            return "redirect:/role/list/" + roleForm.getPageInfo().currentPage;
+        }
         return "redirect:/role/list" ;
     }
     /**
