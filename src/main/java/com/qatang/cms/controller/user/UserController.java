@@ -59,12 +59,7 @@ public class UserController extends BaseController {
         }
         PageInfo pageInfo = userForm.getPageInfo();
         pageInfo.setTotalPages(page.getTotalPages());
-        userForm.setPageInfo(pageInfo);
         modelMap.addAttribute(userForm);
-        List<Gender> genderList = Gender.listAll();
-        List<EnableDisableStatus> validList = EnableDisableStatus.listAll();
-        modelMap.addAttribute(genderList);
-        modelMap.addAttribute(validList);
         request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
         return "user/userList";
     }
@@ -93,10 +88,6 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
-        List<Gender> genderList = Gender.list();
-        List<EnableDisableStatus> validList = EnableDisableStatus.list();
-        modelMap.addAttribute(genderList);
-        modelMap.addAttribute(validList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
@@ -153,10 +144,6 @@ public class UserController extends BaseController {
         }
         userForm.setValidValue(String.valueOf(user.getValid().getValue()));
         modelMap.addAttribute(userForm);
-        List<Gender> genderList = Gender.list();
-        List<EnableDisableStatus> validList = EnableDisableStatus.list();
-        modelMap.addAttribute("genderList", genderList);
-        modelMap.addAttribute("validList", validList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
@@ -241,7 +228,6 @@ public class UserController extends BaseController {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
-            modelMap.addAttribute(userForm);
             return "user/userInput";
         }
         Long id = Long.parseLong(userForm.getId());
@@ -310,7 +296,9 @@ public class UserController extends BaseController {
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        modelMap.addAttribute("id", id);
+        UserForm userForm = new UserForm();
+        userForm.setId(id);
+        modelMap.addAttribute(userForm);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/passwordInput";
     }
@@ -321,7 +309,6 @@ public class UserController extends BaseController {
             updatePasswordValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            modelMap.addAttribute(userForm.getId());
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/passwordInput";
@@ -344,5 +331,29 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/password/reset", method = RequestMethod.GET)
     public String resetPassword() {
         return "success";
+    }
+
+    @ModelAttribute("genderList")
+    public List<Gender> genderList() {
+        List<Gender> genderList = Gender.list();
+        return genderList;
+    }
+
+    @ModelAttribute("genderListAll")
+    public List<Gender> genderListAll() {
+        List<Gender> genderListAll = Gender.listAll();
+        return genderListAll;
+    }
+
+    @ModelAttribute("validList")
+    public List<EnableDisableStatus> enableDisableStatusList() {
+        List<EnableDisableStatus> enableDisableStatusList = EnableDisableStatus.list();
+        return enableDisableStatusList;
+    }
+
+    @ModelAttribute("validListAll")
+    public List<EnableDisableStatus> enableDisableStatusListAll() {
+        List<EnableDisableStatus> enableDisableStatusListAll = EnableDisableStatus.listAll();
+        return enableDisableStatusListAll;
     }
 }
