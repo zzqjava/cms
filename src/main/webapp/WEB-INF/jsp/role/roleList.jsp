@@ -17,6 +17,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/css/main.css">
+
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
     <script src="${ctx}/js/bootstrap-paginator.js"></script>
@@ -29,57 +30,11 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                pageUrl:function(type,page) {
-                    var queryRoleName = $("#queryRoleName").val();
-                    var queryValid = '${roleForm.queryValid}';
+                onPageClicked: function (e, originalEvent, type, page) {
                     var url = "${ctx}/role/list/" + page ;
-                    if (queryRoleName != null && queryRoleName != "") {
-                        queryRoleName = encodeURI(encodeURI(queryRoleName));
-                        if (url.indexOf("?") > 0) {
-                            url = url + "&queryRoleName=" + queryRoleName;
-                        } else {
-                            url = url + "?queryRoleName=" + queryRoleName;
-                        }
-                    }
-                    if (queryValid != null && queryValid != "") {
-                        if (url.indexOf("?") > 0) {
-                            url = url + "&queryValid=" + queryValid;
-                        } else {
-                            url = url + "?queryValid=" + queryValid;
-                        }
-
-                    }
-                    return url;
+                    $("#theForm").attr("action", url);
+                    $("#theForm").submit();
                 },
-                tooltipTitles:function(type,page,current) {
-                    switch (type) {
-                        case "first":
-                            return "第一页";
-                        case "prev":
-                            return "上一页";
-                        case "next":
-                            return "下一页";
-                        case "last":
-                            return "最后一页";
-                        case "page":
-                            return (page === current) ? "当前页 " : "第" + page + "页";
-                    }
-                },
-                itemTexts:function(type,page,current) {
-                    switch (type) {
-                        case "first":
-                            return "第一页";
-                        case "prev":
-                            return "上一页";
-                        case "next":
-                            return "下一页";
-                        case "last":
-                            return "最后一页";
-                        case "page":
-                            return page;
-                    }
-                },
-                onPageClicked:null,
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
@@ -112,11 +67,6 @@
         }
         function closeErrorTip(){
             $('#tipError').click();
-        }
-        //添加
-        function create () {
-            $("#theForm").attr("action", "${ctx}/role/input");
-            $("#theForm").submit();
         }
         //修改
         function update (id) {
