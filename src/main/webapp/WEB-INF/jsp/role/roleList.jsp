@@ -74,14 +74,14 @@
             $("#roleId").val(id);
             $("#theForm").submit();
         }
-        //删除
-        function del (id) {
-            if (confirm('确定删除该条记录?')) {
-                $("#theForm").attr("action", "${ctx}/role/del");
-                $("#roleId").val(id);
-                $("#theForm").submit();
-            }
+        //切换角色状态
+        function toggleValidStatus (id, valid) {
+            $("#theForm").attr("action", "${ctx}/role/toggleValidStatus");
+            $("#roleId").val(id);
+            $("#valid").val(valid);
+            $("#theForm").submit();
         }
+
     </script>
 </head>
 <body>
@@ -110,6 +110,7 @@
         <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
             <input type="hidden" id="currentPage" name="pageInfo.currentPage" value="${roleForm.pageInfo.currentPage}"/>
             <input type="hidden" id="roleId" name="id" />
+            <input type="hidden" id="valid" name="valid" />
             <div class="text-center">
                 <table class="table table-hover table-striped">
                     <tr>
@@ -152,7 +153,15 @@
                     <td>${role.valid.name}</td>
                     <td>
                         <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="update(${role.id})">修改</button>
-                        <button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>
+                        <c:choose>
+                            <c:when test="${role.valid.value == 1}">
+                                <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="toggleValidStatus('${role.id}', 2)">禁用</button>
+                            </c:when>
+                            <c:otherwise>
+                                <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="toggleValidStatus('${role.id}', 1)">启用</button>
+                            </c:otherwise>
+                        </c:choose>
+                        <%--<button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>--%>
                     </td>
                 </tr>
             </c:forEach>
