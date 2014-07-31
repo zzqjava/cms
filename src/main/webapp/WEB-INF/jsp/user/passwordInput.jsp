@@ -35,7 +35,7 @@
                     <legend class=""></legend>
                 </div>
                 <form class="form-horizontal" action="${ctx}/user/password/update" method="post">
-                    <input type="hidden" name="id" value="${id}">
+                    <input type="hidden" name="id" value="${userForm.id}">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">旧密码</label>
                         <div class="col-sm-9">

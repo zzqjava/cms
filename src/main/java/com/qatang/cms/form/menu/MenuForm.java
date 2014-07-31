@@ -5,7 +5,7 @@ package com.qatang.cms.form.menu;
  */
 public class MenuForm {
 
-	private Long id;
+	private String id;
 	private String name;
 	private String url;
 	private String orderLevelValue;
@@ -13,11 +13,11 @@ public class MenuForm {
 	private String memo;
 	private String errorMessage;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

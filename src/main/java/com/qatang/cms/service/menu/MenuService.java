@@ -30,6 +30,13 @@ public interface MenuService {
 	public Menu save(Menu menu);
 
 	/**
+	 * 修改
+	 * @param menu
+	 * @return
+	 */
+	public Menu update(Menu menu);
+
+	/**
 	 * 删除
 	 * @param id
 	 */
