@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -147,14 +148,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
-    public String disable(@PathVariable String userId, ModelMap modelMap) {
+    public String disable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("禁用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         User user = userService.get(id);
@@ -164,14 +165,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
-    public String enable(@PathVariable String userId, ModelMap modelMap) {
+    public String enable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("启用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         User user = userService.get(id);
@@ -231,14 +232,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/del/{userId}", method = RequestMethod.GET)
-    public String delete(@PathVariable String userId, ModelMap modelMap) {
+    public String delete(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("启用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         userService.delete(id);
