@@ -133,16 +133,7 @@
                                             <td>${status.count}</td>
                                             <td><a href="${ctx}/user/view/${user.id}">${user.username}</a></td>
                                             <td>${user.name}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${user.gender.value == 1}">
-                                                        男
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        女
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                            <td>${user.gender.name}</td>
                                             <td>${user.mobile}</td>
                                             <td>${user.email}</td>
                                             <td>${user.valid.name}</td>
