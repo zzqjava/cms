@@ -35,6 +35,11 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
+	public Menu update(Menu menu) {
+		return menuDao.save(menu);
+	}
+
+	@Override
 	public void delete(Long id) {
 		menuDao.delete(id);
 	}

@@ -613,31 +613,31 @@
         },
         itemTexts: function (type, page, current) {
             switch (type) {
-            case "first":
-                return "&lt;&lt;";
-            case "prev":
-                return "&lt;";
-            case "next":
-                return "&gt;";
-            case "last":
-                return "&gt;&gt;";
-            case "page":
-                return page;
+                case "first":
+                    return "第一页";
+                case "prev":
+                    return "上一页";
+                case "next":
+                    return "下一页";
+                case "last":
+                    return "最后一页";
+                case "page":
+                    return page;
             }
         },
         tooltipTitles: function (type, page, current) {
 
             switch (type) {
-            case "first":
-                return "Go to first page";
-            case "prev":
-                return "Go to previous page";
-            case "next":
-                return "Go to next page";
-            case "last":
-                return "Go to last page";
-            case "page":
-                return (page === current) ? "Current page is " + page : "Go to page " + page;
+                case "first":
+                    return "第一页";
+                case "prev":
+                    return "上一页";
+                case "next":
+                    return "下一页";
+                case "last":
+                    return "最后一页";
+                case "page":
+                    return (page === current) ? "当前页 " : "第" + page + "页";
             }
         },
         bootstrapTooltipOptions: {

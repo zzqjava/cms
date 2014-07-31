@@ -21,6 +21,16 @@ public class MenuValidator extends AbstractValidator<MenuForm> {
 			logger.error(msg);
 			throw new ValidateFailedException(msg);
 		}
+		if (StringUtils.isNotEmpty(menuForm.getId())) {
+			Long id = null;
+			try {
+				id = Long.parseLong(menuForm.getId());
+			} catch (NumberFormatException e) {
+				String msg = String.format("id字段不合法");
+				logger.error(msg);
+				throw new ValidateFailedException(msg);
+			}
+		}
 		if (StringUtils.isEmpty(menuForm.getName())) {
 			String msg = String.format("菜单名不能为空");
 			logger.error(msg);

@@ -106,6 +106,7 @@
             <c:otherwise>
                 <form id="theForm" class="form-signup-heading" action="${ctx}/role/update" method="post">
                     <input type="hidden" name="id" value="${roleForm.id}"/>
+                    <input type="hidden" id="currentPage" name="pageInfo.currentPage" value="${roleForm.pageInfo.currentPage}"/>
                     <input type="hidden" id="queryRoleName" name="queryRoleName" value="${roleForm.queryRoleName}"/>
                     <input type="hidden" id="queryValid" name="queryValid" value="${roleForm.queryValid}"/>
                     <c:if test="${errorMessage != null}" >
