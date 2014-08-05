@@ -70,7 +70,6 @@
         <c:choose>
             <c:when test="${roleForm.id == null}">
                 <form id="theForm" class="form-signup-heading" action="${ctx}/role/create" method="post">
-                    <input type="hidden" name="currentPage" value="${currentPage}"/>
                     <c:if test="${errorMessage != null}" >
                         <div class="alert alert-danger fade in">
                             <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
@@ -106,9 +105,6 @@
             <c:otherwise>
                 <form id="theForm" class="form-signup-heading" action="${ctx}/role/update" method="post">
                     <input type="hidden" name="id" value="${roleForm.id}"/>
-                    <input type="hidden" id="currentPage" name="pageInfo.currentPage" value="${roleForm.pageInfo.currentPage}"/>
-                    <input type="hidden" id="queryRoleName" name="queryRoleName" value="${roleForm.queryRoleName}"/>
-                    <input type="hidden" id="queryValid" name="queryValid" value="${roleForm.queryValid}"/>
                     <c:if test="${errorMessage != null}" >
                         <div class="alert alert-danger fade in">
                             <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
