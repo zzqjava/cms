@@ -38,9 +38,6 @@
                     $(this).attr("selected", "selected");
                 }
             });
-            $("#query").click(function(){
-                query();
-            })
         })
 
         //定时关闭提示信息
@@ -64,15 +61,8 @@
         function closeErrorTip(){
             $('#tipError').click();
         }
-        //修改
-        function update (id) {
-            $("#theForm").attr("action", "${ctx}/role/input");
-            $("#roleId").val(id);
-            $("#theForm").submit();
-        }
         //查询
         function query () {
-            $("#theForm").attr("action", "${ctx}/role/list/1");
             $("#theForm").submit();
         }
     </script>
@@ -100,9 +90,7 @@
                     ${errorMessage}
             </div>
         </c:if>
-        <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
-            <input type="hidden" id="roleId" name="id" />
-            <input type="hidden" id="valid" name="valid" />
+        <form class="form-inline" id="theForm" action="${ctx}/role/list/1" method="post">
             <div class="text-center">
                 <table class="table table-hover table-striped">
                     <tr>
@@ -118,7 +106,7 @@
                                 <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
                             </div>
                             &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-                            <button class="btn btn-primary" id="query" name="query" >查询</button>
+                            <input class="btn btn-primary" id="query" name="query" type="submit" value="查询" />
                         </td>
                     </tr>
                 </table>
@@ -126,7 +114,7 @@
         </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list';">角色列表</button>&nbsp;&nbsp;
+                <button class="btn btn-primary" id="list" name="list" type="button" onclick="query();">角色列表</button>&nbsp;&nbsp;
                 <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
             </span>
         </div>

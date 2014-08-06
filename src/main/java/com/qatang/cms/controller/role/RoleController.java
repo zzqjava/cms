@@ -79,12 +79,14 @@ public class RoleController extends BaseController {
 
     private void pagination (RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
         Page<Role> rolePage = roleService.findAllPage(roleForm);
-        if (rolePage.getContent() != null) {
-            List<Role> userList = rolePage.getContent();
-            modelMap.addAttribute(userList);
+        if (rolePage != null) {
+            if (rolePage.getContent() != null) {
+                List<Role> userList = rolePage.getContent();
+                modelMap.addAttribute(userList);
+            }
+            PageInfo pageInfo = roleForm.getPageInfo();
+            pageInfo.setTotalPages(rolePage.getTotalPages());
         }
-        PageInfo pageInfo = roleForm.getPageInfo();
-        pageInfo.setTotalPages(rolePage.getTotalPages());
         modelMap.addAttribute(roleForm);
         request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, roleForm);
     }
