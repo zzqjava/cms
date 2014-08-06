@@ -2,12 +2,15 @@ package com.qatang.cms.controller.user;
 
 import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
+import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
+import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.user.UserForm;
+import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
@@ -44,6 +47,8 @@ public class UserController extends BaseController {
     private UpdatePasswordValidator updatePasswordValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
@@ -324,5 +329,14 @@ public class UserController extends BaseController {
     public List<EnableDisableStatus> enableDisableStatusListAll() {
         List<EnableDisableStatus> enableDisableStatusListAll = EnableDisableStatus.listAll();
         return enableDisableStatusListAll;
+    }
+
+    @ModelAttribute("roleList")
+    public List<Role> roleList() {
+        RoleForm roleForm = new RoleForm();
+        String validValue = String.valueOf(EnableDisableStatus.ENABLE.getValue());
+        roleForm.setValid(validValue);
+        Page<Role> page = roleService.findAllPage(roleForm);
+        return page.getContent();
     }
 }
