@@ -146,7 +146,7 @@ public class RoleController extends BaseController {
             createRoleValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage());
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(roleForm);
             return "/role/roleInput";
         }
@@ -177,21 +177,26 @@ public class RoleController extends BaseController {
         return "/role/roleMenuInput";
     }
 
-    @RequestMapping(value = "/createRoleMenu", method = RequestMethod.POST)
+    @RequestMapping(value ="/createRoleMenu", method = RequestMethod.POST)
     public String createRoleMenu(RoleMenuForm roleMenuForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         try {
             createRoleMenuValidator.validate(roleMenuForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage());
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(roleMenuForm);
-            return "/role/roleInput";
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            return "redirect:/role/queryMenu/"+roleMenuForm.getRoleId() ;
         }
-        RoleMenu roleMenu = new RoleMenu();
-        roleMenu.setRoleId(roleMenuForm.getRoleId());
-        roleMenu.setMenuId(roleMenuForm.getMenuId());
-        modelMap.addAttribute(roleMenuForm);
-        return "/role/roleMenuInput";
+
+        String menuIds = roleMenuForm.getMenuIds();
+        String[] menuIdsArray = menuIds.split(",");
+        for (String menuId : menuIdsArray) {
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setRoleId(Long.parseLong(roleMenuForm.getRoleId()));
+            roleMenu.setMenuId(Long.parseLong(menuId));
+            roleService.save(roleMenu);
+        }
+        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "保存成功！");
+        return "redirect:/role/queryMenu/"+roleMenuForm.getRoleId() ;
     }
 
     /**

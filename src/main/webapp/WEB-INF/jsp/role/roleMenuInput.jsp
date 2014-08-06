@@ -18,27 +18,42 @@
     <script src="${ctx}/js/bootstrap-button.js"></script>
     <script type="text/javascript">
         $(function(){
-            $('#sub').click(function () {
-                $("#theForm").submit();
-                $(this).button('complete');
-            });
-            //定时关闭提示信息
-            var errorMessage = '${errorMessage}';
-            if (errorMessage != null && errorMessage != '') {
-                close();
-            }
-            //回显
-            $("#valid option").each(function() {
-                if ($(this).val() == '${roleForm.valid}') {
-                    $(this).attr("selected", "selected");
+
+        })
+
+        //定时关闭提示信息
+        var successMessage = '${successMessage}';
+        if (successMessage != null && successMessage != '') {
+            closeSuccess();
+        }
+        function closeSuccess() {
+            setTimeout("closeSuccessTip()",2000);
+        }
+        function closeSuccessTip(){
+            $('#tipSuccess').click();
+        }
+        var errorMessage = '${errorMessage}';
+        if (errorMessage != null && errorMessage != '') {
+            closeError();
+        }
+        function closeError() {
+            setTimeout("closeErrorTip()",2000);
+        }
+        function closeErrorTip(){
+            $('#tipError').click();
+        }
+
+        function submitForm () {
+            var value = "";
+            $("input[name='menu']:checked").each(function () {
+                if (value == "") {
+                    value = this.value;
+                } else {
+                    value =value + "," + this.value;
                 }
             });
-        })
-        function close() {
-            setTimeout("closeTip()",2000);
-        }
-        function closeTip(){
-            $('#tip').click();
+            $("#menuIds").val(value);
+            $("#theForm").submit();
         }
     </script>
 </head>
@@ -55,23 +70,30 @@
         <div class="login-single-panel-header">
             <h3>选择菜单</h3>
         </div>
-        <form id="theForm" class="form-signup-heading" action="${ctx}/role/update" method="post">
-            <input type="hidden" name="id" value="${roleForm.id}"/>
+        <form id="theForm" class="form-signup-heading" action="${ctx}/role/createRoleMenu" method="post">
+            <input type="hidden" name="roleId" value="${roleId}" id="roleId"/>
+            <input type="hidden" name="menuIds" value="" id="menuIds"/>
+            <c:if test="${successMessage != null}" >
+                <div class="alert alert-success fade in">
+                    <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                        ${successMessage}
+                </div>
+            </c:if>
             <c:if test="${errorMessage != null}" >
                 <div class="alert alert-danger fade in">
-                    <a class="close" data-dismiss="alert" href="#" id="tip">×</a>
+                    <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
                         ${errorMessage}
                 </div>
             </c:if>
+            <br/> <br/>
             <div class="input-group">
-                <span class="input-group-addon">选择菜单：</span>
                 <c:forEach items="${menuList}" var="menus">
-                    <input type="checkbox" id="menu" name="menu" value="${menus.id}"/>${menus.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" id="menu_${menus.id}" name="menu" value="${menus.id}"/>${menus.name}&nbsp;&nbsp;&nbsp;&nbsp;
                 </c:forEach>
             </div>
             <br/>
-            <button class="btn btn-primary btn-lg" id="sub" name="sub" type="button" data-complete-text="正在提交...">确定</button>
-        </form>
+            <a href="#"class="btn btn-primary btn-lg" id="sub" name="sub" onclick="submitForm();">确定</a>
+        </form
     </div>
 </div>
 <div class="text-center bottom">
