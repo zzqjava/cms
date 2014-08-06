@@ -143,6 +143,7 @@
                                 </c:otherwise>
                             </c:choose>
                         </button>
+                        <button class="btn btn-primary btn-sm" id="queryMenu" name="queryMenu" type="button" onclick="window.location.href='${ctx}/role/queryMenu/' + ${role.id};">添加菜单</button>
                     </td>
                 </tr>
             </c:forEach>

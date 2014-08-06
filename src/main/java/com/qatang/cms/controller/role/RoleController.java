@@ -1,14 +1,19 @@
 package com.qatang.cms.controller.role;
 
 import com.qatang.cms.constants.CommonConstants;
+import com.qatang.cms.entity.menu.Menu;
+import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.role.RoleForm;
+import com.qatang.cms.form.role.RoleMenuForm;
+import com.qatang.cms.service.menu.MenuService;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.validator.IValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,7 +37,11 @@ public class RoleController extends BaseController {
     @Autowired
     private IValidator<RoleForm> createRoleValidator;
     @Autowired
+    private IValidator<RoleMenuForm> createRoleMenuValidator;
+    @Autowired
     private RoleService roleService;
+    @Autowired
+    private MenuService menuService;
 
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input() {
@@ -156,6 +165,35 @@ public class RoleController extends BaseController {
         }
         return "redirect:/role/list" ;
     }
+
+    @RequestMapping(value = "/queryMenu/{roleId}", method = RequestMethod.GET)
+    public String queryMenu(@PathVariable String roleId, RoleForm roleForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+        if (StringUtils.isEmpty(roleId)) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
+            return "redirect:/role/list" ;
+        }
+        roleForm.setId(roleId);
+        modelMap.addAttribute(roleForm);
+        return "/role/roleMenuInput";
+    }
+
+    @RequestMapping(value = "/createRoleMenu", method = RequestMethod.POST)
+    public String createRoleMenu(RoleMenuForm roleMenuForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+        try {
+            createRoleMenuValidator.validate(roleMenuForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            modelMap.addAttribute(roleMenuForm);
+            return "/role/roleInput";
+        }
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setRoleId(roleMenuForm.getRoleId());
+        roleMenu.setMenuId(roleMenuForm.getMenuId());
+        modelMap.addAttribute(roleMenuForm);
+        return "/role/roleMenuInput";
+    }
+
     /**
      * 新增与修改时候使用
      * */
@@ -171,5 +209,13 @@ public class RoleController extends BaseController {
     public List<EnableDisableStatus> queryEnableDisableStatus() {
         List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.listAll();
         return enableDisableStatus;
+    }
+
+    /**
+     * 获取菜单列表
+     * */
+    @ModelAttribute("menuList")
+    public List<Menu> menuList() {
+        return menuService.getList();
     }
 }
