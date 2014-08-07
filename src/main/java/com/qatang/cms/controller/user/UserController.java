@@ -2,12 +2,15 @@ package com.qatang.cms.controller.user;
 
 import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
+import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
+import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.user.UserForm;
+import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -43,6 +47,8 @@ public class UserController extends BaseController {
     private UpdatePasswordValidator updatePasswordValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
@@ -147,14 +153,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
-    public String disable(@PathVariable String userId, ModelMap modelMap) {
+    public String disable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("禁用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         User user = userService.get(id);
@@ -164,14 +170,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
-    public String enable(@PathVariable String userId, ModelMap modelMap) {
+    public String enable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("启用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         User user = userService.get(id);
@@ -231,14 +237,14 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/del/{userId}", method = RequestMethod.GET)
-    public String delete(@PathVariable String userId, ModelMap modelMap) {
+    public String delete(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
         try {
             id = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             logger.error("启用用户，用户id不合法");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
+            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
         userService.delete(id);
@@ -323,5 +329,14 @@ public class UserController extends BaseController {
     public List<EnableDisableStatus> enableDisableStatusListAll() {
         List<EnableDisableStatus> enableDisableStatusListAll = EnableDisableStatus.listAll();
         return enableDisableStatusListAll;
+    }
+
+    @ModelAttribute("roleList")
+    public List<Role> roleList() {
+        RoleForm roleForm = new RoleForm();
+        String validValue = String.valueOf(EnableDisableStatus.ENABLE.getValue());
+        roleForm.setValid(validValue);
+        Page<Role> page = roleService.findAllPage(roleForm);
+        return page.getContent();
     }
 }
