@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created by zhangzq on 2014/6/24.
@@ -52,5 +53,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleMenu save(RoleMenu roleMenu) {
         return roleMenuDao.save(roleMenu);
+    }
+
+    @Override
+    public List<RoleMenu> findRoleMenuList(Long roleId) {
+        return roleMenuDao.findRoleMenuList(roleId);
     }
 }

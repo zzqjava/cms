@@ -19,11 +19,6 @@ public class CreateRoleMenuValidator extends AbstractValidator<RoleMenuForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (roleMenuForm.getMenuIds() == null || "".equals(roleMenuForm.getMenuIds())) {
-            String msg = String.format("必须选择菜单选项");
-            logger.error(msg);
-            throw new ValidateFailedException(msg);
-        }
         return true;
     }
 }

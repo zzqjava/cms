@@ -23,6 +23,11 @@
     <script src="${ctx}/js/bootstrap-button.js"></script>
     <script type="text/javascript">
         $(function(){
+            $('#sub').click(function () {
+                $("#theForm").submit();
+                $(this).button('complete');
+            });
+
             //定时关闭提示信息
             var errorMessage = '${errorMessage}';
             if (errorMessage != null && errorMessage != '') {

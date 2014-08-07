@@ -195,8 +195,11 @@ public class RoleController extends BaseController {
             roleMenu.setMenuId(Long.parseLong(menuId));
             roleService.save(roleMenu);
         }
+        List<RoleMenu> roleMenuList = roleService.findRoleMenuList(Long.parseLong(roleMenuForm.getRoleId()));
+        modelMap.addAttribute(roleMenuForm);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "保存成功！");
-        return "redirect:/role/queryMenu/"+roleMenuForm.getRoleId() ;
+        redirectAttributes.addFlashAttribute("roleMenuList", roleMenuList);
+        return "redirect:/role/queryMenu/" + roleMenuForm.getRoleId() ;
     }
 
     /**

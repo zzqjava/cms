@@ -72,7 +72,7 @@
         </div>
         <form id="theForm" class="form-signup-heading" action="${ctx}/role/createRoleMenu" method="post">
             <input type="hidden" name="roleId" value="${roleId}" id="roleId"/>
-            <input type="hidden" name="menuIds" value="" id="menuIds"/>
+            <input type="hidden" name="menuIds" value="${menuIds}" id="menuIds"/>
             <c:if test="${successMessage != null}" >
                 <div class="alert alert-success fade in">
                     <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
