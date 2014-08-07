@@ -1,4 +1,3 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@page contentType="text/html; charset=utf-8"%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -9,11 +8,6 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="keywords" content="" />
     <meta http-equiv="description" content="" />
-    <%
-        response.setHeader("Cache-Control", "no-store");
-        response.setHeader("Pragma", "no-cache");
-        response.setDateHeader("Expires", 0);
-    %>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/css/main.css">
@@ -30,10 +24,9 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                onPageClicked: function (e, originalEvent, type, page) {
+                pageUrl: function (type, page, current) {
                     var url = "${ctx}/role/list/" + page ;
-                    $("#theForm").attr("action", url);
-                    $("#theForm").submit();
+                    return url;
                 },
                 onPageChanged:null
             }
@@ -68,20 +61,10 @@
         function closeErrorTip(){
             $('#tipError').click();
         }
-        //修改
-        function update (id) {
-            $("#theForm").attr("action", "${ctx}/role/input");
-            $("#roleId").val(id);
+        //查询
+        function query () {
             $("#theForm").submit();
         }
-        //切换角色状态
-        function toggleValidStatus (id, valid) {
-            $("#theForm").attr("action", "${ctx}/role/toggleValidStatus");
-            $("#roleId").val(id);
-            $("#valid").val(valid);
-            $("#theForm").submit();
-        }
-
     </script>
 </head>
 <body>
@@ -107,10 +90,7 @@
                     ${errorMessage}
             </div>
         </c:if>
-        <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
-            <input type="hidden" id="currentPage" name="pageInfo.currentPage" value="${roleForm.pageInfo.currentPage}"/>
-            <input type="hidden" id="roleId" name="id" />
-            <input type="hidden" id="valid" name="valid" />
+        <form class="form-inline" id="theForm" action="${ctx}/role/list/1" method="post">
             <div class="text-center">
                 <table class="table table-hover table-striped">
                     <tr>
@@ -126,7 +106,7 @@
                                 <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
                             </div>
                             &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-                            <button class="btn btn-primary" id="query" name="query" type="submit" onclick="">查询</button>
+                            <input class="btn btn-primary" id="query" name="query" type="submit" value="查询" />
                         </td>
                     </tr>
                 </table>
@@ -134,7 +114,7 @@
         </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list';">角色列表</button>&nbsp;&nbsp;
+                <button class="btn btn-primary" id="list" name="list" type="button" onclick="query();">角色列表</button>&nbsp;&nbsp;
                 <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
             </span>
         </div>
@@ -152,16 +132,18 @@
                     <td>${role.roleDesc}</td>
                     <td>${role.valid.name}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="update(${role.id})">修改</button>
-                        <c:choose>
-                            <c:when test="${role.valid.value == 1}">
-                                <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="toggleValidStatus('${role.id}', 2)">禁用</button>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="toggleValidStatus('${role.id}', 1)">启用</button>
-                            </c:otherwise>
-                        </c:choose>
-                        <%--<button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>--%>
+                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="window.location.href='${ctx}/role/input/' + ${role.id};">修改</button>
+                        <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="window.location.href='${ctx}/role/toggleValidStatus/'+ ${role.id};">
+                            <c:choose>
+                                <c:when test="${role.valid.value == 1}">
+                                    禁用
+                                </c:when>
+                                <c:otherwise>
+                                    启用
+                                </c:otherwise>
+                            </c:choose>
+                        </button>
+                        <button class="btn btn-primary btn-sm" id="queryMenu" name="queryMenu" type="button" onclick="window.location.href='${ctx}/role/queryMenu/' + ${role.id};">添加菜单</button>
                     </td>
                 </tr>
             </c:forEach>
