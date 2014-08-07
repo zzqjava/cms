@@ -111,20 +111,27 @@ public class RoleController extends BaseController {
         return "redirect:/role/list";
     }
 
-    @RequestMapping(value = "/del", method = RequestMethod.POST)
-    public String del(RoleForm roleForm, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/toggleValidStatus", method = RequestMethod.POST)
+    public String toggleValidStatus(RoleForm roleForm, RedirectAttributes redirectAttributes) {
         if (roleForm == null || roleForm.getId() == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
             return "redirect:/role/list" ;
         }
         Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
         if (role == null) {
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要删除的角色对象不存在！");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要切换状态的角色对象不存在！");
         }
-        role.setValid(EnableDisableStatus.DISABLE);
+        if (roleForm.getValid() == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入要切换的状态值为null！");
+            return "redirect:/role/list" ;
+        }
+        role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
         roleService.update(role);
-        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功删除角色！");
+        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功切换角色的状态！");
         redirectAttributes.addFlashAttribute(roleForm);
+        if (roleForm.getPageInfo() != null && roleForm.getPageInfo().currentPage != null) {
+            return "redirect:/role/list/" + roleForm.getPageInfo().currentPage;
+        }
         return "redirect:/role/list";
     }
 
@@ -146,6 +153,9 @@ public class RoleController extends BaseController {
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功更新角色！");
         redirectAttributes.addFlashAttribute(roleForm);
+        if (roleForm.getPageInfo() != null && roleForm.getPageInfo().currentPage != null) {
+            return "redirect:/role/list/" + roleForm.getPageInfo().currentPage;
+        }
         return "redirect:/role/list" ;
     }
     /**
