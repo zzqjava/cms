@@ -33,6 +33,7 @@ public class Menu {
 	@Column(name = "updated_time")
 	private Date updatedTime;
 
+
 	public String getName() {
 		return name;
 	}
