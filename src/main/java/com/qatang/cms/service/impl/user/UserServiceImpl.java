@@ -1,6 +1,8 @@
 package com.qatang.cms.service.impl.user;
 
 import com.qatang.cms.dao.user.UserDao;
+import com.qatang.cms.dao.user.UserRoleDao;
+import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created by qatang on 14-6-12.
@@ -18,6 +21,8 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserRoleDao userRoleDao;
 
     @Override
     public User get(Long id) {
@@ -52,5 +57,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getAll(UserForm userForm) {
         return userDao.findAll(userForm);
+    }
+
+    @Override
+    public List<Role> getByUserId(Long userId) {
+        return userRoleDao.findByUserId(userId);
     }
 }
