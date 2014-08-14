@@ -24,9 +24,10 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                pageUrl: function (type, page, current) {
+                onPageClicked: function (e, originalEvent, type, page) {
                     var url = "${ctx}/role/list/" + page ;
-                    return url;
+                    $("#theForm").attr("action", url);
+                    $("#theForm").submit();
                 },
                 onPageChanged:null
             }
