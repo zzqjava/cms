@@ -7,12 +7,13 @@ import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,19 +23,36 @@ import java.util.Date;
  * Created by qatang on 14-6-5.
  */
 @Controller
-@SessionAttributes(CommonConstants.KAPTCHA_SESSION_KEY)
+@RequestMapping(value = "/signin")
 public class SigninController extends BaseController {
     @Autowired
     private IValidator<UserForm> signinValidator;
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+   @RequestMapping(method = RequestMethod.GET)
     public String signinPage() {
-        return "forward:/index.jsp";
+        return "signin";
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
+    //public String fail(@RequestParam(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM) String userName,@RequestParam(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME) String error, Model model) {
+    public String fail(HttpServletRequest req, Model model) {
+        //model.addAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, userName);
+        String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
+        String error = null;
+        if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
+            error = "用户名/密码错误";
+        } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
+            error = "用户名/密码错误";
+        } else if(exceptionClassName != null) {
+            error = "其他错误：" + exceptionClassName;
+        }
+        model.addAttribute("error", error);
+        return "signin";
+    }
+
+    /*@RequestMapping(value = "/signin", method = RequestMethod.POST)
     public String signin(UserForm userForm, @ModelAttribute(CommonConstants.KAPTCHA_SESSION_KEY) String captchaExpected, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         userForm.setCaptchaExpected(captchaExpected);
         try {
@@ -55,5 +73,5 @@ public class SigninController extends BaseController {
         userService.update(user);
         request.getSession().setAttribute(CommonConstants.USER_SESSION_KEY, user);
         return "redirect:/dashboard";
-    }
+    }*/
 }
