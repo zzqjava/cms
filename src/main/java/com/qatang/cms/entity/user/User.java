@@ -164,4 +164,8 @@ public class User {
     public void setValid(EnableDisableStatus valid) {
         this.valid = valid;
     }
+
+    public String getCredentialsSalt() {
+        return username + salt;
+    }
 }

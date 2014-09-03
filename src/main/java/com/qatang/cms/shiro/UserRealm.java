@@ -55,11 +55,11 @@ public class UserRealm extends AuthorizingRealm {
         }
 
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
-        byte[] salt = Encodes.decodeHex(user.getSalt());
+        //byte[] salt = Encodes.decodeHex(user.getSalt());
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getUsername(), //用户名
                 user.getPassword(), //密码
-                ByteSource.Util.bytes(salt),
+                ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
                 getName()  //realm name
         );
         return authenticationInfo;
@@ -68,13 +68,13 @@ public class UserRealm extends AuthorizingRealm {
     /**
      * 设定Password校验的Hash算法与迭代次数.
      */
-    @PostConstruct
+/*    @PostConstruct
     public void initCredentialsMatcher() {
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(UserServiceImpl.HASH_ALGORITHM);
         matcher.setHashIterations(UserServiceImpl.HASH_INTERATIONS);
 
         setCredentialsMatcher(matcher);
-    }
+    }*/
 
     @Override
     public void clearCachedAuthorizationInfo(PrincipalCollection principals) {

@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-9">
-                        <input type="checkbox" name="rememberMe" value="true" />记住我
+                        <input type="checkbox" id="rememberMe" name="rememberMe" value="true" />记住我
                     </div>
                 </div>
                 <div class="form-group text-center">
