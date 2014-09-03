@@ -51,6 +51,7 @@
         </property>-->
         <property name="filterChainDefinitions">
             <value>
+                /favicon.ico = anon
                 /js/** = anon
                 /css/** = anon
                 /kaptcha = anon
