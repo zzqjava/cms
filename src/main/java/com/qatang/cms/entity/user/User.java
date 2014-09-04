@@ -21,10 +21,7 @@ public class User {
     private Long id;
     @Column(unique = true)
     private String username;
-    @Transient
-    private String plainPassword;
     private String password;
-    private String salt;
     private String name;
     private String email;
     @Enumerated
@@ -61,28 +58,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPlainPassword() {
-        return plainPassword;
-    }
-
-    public void setPlainPassword(String plainPassword) {
-        this.plainPassword = plainPassword;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getName() {
@@ -163,9 +144,5 @@ public class User {
 
     public void setValid(EnableDisableStatus valid) {
         this.valid = valid;
-    }
-
-    public String getCredentialsSalt() {
-        return username + salt;
     }
 }

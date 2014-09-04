@@ -45,8 +45,8 @@ public class SignupController extends BaseController {
         }
         User user = new User();
         user.setUsername(userForm.getUsername());
-        user.setPlainPassword(userForm.getPlainPassword());
-        //user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
+        //user.setPlainPassword(userForm.getPlainPassword());
+        user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
         user.setEmail(userForm.getEmail());
         user.setCreatedTime(new Date());
         userService.save(user);

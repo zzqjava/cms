@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * Created by qatang on 14-6-5.
  */
 @Controller
-@SessionAttributes(CommonConstants.USER_SESSION_KEY)
+//@SessionAttributes(CommonConstants.USER_SESSION_KEY)
 public class DashboardController extends BaseController {
     @RequestMapping("/dashboard")
     public String dashboard(@ModelAttribute(CommonConstants.USER_SESSION_KEY) User user, ModelMap modelMap) {

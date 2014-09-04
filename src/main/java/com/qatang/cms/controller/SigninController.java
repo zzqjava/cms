@@ -7,6 +7,7 @@ import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -42,13 +43,15 @@ public class SigninController extends BaseController {
         String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
         String error = null;
         if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
-            error = "用户名/密码错误";
+            error = "用户不存在";
         } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
             error = "用户名/密码错误";
+        } else if(DisabledAccountException.class.getName().equals(exceptionClassName)) {
+            error = "用户已禁用";
         } else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
-        model.addAttribute("error", error);
+        model.addAttribute("errorMessage", error);
         return "signin";
     }
 

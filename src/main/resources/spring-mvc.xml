@@ -27,7 +27,7 @@
     <mvc:resources mapping="/font/**" location="/font/" />
     <mvc:resources mapping="/css/**" location="/css/" />
 
-    <mvc:interceptors>
+<!--    <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/js/**"/>
@@ -38,7 +38,7 @@
             <mvc:exclude-mapping path="/user/password/forget"/>
             <bean class="com.qatang.cms.interceptor.UserSessionInterceptor" />
         </mvc:interceptor>
-    </mvc:interceptors>
+    </mvc:interceptors>-->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
