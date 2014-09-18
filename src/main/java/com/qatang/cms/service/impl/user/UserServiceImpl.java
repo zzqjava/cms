@@ -1,9 +1,11 @@
 package com.qatang.cms.service.impl.user;
 
+import com.qatang.cms.dao.role.RoleDao;
 import com.qatang.cms.dao.user.UserDao;
 import com.qatang.cms.dao.user.UserRoleDao;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.utils.Digests;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +26,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
     @Autowired
     private UserRoleDao userRoleDao;
 
@@ -63,7 +68,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Role> getByUserId(Long userId) {
-        return userRoleDao.findByUserId(userId);
+        List<UserRole> userRoles = userRoleDao.findByUserId(userId);
+        List<Role> roles = new ArrayList<>();
+        if(userRoles != null){
+            for(UserRole ur : userRoles){
+                roles.add(roleDao.findOne(ur.getRoleId()));
+            }
+        }
+        return roles;
     }
 
 }

@@ -18,6 +18,7 @@ import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,7 @@ public class UserController extends BaseController {
     @Autowired
     private RoleService roleService;
 
+    @RequiresPermissions("system:user:list")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
         UserForm userForm;

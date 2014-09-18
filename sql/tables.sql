@@ -27,7 +27,7 @@ CREATE TABLE `c_user_role` (
   `user_id` bigint(20) NOT NULL,
   `role_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `idx_user_id_role_id` (`user_id`, `role_id`),
+  INDEX `idx_user_id_role_id` (`user_id`, `role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `c_role` (

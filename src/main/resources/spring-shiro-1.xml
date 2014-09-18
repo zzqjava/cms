@@ -22,8 +22,6 @@
 
     <bean id="authenticationFilter" class="com.qatang.cms.filter.AuthenticationFilter" />
 
-    <bean id="sysUserFilter" class="com.qatang.cms.filter.SysUserFilter"/>
-
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -32,7 +30,6 @@
         <property name="filters">
             <util:map>
                 <entry key="authc" value-ref="authenticationFilter"/>
-                <entry key="sysUser" value-ref="sysUserFilter"/>
             </util:map>
         </property>
         <property name="filterChainDefinitions">
@@ -46,6 +43,12 @@
                 /signup = anon
                 /index.jsp = anon
                 /signin = authc
+
+                /user/** = roles[system]
+                /role/** = roles[system]
+                /menu/** = roles[system]
+                /user/** = perms[admin:user:list]
+
                 /** = authc
             </value>
         </property>
@@ -56,21 +59,6 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"/>
     </bean>
 
-    <aop:config proxy-target-class="true"></aop:config>
-
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-
-    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
-        <property name="arguments" ref="securityManager"/>
-    </bean>
-
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
-    </bean>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
 </beans>

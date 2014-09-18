@@ -1,7 +1,11 @@
 package com.qatang.cms;
 
+import com.qatang.cms.entity.menu.Menu;
+import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
+import com.qatang.cms.service.menu.MenuService;
+import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +18,9 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by chirowong on 2014/9/3.
@@ -21,6 +28,10 @@ import java.util.Date;
 public class CmsAuthorizingRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken token){
@@ -45,20 +56,29 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
             }
             user.setLoginTime(new Date());
             userService.update(user);
-            return new SimpleAuthenticationInfo(username,password,user.getName());
+            return new SimpleAuthenticationInfo(user,password,user.getName());
         }
         throw new UnknownAccountException();
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String username = (String)principals.getPrimaryPrincipal();
-
+        User user = (User)principals.getPrimaryPrincipal();
+        List<Role> roles = userService.getByUserId(user.getId());
+        Set<String> stringRoles = new HashSet<>();
+        Set<String> stringPermissions = new HashSet<>();
+        for(Role role : roles){
+            stringRoles.add(role.getRoleName());
+            List<Menu> menus = roleService.getByRoleId(role.getId());
+            for(Menu menu : menus){
+                if(menu != null){
+                    stringPermissions.add(menu.getAuthority());
+                }
+            }
+        }
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        //补充方法
-        //List<Role> roles = roleService.
-        // authorizationInfo.setRoles(userService.findRoles(username));
-        // authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        authorizationInfo.setRoles(stringRoles);
+        authorizationInfo.setStringPermissions(stringPermissions);
         return authorizationInfo;
     }
 }

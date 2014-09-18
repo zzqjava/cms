@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface RoleMenuDao extends JpaRepository<RoleMenu, Long> {
 
-    public List<RoleMenu> findRoleMenuList(Long roleId);
+    public List<RoleMenu> findByRoleId(Long roleId);
 
 }

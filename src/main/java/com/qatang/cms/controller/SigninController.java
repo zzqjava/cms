@@ -33,7 +33,7 @@ public class SigninController extends BaseController {
 
    @RequestMapping(method = RequestMethod.GET)
     public String signinPage() {
-        return "signin";
+       return "signin";
     }
 
     @RequestMapping(method = RequestMethod.POST)

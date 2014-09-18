@@ -1,4 +1,4 @@
-<ehcache updateCheck="false" name="shiroCache">
+<ehcache updateCheck="false" name="authorization">
 
     <defaultCache
             maxElementsInMemory="10000"

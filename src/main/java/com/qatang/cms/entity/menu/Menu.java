@@ -32,7 +32,7 @@ public class Menu {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_time")
 	private Date updatedTime;
-
+    private String authority;
 
 	public String getName() {
 		return name;
@@ -97,4 +97,12 @@ public class Menu {
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
 }
