@@ -4,6 +4,7 @@ CREATE TABLE `c_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(128) NOT NULL DEFAULT '',
   `password` varchar(32) NOT NULL DEFAULT '',
+  `salt` varchar(64) NOT NULL DEFAULT '',
   `name` varchar(32) NOT NULL DEFAULT '',
   `email` varchar(128) NOT NULL DEFAULT '',
   `mobile` varchar(32) NULL DEFAULT '',

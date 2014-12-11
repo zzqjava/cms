@@ -1,7 +1,5 @@
 package com.qatang.cms.validator.impl.user;
 
-import com.qatang.cms.entity.user.User;
-import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
@@ -32,21 +30,26 @@ public class SigninValidator extends AbstractValidator<UserForm> {
             throw new ValidateFailedException(msg);
         }
         if (userForm.getUsername().length() < 6 || userForm.getUsername().length() > 32) {
-            String msg = String.format("用户名长度必须在6-128个字符之间");
+            String msg = String.format("用户名长度必须在6-32个字符之间");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        User user = userService.getByUsername(userForm.getUsername());
-        if (user == null) {
-            String msg = String.format("用户不存在");
+        if (this.checkUsername(userForm.getUsername())) {
+            String msg = String.format("用户名格式错误");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (user.getValid() == EnableDisableStatus.DISABLE) {
-            String msg = String.format("该用户无效");
-            logger.error(msg);
-            throw new ValidateFailedException(msg);
-        }
+//        User user = userService.getByUsername(userForm.getUsername());
+//        if (user == null) {
+//            String msg = String.format("用户不存在");
+//            logger.error(msg);
+//            throw new ValidateFailedException(msg);
+//        }
+//        if (user.getValid() == EnableDisableStatus.DISABLE) {
+//            String msg = String.format("该用户无效");
+//            logger.error(msg);
+//            throw new ValidateFailedException(msg);
+//        }
 
         if (StringUtils.isEmpty(userForm.getPassword())) {
             String msg = String.format("密码不能为空");

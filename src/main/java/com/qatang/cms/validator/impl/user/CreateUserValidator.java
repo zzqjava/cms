@@ -36,6 +36,11 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (this.checkUsername(userForm.getUsername())) {
+            String msg = String.format("用户名格式错误");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         User user = userService.getByUsername(userForm.getUsername());
         if (user != null) {
             String msg = String.format("用户名已存在");
