@@ -35,6 +35,11 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
+        if (this.checkUsername(userForm.getUsername())) {
+            String msg = String.format("用户名格式错误");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
         //用户名是否已存在验证
         User user = userService.getByUsername(userForm.getUsername());
         if (user != null) {
