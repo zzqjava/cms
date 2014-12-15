@@ -12,12 +12,14 @@ import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserService;
+import com.qatang.cms.shiro.authentication.PasswordHelper;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -36,7 +38,6 @@ import java.util.List;
 @SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
 @RequestMapping("/user")
 public class UserController extends BaseController {
-
     @Autowired
     private QueryUserValidator queryUserValidator;
     @Autowired
@@ -49,7 +50,10 @@ public class UserController extends BaseController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private PasswordHelper passwordHelper;
 
+    @RequiresPermissions("sys:user:list")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
         UserForm userForm;
@@ -289,7 +293,8 @@ public class UserController extends BaseController {
         }
         Long id = Long.parseLong(userForm.getId());
         User user = userService.get(id);
-        user.setPassword(DigestUtils.md5Hex(userForm.getNewPassword()));
+        user.setPassword(userForm.getNewPassword());
+        passwordHelper.encryptPassword(user);
         userService.update(user);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         modelMap.addAttribute(SUCCESS_MESSAGE_KEY, "修改用户密码成功");
@@ -337,6 +342,6 @@ public class UserController extends BaseController {
         String validValue = String.valueOf(EnableDisableStatus.ENABLE.getValue());
         roleForm.setValid(validValue);
         Page<Role> page = roleService.findAllPage(roleForm);
-        return page.getContent();
+        return page == null ? null : page.getContent();
     }
 }
