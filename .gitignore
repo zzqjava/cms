@@ -3,4 +3,3 @@ build
 *.swp
 .idea
 target/
-cms.properties
