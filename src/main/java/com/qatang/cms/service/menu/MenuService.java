@@ -1,6 +1,7 @@
 package com.qatang.cms.service.menu;
 
 import com.qatang.cms.entity.menu.Menu;
+import com.qatang.cms.form.menu.MenuForm;
 
 import java.util.List;
 
@@ -41,4 +42,10 @@ public interface MenuService {
 	 * @param id
 	 */
 	public void delete(Long id);
+
+    /**
+     * 查询
+     * @param menuForm
+     */
+    public List<Menu> query(MenuForm menuForm);
 }
