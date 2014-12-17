@@ -2,11 +2,12 @@ package com.qatang.cms.controller;
 
 import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
+import com.qatang.cms.shiro.authentication.PasswordHelper;
 import com.qatang.cms.validator.IValidator;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,6 +28,8 @@ public class SignupController extends BaseController {
     private IValidator<UserForm> registerValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordHelper passwordHelper;
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signupPage() {
@@ -45,9 +48,11 @@ public class SignupController extends BaseController {
         }
         User user = new User();
         user.setUsername(userForm.getUsername());
-        user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
+        user.setPassword(userForm.getPassword());
+        passwordHelper.encryptPassword(user);
         user.setEmail(userForm.getEmail());
         user.setCreatedTime(new Date());
+        user.setValid(EnableDisableStatus.ENABLE);
         userService.save(user);
         return "user/signupSuccess";
     }

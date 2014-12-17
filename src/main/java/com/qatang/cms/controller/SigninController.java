@@ -6,7 +6,11 @@ import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.IValidator;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,15 +49,26 @@ public class SigninController extends BaseController {
             return "redirect:/signin";
         }
 
-        User user = userService.getByUsername(userForm.getUsername());
-        if (user == null || !user.getPassword().equals(DigestUtils.md5Hex(userForm.getPassword()))) {
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "用户名或密码错误！");
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userForm.getUsername(), userForm.getPassword());
+
+        Subject subject = SecurityUtils.getSubject();
+
+        try {
+            subject.login(usernamePasswordToken);
+        } catch (AuthenticationException e) {
+            if (e instanceof IncorrectCredentialsException) {
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "用户名或密码错误！");
+            } else {
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            }
+            logger.error(e.getMessage(), e);
             return "redirect:/signin";
         }
+
+        User user = (User)subject.getPrincipal();
         user.setLastLoginTime(user.getLoginTime());
         user.setLoginTime(new Date());
         userService.update(user);
-        request.getSession().setAttribute(CommonConstants.USER_SESSION_KEY, user);
         return "redirect:/dashboard";
     }
 }
