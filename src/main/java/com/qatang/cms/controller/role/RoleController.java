@@ -1,6 +1,5 @@
 package com.qatang.cms.controller.role;
 
-import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.form.PageInfo;
@@ -30,7 +29,7 @@ import java.util.List;
  * Created by zhangzq on 14-6-25.
  */
 @Controller
-@SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
+@SessionAttributes("queryParam")
 @RequestMapping("/role")
 public class RoleController extends BaseController {
 
@@ -64,8 +63,8 @@ public class RoleController extends BaseController {
         return "/role/roleInput";
     }
 
-    @RequestMapping(value = "/list/{currentPage}", method = {RequestMethod.POST, RequestMethod.GET})
-    public String list(@PathVariable String currentPage, @ModelAttribute(CommonConstants.QUERY_CONDITION_KEY) RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
+    @RequestMapping(value = "/list/{currentPage}", method = RequestMethod.POST)
+    public String list(@PathVariable String currentPage, @ModelAttribute("queryParam") RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
         if (currentPage == null || "".equals(currentPage) || Integer.parseInt(currentPage) < 1) {
             currentPage = 1 + "";
         }
@@ -77,8 +76,8 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public String list(ModelMap modelMap, HttpServletRequest request) {
         RoleForm roleForm;
-        if (modelMap.containsKey(CommonConstants.QUERY_CONDITION_KEY)) {
-            roleForm = (RoleForm) modelMap.get(CommonConstants.QUERY_CONDITION_KEY);
+        if (modelMap.containsKey("queryParam")) {
+            roleForm = (RoleForm) modelMap.get("queryParam");
         } else {
             roleForm = new RoleForm();
         }
@@ -97,7 +96,7 @@ public class RoleController extends BaseController {
             pageInfo.setTotalPages(rolePage.getTotalPages());
         }
         modelMap.addAttribute(roleForm);
-        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, roleForm);
+        request.getSession().setAttribute("queryParam", roleForm);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -157,23 +156,25 @@ public class RoleController extends BaseController {
         role.setUpdatedTime(new Date());
         roleService.update(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功更新角色！");
-        if (modelMap.containsKey(CommonConstants.QUERY_CONDITION_KEY)) {
-            roleForm = (RoleForm) modelMap.get(CommonConstants.QUERY_CONDITION_KEY);
-        }
-        if (roleForm.getPageInfo() != null && roleForm.getPageInfo().currentPage != null) {
-            return "redirect:/role/list/" + roleForm.getPageInfo().currentPage;
-        }
         return "redirect:/role/list" ;
     }
 
     @RequestMapping(value = "/queryMenu/{roleId}", method = RequestMethod.GET)
-    public String queryMenu(@PathVariable String roleId, RoleForm roleForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    public String queryMenu(@PathVariable String roleId, ModelMap modelMap,RoleMenuForm roleMenuForm, RedirectAttributes redirectAttributes) {
         if (StringUtils.isEmpty(roleId)) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
             return "redirect:/role/list" ;
         }
-        roleForm.setId(roleId);
-        modelMap.addAttribute(roleForm);
+        //根据传入过来的角色 先判断当前角色已拥有的菜单
+        List<RoleMenu> hasExistRoleMenuList = roleService.findRoleMenuList(Long.parseLong(roleId));
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (RoleMenu roleMenu : hasExistRoleMenuList) {
+            stringBuilder.append(roleMenu.getMenuId()).append(",");
+        }
+        String menuIds = !stringBuilder.equals("") ? stringBuilder.toString() : "";
+        roleMenuForm.setMenuIds(menuIds.lastIndexOf(",") > 0 ? menuIds.substring(0, menuIds.lastIndexOf(",")) : menuIds);
+        modelMap.addAttribute(roleId);
+        modelMap.addAttribute(roleMenuForm);
         return "/role/roleMenuInput";
     }
 
