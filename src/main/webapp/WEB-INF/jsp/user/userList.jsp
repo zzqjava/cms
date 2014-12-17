@@ -87,16 +87,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-4">
-                                <div class="input-group col-xs-4">
-                                    <span class="input-group-addon">角色：</span>
-                                    <select name="" class="form-control">
-                                        <c:forEach items="${roleList}" var="role">
-                                            <option value="${role.id}" <%--<c:if test="${userForm.roleId == role.id}">selected="selected"</c:if>--%>>${role.roleName}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="col-xs-6">
                                 <div class="input-group col-xs-8">
                                     <span class="input-group-addon">排序方式：将</span>

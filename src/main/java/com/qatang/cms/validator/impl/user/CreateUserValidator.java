@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by qatang on 14-6-12.
  */
@@ -141,6 +143,12 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
         EnableDisableStatus enableDisableStatus = EnableDisableStatus.get(validValue);
         if (enableDisableStatus == null) {
             String msg = String.format("是否有效状态字段格式不合法");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        List<Long> roleIdList = userForm.getRoleIdList();
+        if (roleIdList == null || roleIdList.isEmpty()) {
+            String msg = String.format("用户至少分配一个角色");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
