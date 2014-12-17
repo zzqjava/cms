@@ -2,6 +2,7 @@ package com.qatang.cms.validator.impl.menu;
 
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
+import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.menu.MenuForm;
 import com.qatang.cms.validator.AbstractValidator;
@@ -77,6 +78,16 @@ throw new ValidateFailedException(msg);
 			logger.error(msg);
 			throw new ValidateFailedException(msg);
 		}
+        if (StringUtils.isEmpty(menuForm.getResourcesType()) && ResourcesType.ALL.getValue() == ResourcesType.get(Integer.parseInt(menuForm.getResourcesType())).getValue()) {
+            String msg = String.format("必须选择菜单类型");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
+        if (StringUtils.isEmpty(menuForm.getPermission())) {
+            String msg = String.format("必须填写权限");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
+        }
 		return true;
 	}
 }
