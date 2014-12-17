@@ -1,5 +1,7 @@
 package com.qatang.cms.form.menu;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by likunpeng on 2014/6/24.
  */
@@ -12,6 +14,11 @@ public class MenuForm {
 	private String validValue;
 	private String memo;
 	private String errorMessage;
+    private String parentID;
+    private String resourcesType;
+    private String level;
+    private String permission;
+    private String hasChildren;
 
 	public String getId() {
 		return id;
@@ -68,4 +75,47 @@ public class MenuForm {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+    public String getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(String parentID) {
+        this.parentID = parentID;
+    }
+
+    public String getResourcesType() {
+        return resourcesType;
+    }
+
+    public void setResourcesType(String resourcesType) {
+        this.resourcesType = resourcesType;
+    }
+
+    public String getLevel() {
+        if (StringUtils.isEmpty(level)) {
+            level = "0";
+        }
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getHasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(String hasChildren) {
+        this.hasChildren = hasChildren;
+    }
 }

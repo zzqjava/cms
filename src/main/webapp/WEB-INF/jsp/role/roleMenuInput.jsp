@@ -17,10 +17,6 @@
     <script src="${ctx}/js/bootstrap-transition.js"></script>
     <script src="${ctx}/js/bootstrap-button.js"></script>
     <script type="text/javascript">
-        $(function(){
-
-        })
-
         //定时关闭提示信息
         var successMessage = '${successMessage}';
         if (successMessage != null && successMessage != '') {
@@ -88,7 +84,9 @@
             <br/> <br/>
             <div class="input-group">
                 <c:forEach items="${menuList}" var="menus">
-                    <input type="checkbox" id="menu_${menus.id}" name="menu" value="${menus.id}"/>${menus.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="menu_${menus.id}" name="menu" value="${menus.id}"/>${menus.name}
+                    </label>
                 </c:forEach>
             </div>
             <br/>
