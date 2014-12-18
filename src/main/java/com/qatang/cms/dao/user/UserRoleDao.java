@@ -12,4 +12,5 @@ import java.util.List;
 public interface UserRoleDao extends JpaRepository<UserRole, Long> {
 
     public List<Role> findByUserId(Long userId);
+    public UserRole findByUserIdAndRoleId(Long userId, Long roleId);
 }

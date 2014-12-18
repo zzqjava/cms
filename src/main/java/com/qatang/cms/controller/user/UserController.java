@@ -4,11 +4,11 @@ import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
-import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserService;
@@ -17,7 +17,6 @@ import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * Created by JSH on 2014/6/26.
@@ -66,6 +67,7 @@ public class UserController extends BaseController {
         return "user/userList";
     }
 
+    @RequiresPermissions("sys:user:list")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public String list(@ModelAttribute(CommonConstants.QUERY_CONDITION_KEY) UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
         try {
@@ -92,12 +94,15 @@ public class UserController extends BaseController {
         request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
     }
 
+    @RequiresPermissions("sys:user:input")
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
+
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
 
+    @RequiresPermissions("sys:user:input")
     @RequestMapping(value = "/input/{userId}", method = RequestMethod.GET)
     public String input(@PathVariable String userId, ModelMap modelMap) {
         Long id;
@@ -156,6 +161,7 @@ public class UserController extends BaseController {
         return "user/userInput";
     }
 
+    @RequiresPermissions("sys:user:disable")
     @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
     public String disable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
@@ -173,6 +179,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
+    @RequiresPermissions("sys:user:enable")
     @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
     public String enable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
@@ -190,6 +197,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
+    @RequiresPermissions("sys:user:create")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(UserForm userForm, ModelMap modelMap) {
         try {
@@ -203,7 +211,7 @@ public class UserController extends BaseController {
         }
         User user = new User();
         user.setUsername(userForm.getUsername());
-        user.setPassword(DigestUtils.md5Hex(userForm.getPassword()));
+        user.setPassword(userForm.getPassword());
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
         user.setGender(Gender.get(Integer.parseInt(userForm.getGenderValue())));
@@ -211,11 +219,23 @@ public class UserController extends BaseController {
         user.setQQ(userForm.getQQ());
         user.setCreatedTime(new Date());
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
-        userService.save(user);
+        passwordHelper.encryptPassword(user);
+        user = userService.save(user);
+        Long userId = user.getId();
+        List<Long> roleIdList = userForm.getRoleIdList();
+        List<UserRole> userRoleList = new ArrayList<>();
+        for (Long roleId : roleIdList) {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(roleId);
+            userRoleList.add(userRole);
+        }
+        userService.save(userRoleList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "success";
     }
 
+    @RequiresPermissions("sys:user:update")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(UserForm userForm, ModelMap modelMap) {
         try {
@@ -236,10 +256,35 @@ public class UserController extends BaseController {
         user.setUpdatedTime(new Date());
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.update(user);
+        List<Long> roleIdList = userForm.getRoleIdList();
+        List<Role> roleList = userService.getByUserId(id);
+        Map<Long, Role> roleMap = new HashMap<>();
+        for (Role role : roleList) {
+            roleMap.put(role.getId(), role);
+        }
+        List<UserRole> deleteList = new ArrayList<>();
+        List<UserRole> saveList = new ArrayList<>();
+        for (Long roleId : roleIdList) {
+            if (!roleMap.containsKey(roleId)) {
+                UserRole userRole = new UserRole();
+                userRole.setRoleId(roleId);
+                userRole.setUserId(id);
+                saveList.add(userRole);
+            }
+        }
+        userService.save(saveList);
+        for (Long roleId : roleMap.keySet()) {
+            if (!roleIdList.contains(roleId)) {
+                UserRole userRole = userService.findByUserIdAndRoleId(id, roleId);
+                deleteList.add(userRole);
+            }
+        }
+        userService.delete(deleteList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "success";
     }
 
+    @RequiresPermissions("sys:user:del")
     @RequestMapping(value = "/del/{userId}", method = RequestMethod.GET)
     public String delete(@PathVariable String userId, RedirectAttributes redirectAttributes) {
         Long id;
@@ -255,6 +300,7 @@ public class UserController extends BaseController {
         return "redirect:/user/list";
     }
 
+    @RequiresPermissions("sys:user:view")
     @RequestMapping(value = "/view/{userId}", method = RequestMethod.GET)
     public String view(@PathVariable String userId, ModelMap modelMap) {
         Long id;
@@ -272,6 +318,7 @@ public class UserController extends BaseController {
         return "user/userView";
     }
 
+    @RequiresPermissions("sys:user:inputPassword")
     @RequestMapping(value = "/password/input/{id}", method = RequestMethod.GET)
     public String inputPassword(@PathVariable String id, ModelMap modelMap) {
         UserForm userForm = new UserForm();
@@ -281,6 +328,7 @@ public class UserController extends BaseController {
         return "user/passwordInput";
     }
 
+    @RequiresPermissions("sys:user:updatePassword")
     @RequestMapping(value = "/password/update", method = RequestMethod.POST)
     public String updatePassword(UserForm userForm, ModelMap modelMap) {
         try {
@@ -301,15 +349,57 @@ public class UserController extends BaseController {
         return "success";
     }
 
+    @RequiresPermissions("sys:user:forgetPassword")
     @RequestMapping(value = "/password/forget", method = RequestMethod.GET)
     public String forgetPassword(ModelMap modelMap) {
         modelMap.addAttribute(FORWARD_URL, "/signin");
         return "user/passwordReset";
     }
 
+    @RequiresPermissions("sys:user:resetPassword")
     @RequestMapping(value = "/password/reset", method = RequestMethod.GET)
     public String resetPassword() {
         return "success";
+    }
+
+    @RequiresPermissions("sys:user:ajaxRoles")
+    @RequestMapping(value = "/ajax/roles", method = RequestMethod.POST)
+    public void ajaxRoles(Long id, HttpServletResponse response) {
+        try {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter printWriter = response.getWriter();
+            List<Role> allRoles = roleService.findAll();
+            StringBuffer stringBuffer = new StringBuffer();
+            if (id == null) {
+                int index = 0;
+                for (Role role : allRoles) {
+                    stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                }
+            } else {
+                List<Role> roles = userService.getByUserId(id);
+                Map<Long, String> roleIdRoleNameMap = new HashMap<>();
+                for (Role role : roles) {
+                    roleIdRoleNameMap.put(role.getId(), role.getRoleName());
+                }
+                for (Role role : allRoles) {
+                    int index = 0;
+                    if (roleIdRoleNameMap.containsKey(role.getId())) {
+                        stringBuffer.append("<input type=\"checkbox\" checked=\"checked\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                    } else {
+                        stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"\").append(role.getId()).append(\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                    }
+                }
+            }
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("success", true);
+//            jsonObject.put("roles", stringBuffer.toString());
+//            printWriter.print(jsonObject.toString());
+            printWriter.write(stringBuffer.toString());
+            printWriter.flush();
+            printWriter.close();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @ModelAttribute("genderList")
@@ -334,14 +424,5 @@ public class UserController extends BaseController {
     public List<EnableDisableStatus> enableDisableStatusListAll() {
         List<EnableDisableStatus> enableDisableStatusListAll = EnableDisableStatus.listAll();
         return enableDisableStatusListAll;
-    }
-
-    @ModelAttribute("roleList")
-    public List<Role> roleList() {
-        RoleForm roleForm = new RoleForm();
-        String validValue = String.valueOf(EnableDisableStatus.ENABLE.getValue());
-        roleForm.setValid(validValue);
-        Page<Role> page = roleService.findAllPage(roleForm);
-        return page == null ? null : page.getContent();
     }
 }
