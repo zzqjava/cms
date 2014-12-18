@@ -82,7 +82,7 @@ public class UserController extends BaseController {
         return "user/userList";
     }
 
-    public void pagination(UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
+    private void pagination(UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
         Page<User> page = userService.getAll(userForm);
         if (page.getContent() != null) {
             List<User> userList = page.getContent();
@@ -221,6 +221,7 @@ public class UserController extends BaseController {
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         passwordHelper.encryptPassword(user);
         user = userService.save(user);
+
         Long userId = user.getId();
         List<Long> roleIdList = userForm.getRoleIdList();
         List<UserRole> userRoleList = new ArrayList<>();
