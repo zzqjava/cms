@@ -48,6 +48,7 @@
                 /js/** = anon
                 /font/** = anon
                 /css/** = anon
+                /static/** = anon
                 /favicon.ico = anon
                 /signin = anon
                 /signup = anon

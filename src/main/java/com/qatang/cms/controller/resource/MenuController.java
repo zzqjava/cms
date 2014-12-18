@@ -1,4 +1,4 @@
-package com.qatang.cms.controller.menu;
+package com.qatang.cms.controller.resource;
 
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.menu.Menu;
@@ -10,7 +10,6 @@ import com.qatang.cms.form.menu.MenuForm;
 import com.qatang.cms.service.menu.MenuService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

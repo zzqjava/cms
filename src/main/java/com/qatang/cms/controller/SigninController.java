@@ -35,7 +35,7 @@ public class SigninController extends BaseController {
 
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
     public String signinPage() {
-        return "forward:/index.jsp";
+        return "user/signin";
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
