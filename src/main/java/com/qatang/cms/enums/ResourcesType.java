@@ -6,19 +6,20 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Created by zhangzq on 2014/6/23.
+ * Created by zhangzq on 14-12-16.
  */
-public enum YesNoStatus {
-    ALL(-1, "全部"),
-    YES(1, "是"),
-    NO(0, "否");
-    private static Logger logger = LoggerFactory.getLogger(YesNoStatus.class);
+public enum ResourcesType {
+    ALL("全部"),
+    MENU("菜单"),
+    FUNCTION("功能"),
+    RESOURCES("资源");
+    private static Logger logger = LoggerFactory.getLogger(ResourcesType.class);
 
-    private static final Map<Integer, YesNoStatus> _MAP = new HashMap<Integer, YesNoStatus>();
-    private static List<YesNoStatus> _LIST = new ArrayList<YesNoStatus>();
-    private static List<YesNoStatus> _ALLLIST = new ArrayList<YesNoStatus>();
+    private static final Map<Integer, ResourcesType> _MAP = new HashMap<Integer, ResourcesType>();
+    private static List<ResourcesType> _LIST = new ArrayList<ResourcesType>();
+    private static List<ResourcesType> _ALLLIST = new ArrayList<ResourcesType>();
     static {
-        for(YesNoStatus yesNoStatus : YesNoStatus.values()){
+        for(ResourcesType yesNoStatus : ResourcesType.values()){
             _MAP.put(yesNoStatus.getValue(), yesNoStatus);
             _ALLLIST.add(yesNoStatus);
             if (!yesNoStatus.equals(ALL)) {
@@ -34,11 +35,9 @@ public enum YesNoStatus {
         }
     }
 
-    private int value;
     private String name;
 
-    private YesNoStatus(int value, String name){
-        this.value = value;
+    private ResourcesType(String name){
         this.name = name;
     }
 
@@ -47,10 +46,10 @@ public enum YesNoStatus {
     }
 
     public int getValue(){
-        return value;
+        return this.ordinal();
     }
 
-    public static YesNoStatus get(int value){
+    public static ResourcesType get(int value){
         try{
             return _MAP.get(value);
         }catch(Exception e){
@@ -59,11 +58,11 @@ public enum YesNoStatus {
         }
     }
 
-    public static List<YesNoStatus> list() {
+    public static List<ResourcesType> list() {
         return _LIST;
     }
 
-    public static List<YesNoStatus> listAll() {
+    public static List<ResourcesType> listAll() {
         return _ALLLIST;
     }
 }

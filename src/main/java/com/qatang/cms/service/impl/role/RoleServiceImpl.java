@@ -51,6 +51,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
+    }
+
+    @Override
     public RoleMenu save(RoleMenu roleMenu) {
         return roleMenuDao.save(roleMenu);
     }

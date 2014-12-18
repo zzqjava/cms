@@ -87,8 +87,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-8">
-                                <div class="input-group col-xs-6">
+                            <div class="col-xs-6">
+                                <div class="input-group col-xs-8">
                                     <span class="input-group-addon">排序方式：将</span>
                                     <select name="orderType" class="form-control col-xs-4">
                                         <option value="id">id</option>
@@ -102,8 +102,10 @@
                                     <span class="input-group-addon">排序</span>
                                 </div>
                             </div>
-                            <div class="col-xs-4">
-                                <button class="btn btn-default">查询</button>
+                            <div class="col-xs-2">
+                                <div class="col-xs-2">
+                                    <button class="btn btn-default">查询</button>
+                                </div>
                             </div>
                         </div>
                     </form>

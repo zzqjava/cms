@@ -3,6 +3,7 @@ package com.qatang.cms.entity.menu;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -45,6 +46,7 @@ public class Menu {
     private String permission;
     @Column(name = "has_children")
     @Enumerated
+	@Convert(converter = YesNoStatusConverter.class)
     private YesNoStatus hasChildren;
 
     @Transient
