@@ -70,11 +70,11 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
         for(Role role : roles){
             stringRoles.add(role.getRoleName());
             List<Menu> menus = roleService.getByRoleId(role.getId());
-            for(Menu menu : menus){
+            /*for(Menu menu : menus){
                 if(menu != null){
                     stringPermissions.add(menu.getAuthority());
                 }
-            }
+            }*/
         }
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(stringRoles);
