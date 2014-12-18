@@ -17,7 +17,7 @@ public interface RoleService {
 	public void del(Role role);
 	public Role getRole(Long id);
 	public Page<Role> findAllPage(RoleForm roleForm);
-
+	public List<Role> findAll();
     public RoleMenu save(RoleMenu roleMenu);
     public List<RoleMenu> findRoleMenuList(Long roleId);
 }
