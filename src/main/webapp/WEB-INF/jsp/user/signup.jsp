@@ -46,7 +46,7 @@
             <br/>
             <input type="text" id="email" name="email" autofocus="" required="" placeholder="用户邮箱" value="${userForm.email}" class="form-control">
             <br/>
-            <input type="password" id="password" name="plainPassword" value="" required="" placeholder="密码" class="form-control">
+            <input type="password" id="password" name="password" value="" required="" placeholder="密码" class="form-control">
             <br/>
             <input type="password" id="conPassword" name="conPassword" value="" required="" placeholder="确认密码" class="form-control">
             <br/>

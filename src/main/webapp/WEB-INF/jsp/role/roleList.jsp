@@ -8,10 +8,14 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="keywords" content="" />
     <meta http-equiv="description" content="" />
+    <%
+        response.setHeader("Cache-Control", "no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+    %>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/css/main.css">
-
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
     <script src="${ctx}/js/bootstrap-paginator.js"></script>
@@ -24,11 +28,57 @@
                 currentPage:${roleForm.pageInfo.currentPage},
                 totalPages:${roleForm.pageInfo.totalPages},
                 numberOfPages:10,
-                onPageClicked: function (e, originalEvent, type, page) {
+                pageUrl:function(type,page) {
+                    var queryRoleName = $("#queryRoleName").val();
+                    var queryValid = '${roleForm.queryValid}';
                     var url = "${ctx}/role/list/" + page ;
-                    $("#theForm").attr("action", url);
-                    $("#theForm").submit();
+                    if (queryRoleName != null && queryRoleName != "") {
+                        queryRoleName = encodeURI(encodeURI(queryRoleName));
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryRoleName=" + queryRoleName;
+                        } else {
+                            url = url + "?queryRoleName=" + queryRoleName;
+                        }
+                    }
+                    if (queryValid != null && queryValid != "") {
+                        if (url.indexOf("?") > 0) {
+                            url = url + "&queryValid=" + queryValid;
+                        } else {
+                            url = url + "?queryValid=" + queryValid;
+                        }
+
+                    }
+                    return url;
                 },
+                tooltipTitles:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return (page === current) ? "当前页 " : "第" + page + "页";
+                    }
+                },
+                itemTexts:function(type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "第一页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "最后一页";
+                        case "page":
+                            return page;
+                    }
+                },
+                onPageClicked:null,
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
@@ -62,9 +112,24 @@
         function closeErrorTip(){
             $('#tipError').click();
         }
-        //查询
-        function query () {
+        //添加
+        function create () {
+            $("#theForm").attr("action", "${ctx}/role/input");
             $("#theForm").submit();
+        }
+        //修改
+        function update (id) {
+            $("#theForm").attr("action", "${ctx}/role/input");
+            $("#roleId").val(id);
+            $("#theForm").submit();
+        }
+        //删除
+        function del (id) {
+            if (confirm('确定删除该条记录?')) {
+                $("#theForm").attr("action", "${ctx}/role/del");
+                $("#roleId").val(id);
+                $("#theForm").submit();
+            }
         }
     </script>
 </head>
@@ -91,7 +156,9 @@
                     ${errorMessage}
             </div>
         </c:if>
-        <form class="form-inline" id="theForm" action="${ctx}/role/list/1" method="post">
+        <form class="form-inline" id="theForm" action="${ctx}/role/list" method="post">
+            <input type="hidden" id="currentPage" name="currentPage" value="${pageInfo.currentPage}"/>
+            <input type="hidden" id="roleId" name="id" />
             <div class="text-center">
                 <table class="table table-hover table-striped">
                     <tr>
@@ -104,10 +171,14 @@
                         <td class="text-center">
                             <div class="input-group col-sm-5">
                                 <span class="input-group-addon ">是否有效：</span>
-                                <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
+                                <select class="form-control" name="queryValid" id="queryValid">
+                                    <c:forEach items="${queryEnableDisableStatus}" var="queryEnableDisableStatus">
+                                        <option value="${queryEnableDisableStatus.value}">${queryEnableDisableStatus.name}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                             &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-                            <input class="btn btn-primary" id="query" name="query" type="submit" value="查询" />
+                            <button class="btn btn-primary" id="query" name="query" type="submit" onclick="">查询</button>
                         </td>
                     </tr>
                 </table>
@@ -115,7 +186,7 @@
         </form>
         <div class="panel-heading" style="text-align: left">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="list" name="list" type="button" onclick="query();">角色列表</button>&nbsp;&nbsp;
+                <button class="btn btn-primary" id="list" name="list" type="button" onclick="window.location.href='${ctx}/role/list/${pageInfo.currentPage}';">角色列表</button>&nbsp;&nbsp;
                 <button class="btn btn-primary" id="input" name="input" type="button" onclick="window.location.href='${ctx}/role/input';">添加角色</button>
             </span>
         </div>
@@ -133,18 +204,8 @@
                     <td>${role.roleDesc}</td>
                     <td>${role.valid.name}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="window.location.href='${ctx}/role/input/' + ${role.id};">修改</button>
-                        <button class="btn btn-primary btn-sm" id="toggleValidStatus" name="toggleValidStatus" type="button" onclick="window.location.href='${ctx}/role/toggleValidStatus/'+ ${role.id};">
-                            <c:choose>
-                                <c:when test="${role.valid.value == 1}">
-                                    禁用
-                                </c:when>
-                                <c:otherwise>
-                                    启用
-                                </c:otherwise>
-                            </c:choose>
-                        </button>
-                        <button class="btn btn-primary btn-sm" id="queryMenu" name="queryMenu" type="button" onclick="window.location.href='${ctx}/role/queryMenu/' + ${role.id};">添加菜单</button>
+                        <button class="btn btn-primary btn-sm" id="update" name="update" type="button" onclick="update(${role.id})">修改</button>
+                        <button class="btn btn-primary btn-sm" id="del" name="del" type="button" onclick="del(${role.id})">删除</button>
                     </td>
                 </tr>
             </c:forEach>

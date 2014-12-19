@@ -2,8 +2,6 @@ package com.qatang.cms.form.user;
 
 import com.qatang.cms.form.AbstractPagingForm;
 
-import java.util.List;
-
 /**
  * Created by qatang on 14-6-12.
  */
@@ -12,7 +10,6 @@ public class UserForm extends AbstractPagingForm {
     private String errorMessage;
     private String username;
     private String password;
-    private String plainPassword;
     private String newPassword;
     private String conPassword;
     private String captcha;
@@ -25,7 +22,6 @@ public class UserForm extends AbstractPagingForm {
     private String validValue;
     private String orderType;
     private String sortType;
-    private List<Long> roleIdList;
 
     public String getId() {
         return id;
@@ -45,14 +41,6 @@ public class UserForm extends AbstractPagingForm {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getPlainPassword() {
-        return plainPassword;
-    }
-
-    public void setPlainPassword(String plainPassword) {
-        this.plainPassword = plainPassword;
     }
 
     public void setPassword(String password) {
@@ -161,13 +149,5 @@ public class UserForm extends AbstractPagingForm {
 
     public void setSortType(String sortType) {
         this.sortType = sortType;
-    }
-
-    public List<Long> getRoleIdList() {
-        return roleIdList;
-    }
-
-    public void setRoleIdList(List<Long> roleIdList) {
-        this.roleIdList = roleIdList;
     }
 }
