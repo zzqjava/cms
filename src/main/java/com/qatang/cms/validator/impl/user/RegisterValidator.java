@@ -69,12 +69,12 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (StringUtils.isEmpty(userForm.getPassword())) {
+        if (StringUtils.isEmpty(userForm.getPlainPassword())) {
             String msg = String.format("密码不能为空");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getPassword().length() < 6 || userForm.getPassword().length() > 16) {
+        if (userForm.getPlainPassword().length() < 6 || userForm.getPlainPassword().length() > 16) {
             String msg = String.format("密码长度必须在6-16个字符之间");
             logger.error(msg);
             throw new ValidateFailedException(msg);
@@ -89,7 +89,7 @@ public class RegisterValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (!userForm.getPassword().equals(userForm.getConPassword())) {
+        if (!userForm.getPlainPassword().equals(userForm.getConPassword())) {
             String msg = String.format("两次输入密码不一致");
             logger.error(msg);
             throw new ValidateFailedException(msg);

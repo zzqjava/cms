@@ -15,6 +15,6 @@ public class DashboardController extends BaseController {
     public String dashboard(ModelMap modelMap) {
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         modelMap.addAttribute(user);
-        return "/user/dashboard";
+        return "dashboard";
     }
 }

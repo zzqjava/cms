@@ -43,6 +43,18 @@
     </pluginRepositories>
 
     <dependencies>
+        <!-- aspectj相关jar包-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.4</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
@@ -155,12 +167,17 @@
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
+            <artifactId>shiro-web</artifactId>
             <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
             <version>1.2.3</version>
         </dependency>
         <dependency>
@@ -192,6 +209,12 @@
             <groupId>com.lecai</groupId>
             <artifactId>json-lib</artifactId>
             <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>2.4.2</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
