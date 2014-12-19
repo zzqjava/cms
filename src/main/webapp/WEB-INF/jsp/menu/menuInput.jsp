@@ -13,20 +13,6 @@
     <link rel="stylesheet" href="${ctx}/css/main.css">
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
-    <script src="${ctx}/js/bootstrap-alert.js"></script>
-    <script src="${ctx}/js/bootstrap-transition.js"></script>
-    <script src="${ctx}/js/bootstrap-button.js"></script>
-
-    <script type="text/javascript">
-        $(function(){
-            //回显
-            $("#resourcesType option").each(function() {
-                if ($(this).val() == '${menuForm.resourcesType}') {
-                    $(this).attr("selected", "selected");
-                }
-            });
-        })
-    </script>
 </head>
 <body>
 <div>
@@ -41,7 +27,7 @@
         <div class="login-box text-center" >
             <div class="login-single-panel-header">
                 <c:choose>
-                    <c:when test="${menuForm.id == null}">
+                    <c:when test="${menu.id == null}">
                         <div class="titlediv"><h3>添加菜单</h3></div>
                     </c:when>
                     <c:otherwise>
@@ -56,67 +42,8 @@
                 <h5 style="color:red">${errorMessage}</h5>
             </div>
             <c:choose>
-                <c:when test="${menuForm.id == null}">
+                <c:when test="${menu.id == null} " >
                     <form id="theform" class="form-signup-heading" action="${ctx}/menu/create" method="post">
-                        <input class="form-control" type="hidden" name="parentID" value="${menuForm.parentID}">
-                        <input class="form-control" type="hidden" name="level"  value="${menuForm.level}">
-
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单名称：</div>
-                            <input class="form-control" type="text" name="name" placeholder="菜单名称不能为空" value="${menuForm.name}">
-                        </div>
-                        <br/>
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单链接：</div>
-                            <input class="form-control" type="text" name="url" placeholder="${menuForm.url}" value="${menuForm.url}">
-                        </div>
-                        <br/>
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单权限：</div>
-                            <input class="form-control" type="text" name="permission" placeholder="${menuForm.permission}" value="${menuForm.permission}">
-                        </div>
-                        <br/>
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单排序：</div>
-                            <input class="form-control" type="text" name="orderLevelValue" placeholder="${menuForm.orderLevelValue}" value="${menuForm.orderLevelValue}">
-                        </div>
-                        <br/>
-                        <div class="input-group col-sm-5">
-                            <span class="input-group-addon ">菜单类型：</span>
-                            <select class="form-control" name="resourcesType" id="resourcesType">
-                                <c:forEach items="${resourcesTypeItems}" var="resourcesTypeItem">
-                                    <option value="${resourcesTypeItem.value}">${resourcesTypeItem.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <br/>
-                        <div class="form-group">
-                            <div class="input-group col-sm-5">
-                                <div class="input-group-addon">是否有效：</div>
-                                <select class="form-control" id="validValue" name="validValue">
-                                    <c:forEach items="${enableDisableStatus}" var="ed">
-                                        <option value="${ed.value}">${ed.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <br/>
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单备注：</div>
-                            <textarea class="form-control" rows="3" name="memo">${menuForm.memo}</textarea>
-                        </div>
-                        <br/>
-                        <div class="input-group">
-                            <button type="submit" class="btn btn-primary btn-lg">提交</button>&nbsp;&nbsp;
-                            <a class="btn btn-primary btn-lg" href="javascript:window.history.go(-1);">返回</a>
-                        </div>
-                    </form>
-                </c:when>
-                <c:otherwise>
-                    <form id="theform" class="form-signup-heading" action="${ctx}/menu/update" method="post">
-                        <input type="hidden" id="id" name="id" value="${menuForm.id}">
-                        <input class="form-control" type="hidden" name="parentID" value="${menuForm.parentID}">
-                        <input class="form-control" type="hidden" name="level"  value="${menuForm.level}">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">菜单名称：</div>
@@ -125,31 +52,60 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">菜单链接：</div>
+                                <div class="input-group-addon">url：</div>
                                 <input class="form-control" type="text" name="url" placeholder="${menuForm.url}" value="${menuForm.url}">
                             </div>
                         </div>
-                        <div class="input-group">
-                            <div class="input-group-addon">菜单权限：</div>
-                            <input class="form-control" type="text" name="permission" placeholder="${menuForm.permission}" value="${menuForm.permission}">
-                        </div>
-                        <br/>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">菜单排序：</div>
+                                <div class="input-group-addon">菜单排序值：</div>
                                 <input class="form-control" type="text" name="orderLevelValue" placeholder="${menuForm.orderLevelValue}" value="${menuForm.orderLevelValue}">
                             </div>
                         </div>
-                        <br/>
-                        <div class="input-group col-sm-5">
-                            <span class="input-group-addon ">菜单类型：</span>
-                            <select class="form-control" name="resourcesType" id="resourcesType">
-                                <c:forEach items="${resourcesTypeItems}" var="resourcesTypeItem">
-                                    <option value="${resourcesTypeItem.value}">${resourcesTypeItem.name}</option>
-                                </c:forEach>
-                            </select>
+                        <div class="form-group">
+                            <div class="input-group col-sm-5">
+                                <div class="input-group-addon">是否有效：</div>
+                                <select class="form-control" id="validValue" name="validValue">
+                                    <c:forEach items="${enableDisableStatus}" var="ed">
+                                        <option value="${ed.value}">${ed.name}</option>
+                                    </c:forEach>
+                                </select>
+                                    <%-- <input class="form-control" type="text" name="validValue" placeholder="${menu.valid}" value="${menu.valid}">--%>
+                            </div>
                         </div>
-                        <br/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">备注：</div>
+                                <input class="form-control" type="text" name="memo" placeholder="${menuForm.memo}" value="${menuForm.memo}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                            <a class="btn btn-primary btn-lg" href="javascript:window.history.go(-1);">返回</a>
+                        </div>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <form id="theform" class="form-signup-heading" action="${ctx}/menu/update" method="post">
+                        <input type="hidden" id="id" name="id" value="${menuForm.id}">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">菜单名称：</div>
+                                <input class="form-control" type="text" name="name" placeholder="菜单名称不能为空" value="${menuForm.name}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">url：</div>
+                                <input class="form-control" type="text" name="url" placeholder="${menuForm.url}" value="${menuForm.url}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">菜单排序值：</div>
+                                <input class="form-control" type="text" name="orderLevelValue" placeholder="${menuForm.orderLevelValue}" value="${menuForm.orderLevelValue}">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="input-group col-sm-5">
                                 <div class="input-group-addon">是否有效：</div>
@@ -162,8 +118,8 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">菜单备注：</div>
-                                <textarea class="form-control" rows="3" name="memo">${menuForm.memo}</textarea>
+                                <div class="input-group-addon">备注：</div>
+                                <input class="form-control" type="text" name="memo" placeholder="${menuForm.memo}" value="${menuForm.memo}">
                             </div>
                         </div>
                         <div class="form-group">

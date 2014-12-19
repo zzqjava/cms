@@ -6,5 +6,4 @@
 
     <import resource="classpath*:spring-beans.xml" />
     <import resource="classpath*:spring-jpa.xml" />
-    <import resource="classpath*:spring-shiro.xml" />
 </beans>
