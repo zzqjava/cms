@@ -30,7 +30,6 @@
         <div class="col-lg-3"></div>
         <div class="col-lg-6 login-box">
             <h3 class="text-center">用户登录</h3>
-            <h5 class="text-center" style="color:red">${errorMessage}</h5>
             <form id="theform" class="form-horizontal" action="${ctx}/signin" method="post" role="form">
                 <div class="form-group">
                     <label class="col-lg-2 control-label" for="username">用户名</label>

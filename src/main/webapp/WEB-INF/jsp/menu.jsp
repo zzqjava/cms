@@ -14,9 +14,6 @@
                 <a href="${ctx}/user/list">用户管理</a>
             </div>
             <div class="panel-body">
-                <a href="${ctx}/role/list">角色管理</a>
-            </div>
-            <div class="panel-body">
                 <a href="${ctx}/menu/list">菜单管理</a>
             </div>
         </div>

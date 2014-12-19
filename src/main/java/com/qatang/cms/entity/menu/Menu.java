@@ -1,16 +1,12 @@
 package com.qatang.cms.entity.menu;
 
 import com.qatang.cms.enums.EnableDisableStatus;
-import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
-import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by likunpeng on 2014/6/25.
@@ -36,21 +32,6 @@ public class Menu {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_time")
 	private Date updatedTime;
-
-    @Column(name = "parent_id")
-    private Long parentID;
-    @Enumerated
-    @Column(name = "resources_type")
-    private ResourcesType resourcesType;
-    private Integer level;
-    private String permission;
-    @Column(name = "has_children")
-    @Enumerated
-	@Convert(converter = YesNoStatusConverter.class)
-    private YesNoStatus hasChildren;
-
-    @Transient
-    private List<Menu> children;
 
 	public String getName() {
 		return name;
@@ -115,55 +96,4 @@ public class Menu {
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
-
-    public Long getParentID() {
-        return parentID;
-    }
-
-    public void setParentID(Long parentID) {
-        this.parentID = parentID;
-    }
-
-    public ResourcesType getResourcesType() {
-        return resourcesType;
-    }
-
-    public void setResourcesType(ResourcesType resourcesType) {
-        this.resourcesType = resourcesType;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public List<Menu> getChildren() {
-        if(children == null){
-            children = new ArrayList<Menu>();
-        }
-        return children;
-    }
-
-    public void setChildren(List<Menu> children) {
-        this.children = children;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public YesNoStatus getHasChildren() {
-        return hasChildren;
-    }
-
-    public void setHasChildren(YesNoStatus hasChildren) {
-        this.hasChildren = hasChildren;
-    }
 }
