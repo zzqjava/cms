@@ -13,6 +13,24 @@
     <link rel="stylesheet" href="${ctx}/css/main.css">
     <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
     <script src="${ctx}/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var id = $("#userId").val();
+            $.ajax( {
+                type : "POST",
+                url : "${ctx}/user/ajax/roles.do",
+                data : {"id": id},
+//                dataType: "json",
+                dataType: "text",
+                success : function(data) {
+//                    if (data.success) {
+//                        $("#roles").html(data.roles);
+//                    }
+                    $("#roles").html(data);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/navi.jsp"/>
@@ -109,6 +127,12 @@
                             </label>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="col-lg-3 control-label" style="width:23%;">角色</label>
+                        <div class="form-group">
+                            <label id="roles" class="radio-inline"></label>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">提交</button>
@@ -119,7 +143,7 @@
             </c:when>
             <c:otherwise>
                 <form:form class="form-horizontal" action="${ctx}/user/update" method="post" modelAttribute="userForm">
-                    <input type="hidden" name="id" value="${userForm.id}">
+                    <input type="hidden" name="id" value="${userForm.id}" id="userId">
                     <div class="form-group">
                         <label class="col-lg-3 control-label">用户名</label>
                         <div class="col-lg-6">

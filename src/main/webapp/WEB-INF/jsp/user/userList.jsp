@@ -87,8 +87,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-8">
-                                <div class="input-group col-xs-6">
+                            <div class="col-xs-6">
+                                <div class="input-group col-xs-8">
                                     <span class="input-group-addon">排序方式：将</span>
                                     <select name="orderType" class="form-control col-xs-4">
                                         <option value="id">id</option>
@@ -102,8 +102,10 @@
                                     <span class="input-group-addon">排序</span>
                                 </div>
                             </div>
-                            <div class="col-xs-4">
-                                <button class="btn btn-default">查询</button>
+                            <div class="col-xs-2">
+                                <div class="col-xs-2">
+                                    <button class="btn btn-default">查询</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -118,6 +120,7 @@
                                 <thead>
                                     <tr>
                                         <th>序号</th>
+                                        <th>编号</th>
                                         <th>用户名</th>
                                         <th>姓名</th>
                                         <th>性别</th>
@@ -131,18 +134,10 @@
                                     <c:forEach items="${userList}" var="user" varStatus="status">
                                         <tr>
                                             <td>${status.count}</td>
+                                            <td>${user.id}</td>
                                             <td><a href="${ctx}/user/view/${user.id}">${user.username}</a></td>
                                             <td>${user.name}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${user.gender.value == 1}">
-                                                        男
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        女
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                            <td>${user.gender.name}</td>
                                             <td>${user.mobile}</td>
                                             <td>${user.email}</td>
                                             <td>${user.valid.name}</td>
@@ -166,22 +161,22 @@
                     </c:if>
                 </div>
                 <div class="container">
-                    <div style="float:right;">
-                    <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
-                        <input id="page" type="hidden" name="pageInfo.currentPage">
-                        <ul class="pagination">
-                            <c:if test="${userForm.pageInfo.currentPage > 1}">
-                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});">&laquo;</a></li>
-                            </c:if>
-                            <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
-                                <li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>
-                            </c:forEach>
-                            <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
-                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});">&raquo;</a></li>
-                            </c:if>
-                        </ul>
-                    </form>
-                </div>
+                    <div>
+                        <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
+                            <input id="page" type="hidden" name="pageInfo.currentPage">
+                            <ul class="pagination">
+                                <c:if test="${userForm.pageInfo.currentPage > 1}">
+                                    <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});">&laquo;</a></li>
+                                </c:if>
+                                <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
+                                    <li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>
+                                </c:forEach>
+                                <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
+                                    <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});">&raquo;</a></li>
+                                </c:if>
+                            </ul>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
