@@ -16,6 +16,8 @@
     <!-- use-default-filters="false" 目的在于使默认filter失效，也就是使默认要扫描的注解失效，比如@service -->
     <context:component-scan base-package="com.qatang.cms.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <mvc:annotation-driven />
@@ -27,21 +29,29 @@
     <mvc:resources mapping="/font/**" location="/font/" />
     <mvc:resources mapping="/css/**" location="/css/" />
 
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/js/**"/>
-            <mvc:exclude-mapping path="/font/**"/>
-            <mvc:exclude-mapping path="/css/**"/>
-            <mvc:exclude-mapping path="/signin"/>
-            <mvc:exclude-mapping path="/signup"/>
-            <mvc:exclude-mapping path="/user/password/forget"/>
-            <bean class="com.qatang.cms.interceptor.UserSessionInterceptor" />
-        </mvc:interceptor>
-    </mvc:interceptors>
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/js/**"/>-->
+            <!--<mvc:exclude-mapping path="/font/**"/>-->
+            <!--<mvc:exclude-mapping path="/css/**"/>-->
+            <!--<mvc:exclude-mapping path="/*.ico"/>-->
+            <!--<mvc:exclude-mapping path="/signin"/>-->
+            <!--<mvc:exclude-mapping path="/signup"/>-->
+            <!--<mvc:exclude-mapping path="/user/password/forget"/>-->
+            <!--<bean class="com.qatang.cms.interceptor.UserSessionInterceptor" />-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/views/" p:suffix=".jsp">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     </bean>
 
+    <!-- 控制器异常处理 -->
+    <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+    </bean>
+
+    <bean class="com.qatang.cms.controller.exception.DefaultExceptionHandler"/>
+
+    <import resource="spring-mvc-shiro.xml"/>
 </beans>
