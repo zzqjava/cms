@@ -161,38 +161,22 @@ public class UserController extends BaseController {
         return "user/userInput";
     }
 
-    @RequiresPermissions("sys:user:disable")
-    @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
-    public String disable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
-        Long id;
+    @RequiresPermissions("sys:user:validate")
+    @RequestMapping(value = "validate/{id}", method = RequestMethod.GET)
+    public String validate(@PathVariable String id, RedirectAttributes redirectAttributes) {
+        Long userId;
         try {
-            id = Long.parseLong(userId);
+            userId = Long.parseLong(id);
         } catch (NumberFormatException e) {
-            logger.error("禁用用户，用户id不合法");
+            logger.error("禁用/启用用户，用户id不合法");
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
             redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        User user = userService.get(id);
-        user.setValid(EnableDisableStatus.DISABLE);
-        userService.update(user);
-        return "redirect:/user/list";
-    }
-
-    @RequiresPermissions("sys:user:enable")
-    @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
-    public String enable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
-        Long id;
-        try {
-            id = Long.parseLong(userId);
-        } catch (NumberFormatException e) {
-            logger.error("启用用户，用户id不合法");
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        User user = userService.get(id);
-        user.setValid(EnableDisableStatus.ENABLE);
+        User user = userService.get(userId);
+        EnableDisableStatus enableDisableStatus = user.getValid();
+        enableDisableStatus = enableDisableStatus.getValue() == EnableDisableStatus.ENABLE.getValue() ? EnableDisableStatus.DISABLE : EnableDisableStatus.ENABLE;
+        user.setValid(enableDisableStatus);
         userService.update(user);
         return "redirect:/user/list";
     }
