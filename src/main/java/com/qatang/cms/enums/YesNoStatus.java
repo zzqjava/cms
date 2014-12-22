@@ -9,9 +9,9 @@ import java.util.*;
  * Created by zhangzq on 2014/6/23.
  */
 public enum YesNoStatus {
-    ALL("全部"),
-    YES("是"),
-    NO("否");
+    ALL(-1, "全部"),
+    YES(1, "是"),
+    NO(0, "否");
     private static Logger logger = LoggerFactory.getLogger(YesNoStatus.class);
 
     private static final Map<Integer, YesNoStatus> _MAP = new HashMap<Integer, YesNoStatus>();
@@ -34,9 +34,11 @@ public enum YesNoStatus {
         }
     }
 
+    private int value;
     private String name;
 
-    private YesNoStatus(String name){
+    private YesNoStatus(int value, String name){
+        this.value = value;
         this.name = name;
     }
 
@@ -45,7 +47,7 @@ public enum YesNoStatus {
     }
 
     public int getValue(){
-        return this.ordinal();
+        return value;
     }
 
     public static YesNoStatus get(int value){
