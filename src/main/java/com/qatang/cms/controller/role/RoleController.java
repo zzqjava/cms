@@ -4,7 +4,6 @@ import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.controller.BaseController;
-import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.enums.EnableDisableStatus;

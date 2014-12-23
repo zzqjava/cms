@@ -67,13 +67,8 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
         Set<String> stringRoles = new HashSet<>();
         Set<String> stringPermissions = new HashSet<>();
         for(Role role : roles){
-<<<<<<< HEAD
             stringRoles.add(role.getName());
-            List<Menu> menus = roleService.getByRoleId(role.getId());
-=======
-            stringRoles.add(role.getRoleName());
             List<Resource> menus = roleService.getByRoleId(role.getId());
->>>>>>> 57389f169916442c332fb7f54a6e0c5c3e52b563
             /*for(Menu menu : menus){
                 if(menu != null){
                     stringPermissions.add(menu.getAuthority());

@@ -21,10 +21,6 @@ public interface RoleService {
 	public List<Role> findAll();
     public RoleMenu save(RoleMenu roleMenu);
     public List<RoleMenu> findRoleMenuList(Long roleId);
-<<<<<<< HEAD
-    public List<Menu> getByRoleId(Long roleId);
 	public List<Role> findDefaultRoles();
-=======
     public List<Resource> getByRoleId(Long roleId);
->>>>>>> 57389f169916442c332fb7f54a6e0c5c3e52b563
 }
