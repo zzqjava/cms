@@ -1,7 +1,9 @@
 package com.qatang.cms.controller.role;
 
+import com.qatang.cms.entity.resource.Resource;
+import com.qatang.cms.entity.role.RoleMenu;
+import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.controller.BaseController;
-import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -10,7 +12,7 @@ import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.role.RoleMenuForm;
-import com.qatang.cms.service.menu.MenuService;
+import com.qatang.cms.service.resource.ResourceService;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public class RoleController extends BaseController {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private MenuService menuService;
+    private ResourceService resourceService;
 
     /*@RequiresPermissions("sys:role:input")*/
     @RequestMapping(value = "/input", method = RequestMethod.GET)
@@ -243,7 +245,7 @@ public class RoleController extends BaseController {
      * 获取菜单列表
      * */
     @ModelAttribute("menuList")
-    public List<Menu> menuList() {
-        return menuService.getList();
+    public List<Resource> menuList() {
+        return resourceService.getList();
     }
 }
