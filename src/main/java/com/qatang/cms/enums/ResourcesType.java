@@ -9,21 +9,21 @@ import java.util.*;
  * Created by zhangzq on 14-12-16.
  */
 public enum ResourcesType {
-    ALL("全部"),
-    MENU("菜单"),
-    FUNCTION("功能"),
-    RESOURCES("资源");
+    ALL(-1, "全部"),
+    MENU(0, "菜单"),
+    FUNCTION(1, "功能"),
+    RESOURCES(2, "资源");
     private static Logger logger = LoggerFactory.getLogger(ResourcesType.class);
 
     private static final Map<Integer, ResourcesType> _MAP = new HashMap<Integer, ResourcesType>();
     private static List<ResourcesType> _LIST = new ArrayList<ResourcesType>();
     private static List<ResourcesType> _ALLLIST = new ArrayList<ResourcesType>();
     static {
-        for(ResourcesType yesNoStatus : ResourcesType.values()){
-            _MAP.put(yesNoStatus.getValue(), yesNoStatus);
-            _ALLLIST.add(yesNoStatus);
-            if (!yesNoStatus.equals(ALL)) {
-                _LIST.add(yesNoStatus);
+        for(ResourcesType resourcesType : ResourcesType.values()){
+            _MAP.put(resourcesType.getValue(), resourcesType);
+            _ALLLIST.add(resourcesType);
+            if (!resourcesType.equals(ALL)) {
+                _LIST.add(resourcesType);
             }
         }
 
@@ -36,8 +36,10 @@ public enum ResourcesType {
     }
 
     private String name;
+    private int value;
 
-    private ResourcesType(String name){
+    private ResourcesType(int value, String name){
+        this.value = value;
         this.name = name;
     }
 
@@ -46,7 +48,7 @@ public enum ResourcesType {
     }
 
     public int getValue(){
-        return this.ordinal();
+        return value;
     }
 
     public static ResourcesType get(int value){

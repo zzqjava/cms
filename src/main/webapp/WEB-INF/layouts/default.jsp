@@ -123,6 +123,7 @@
 <script src="${ctx}/static/js/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="${ctx}/static/js/bootstrap.js"></script>
+<script src="${ctx}/static/js/bootstrap-paginator.js"></script>
 <!-- App -->
 <script src="${ctx}/static/js/app.js"></script>
 <script src="${ctx}/static/js/app.plugin.js"></script>

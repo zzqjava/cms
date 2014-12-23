@@ -1,12 +1,11 @@
 package com.qatang.cms.service.impl.role;
 
-import com.qatang.cms.dao.menu.MenuDao;
+import com.qatang.cms.dao.resource.ResourceDao;
 import com.qatang.cms.dao.role.RoleDao;
 import com.qatang.cms.dao.role.RoleMenuDao;
-import com.qatang.cms.entity.menu.Menu;
+import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
-import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMenuDao roleMenuDao;
     @Autowired
-    private MenuDao menuDao;
+    private ResourceDao menuDao;
 
     @Override
     public Role save(Role user) {
@@ -72,9 +71,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Menu> getByRoleId(Long roleId) {
+    public List<Resource> getByRoleId(Long roleId) {
         List<RoleMenu> roleMenus = roleMenuDao.findByRoleId(roleId);
-        List<Menu> menus = new ArrayList<>();
+        List<Resource> menus = new ArrayList<>();
         if(roleMenus != null){
             for(RoleMenu rm : roleMenus){
                 menus.add(menuDao.findOne(rm.getMenuId()));

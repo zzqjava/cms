@@ -1,6 +1,6 @@
 package com.qatang.cms.service.role;
 
-import com.qatang.cms.entity.menu.Menu;
+import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.form.role.RoleForm;
@@ -21,5 +21,5 @@ public interface RoleService {
 	public List<Role> findAll();
     public RoleMenu save(RoleMenu roleMenu);
     public List<RoleMenu> findRoleMenuList(Long roleId);
-    public List<Menu> getByRoleId(Long roleId);
+    public List<Resource> getByRoleId(Long roleId);
 }
