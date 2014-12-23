@@ -14,7 +14,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -68,7 +67,7 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
         Set<String> stringRoles = new HashSet<>();
         Set<String> stringPermissions = new HashSet<>();
         for(Role role : roles){
-            stringRoles.add(role.getRoleName());
+            stringRoles.add(role.getName());
             List<Menu> menus = roleService.getByRoleId(role.getId());
             /*for(Menu menu : menus){
                 if(menu != null){

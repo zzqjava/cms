@@ -9,8 +9,10 @@ import com.qatang.cms.form.AbstractPagingForm;
 public class RoleForm extends AbstractPagingForm {
 
     private String id;
-    private String roleName;
-    private String roleDesc;
+    private String identifier;
+    private String name;
+    private String description;
+    private String isDefault;
     private String valid;
 
     private String queryRoleName;
@@ -19,23 +21,41 @@ public class RoleForm extends AbstractPagingForm {
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
-    public String getRoleName() {
-        return roleName;
+
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    public String getRoleDesc() {
-        return roleDesc;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getValid() {

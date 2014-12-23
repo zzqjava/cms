@@ -2,6 +2,7 @@ package com.qatang.cms.dao.role.impl;
 
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
+import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.role.RoleForm;
 import org.apache.commons.lang3.StringUtils;
@@ -65,4 +66,12 @@ public class RoleDaoImpl {
         return new PageImpl<Role>(list, new PageRequest(pageInfo.getCurrentPage(), pageInfo.getPageSize()), count);
     }
 
+    public List<Role> findDefaultRoles() {
+        StringBuilder hql = new StringBuilder("from Role t where 1=1");
+        hql.append(" and t.isDefault =:isDefault");
+        hql.append(" order by t.id desc");
+        Query query = em.createQuery(hql.toString());
+        query.setParameter("isDefault", YesNoStatus.YES);
+        return query.getResultList();
+    }
 }

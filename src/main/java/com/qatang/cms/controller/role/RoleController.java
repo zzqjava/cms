@@ -1,12 +1,13 @@
 package com.qatang.cms.controller.role;
 
-import com.qatang.cms.entity.menu.Menu;
-import com.qatang.cms.entity.role.RoleMenu;
-import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.controller.BaseController;
+import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
+import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.enums.EnableDisableStatus;
+import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
+import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.form.role.RoleMenuForm;
 import com.qatang.cms.service.menu.MenuService;
@@ -42,11 +43,14 @@ public class RoleController extends BaseController {
     @Autowired
     private MenuService menuService;
 
+    /*@RequiresPermissions("sys:role:input")*/
     @RequestMapping(value = "/input", method = RequestMethod.GET)
-    public String input() {
+    public String input(ModelMap modelMap) {
+        modelMap.addAttribute(FORWARD_URL, "/role/list");
         return "/role/roleInput";
     }
 
+    /*@RequiresPermissions("sys:role:input")*/
     @RequestMapping(value = "/input/{roleId}", method = RequestMethod.GET)
     public String input(@PathVariable String roleId, ModelMap modelMap) {
         if (roleId != null && !"".equals(roleId)) {
@@ -54,8 +58,10 @@ public class RoleController extends BaseController {
             RoleForm roleForm = new RoleForm();
             if (role != null) {
                 roleForm.setId(String.valueOf(role.getId()));
-                roleForm.setRoleName(role.getRoleName());
-                roleForm.setRoleDesc(role.getRoleDesc());
+                roleForm.setName(role.getName());
+                roleForm.setIdentifier(role.getIdentifier());
+                roleForm.setDescription(role.getDescription());
+                roleForm.setIsDefault(String.valueOf(role.getIsDefault().getValue()));
                 roleForm.setValid(String.valueOf(role.getValid().getValue()));
             }
             modelMap.addAttribute(roleForm);
@@ -63,6 +69,7 @@ public class RoleController extends BaseController {
         return "/role/roleInput";
     }
 
+    /*@RequiresPermissions("sys:role:list")*/
     @RequestMapping(value = "/list/{currentPage}", method = RequestMethod.POST)
     public String list(@PathVariable String currentPage, @ModelAttribute("queryParam") RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
         if (currentPage == null || "".equals(currentPage) || Integer.parseInt(currentPage) < 1) {
@@ -73,6 +80,7 @@ public class RoleController extends BaseController {
         return "role/roleList";
     }
 
+    /*@RequiresPermissions("sys:role:list")*/
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public String list(ModelMap modelMap, HttpServletRequest request) {
         RoleForm roleForm;
@@ -89,8 +97,8 @@ public class RoleController extends BaseController {
         Page<Role> rolePage = roleService.findAllPage(roleForm);
         if (rolePage != null) {
             if (rolePage.getContent() != null) {
-                List<Role> userList = rolePage.getContent();
-                modelMap.addAttribute(userList);
+                List<Role> roleList = rolePage.getContent();
+                modelMap.addAttribute(roleList);
             }
             PageInfo pageInfo = roleForm.getPageInfo();
             pageInfo.setTotalPages(rolePage.getTotalPages());
@@ -99,9 +107,11 @@ public class RoleController extends BaseController {
         request.getSession().setAttribute("queryParam", roleForm);
     }
 
+    /*@RequiresPermissions("sys:role:create")*/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(RoleForm roleForm, RedirectAttributes redirectAttributes, ModelMap modelMap) {
         try {
+            //roleForm.setValid("1");
             createRoleValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage());
@@ -110,15 +120,20 @@ public class RoleController extends BaseController {
             return "/role/roleInput";
         }
         Role role = new Role();
-        role.setRoleName(roleForm.getRoleName());
-        role.setRoleDesc(roleForm.getRoleDesc());
+        role.setName(roleForm.getName());
+        role.setIdentifier(roleForm.getIdentifier());
+        role.setDescription(roleForm.getDescription());
+        role.setIsDefault(YesNoStatus.get(Integer.parseInt(roleForm.getIsDefault())));
         role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
+        role.setIsDefault(YesNoStatus.YES);
+        role.setValid(EnableDisableStatus.ENABLE);
         role.setCreatedTime(new Date());
         roleService.save(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功添加角色！");
         return "redirect:/role/list";
     }
 
+    /*@RequiresPermissions("sys:role:toggleValidStatus")*/
     @RequestMapping(value = "/toggleValidStatus/{roleId}", method = RequestMethod.GET)
     public String toggleValidStatus(@PathVariable String roleId, RedirectAttributes redirectAttributes) {
         if (roleId == null || "".equals(roleId)) {
@@ -139,6 +154,7 @@ public class RoleController extends BaseController {
         return "redirect:/role/list";
     }
 
+    /*@RequiresPermissions("sys:role:update")*/
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(RoleForm roleForm, RedirectAttributes redirectAttributes, ModelMap modelMap) {
         try {
@@ -150,8 +166,9 @@ public class RoleController extends BaseController {
             return "/role/roleInput";
         }
         Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
-        role.setRoleName(roleForm.getRoleName());
-        role.setRoleDesc(roleForm.getRoleDesc());
+        role.setName(roleForm.getName());
+        roleForm.setDescription(role.getDescription());
+        roleForm.setIsDefault(String.valueOf(role.getIsDefault().getValue()));
         role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
         role.setUpdatedTime(new Date());
         roleService.update(role);
@@ -159,6 +176,7 @@ public class RoleController extends BaseController {
         return "redirect:/role/list" ;
     }
 
+    /*@RequiresPermissions("sys:role:queryMenu")*/
     @RequestMapping(value = "/queryMenu/{roleId}", method = RequestMethod.GET)
     public String queryMenu(@PathVariable String roleId, ModelMap modelMap,RoleMenuForm roleMenuForm, RedirectAttributes redirectAttributes) {
         if (StringUtils.isEmpty(roleId)) {
@@ -178,6 +196,7 @@ public class RoleController extends BaseController {
         return "/role/roleMenuInput";
     }
 
+    /*@RequiresPermissions("sys:role:createRoleMenu")*/
     @RequestMapping(value ="/createRoleMenu", method = RequestMethod.POST)
     public String createRoleMenu(RoleMenuForm roleMenuForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         try {
