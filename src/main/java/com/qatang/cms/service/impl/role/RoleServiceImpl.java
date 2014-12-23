@@ -6,7 +6,6 @@ import com.qatang.cms.dao.role.RoleMenuDao;
 import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
-import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,13 @@ public class RoleServiceImpl implements RoleService {
     private MenuDao menuDao;
 
     @Override
-    public Role save(Role user) {
-        return roleDao.save(user);
+    public Role save(Role role) {
+        return roleDao.save(role);
     }
 
     @Override
-    public Role update(Role user) {
-        return roleDao.save(user);
+    public Role update(Role role) {
+        return roleDao.save(role);
     }
 
     @Override
@@ -81,5 +80,10 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         return menus;
+    }
+
+    @Override
+    public List<Role> findDefaultRoles() {
+        return roleDao.findDefaultRoles();
     }
 }

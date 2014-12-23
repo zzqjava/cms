@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface RoleService {
 
-	public Role save(Role user);
-	public Role update(Role user);
+	public Role save(Role role);
+	public Role update(Role role);
 	public void del(Role role);
 	public Role getRole(Long id);
 	public Page<Role> findAllPage(RoleForm roleForm);
@@ -22,4 +22,5 @@ public interface RoleService {
     public RoleMenu save(RoleMenu roleMenu);
     public List<RoleMenu> findRoleMenuList(Long roleId);
     public List<Menu> getByRoleId(Long roleId);
+	public List<Role> findDefaultRoles();
 }
