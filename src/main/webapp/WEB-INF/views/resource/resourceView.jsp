@@ -27,26 +27,34 @@
         <table class="table table-bordered">
             <tr>
                 <td>菜单名</td>
-                <td>${menu.name}</td>
+                <td>${resource.name}</td>
             </tr>
             <tr>
                 <td>菜单链接</td>
-                <td>${menu.url}</td>
+                <td>${resource.url}</td>
+            </tr>
+            <tr>
+                <td>菜单权限</td>
+                <td>${resource.identifier}</td>
+            </tr>
+            <tr>
+                <td>菜单类别</td>
+                <td>${resource.type.name}</td>
             </tr>
             <tr>
                 <td>菜单排序值</td>
-                <td>${menu.orderLevel}</td>
+                <td>${resource.priority}</td>
             </tr>
             <tr>
                 <td>是否有效</td>
-                <td>${menu.valid.name}</td>
+                <td>${resource.valid.name}</td>
             </tr>
             <tr>
                 <td>备注</td>
-                <td>${menu.memo}</td>
+                <td>${resource.memo}</td>
             </tr>
         </table>
-        <a class="btn btn-primary btn-lg" href="${ctx}${forwardUrl}">返回列表</a>
+        <a class="btn btn-sm btn-default" href="${ctx}${forwardUrl}">返回列表</a>
     </div>
 </div>
 </body>
