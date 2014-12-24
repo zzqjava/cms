@@ -74,4 +74,5 @@ public class RoleDaoImpl {
         query.setParameter("isDefault", YesNoStatus.YES);
         return query.getResultList();
     }
-}
+
+  }

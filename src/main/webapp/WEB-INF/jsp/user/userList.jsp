@@ -127,7 +127,7 @@
                                         <th>手机号</th>
                                         <th>邮箱</th>
                                         <th>是否有效</th>
-                                        <th colspan="3">操作</th>
+                                        <th colspan="4">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -153,6 +153,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
+                                            <td><a href="${ctx}/user/input/${user.id}">分配角色</a></td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
