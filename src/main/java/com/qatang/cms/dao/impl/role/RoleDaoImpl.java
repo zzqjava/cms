@@ -1,4 +1,4 @@
-package com.qatang.cms.dao.role.impl;
+package com.qatang.cms.dao.impl.role;
 
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -36,7 +36,7 @@ public class RoleDaoImpl {
                 hql.append(" and t.valid=:queryValid");
             }
         }
-        hql.append(" order by t.createdTime desc");
+        hql.append(" order by t.id asc");
         hqlCount.append(hql);
         Query q = em.createQuery(hql.toString());
         Query qc = em.createQuery(hqlCount.toString());

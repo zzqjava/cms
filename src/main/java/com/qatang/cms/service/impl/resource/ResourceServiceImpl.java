@@ -1,4 +1,4 @@
-package com.qatang.cms.service.resource.impl;
+package com.qatang.cms.service.impl.resource;
 
 import com.qatang.cms.dao.resource.ResourceDao;
 import com.qatang.cms.entity.resource.Resource;
