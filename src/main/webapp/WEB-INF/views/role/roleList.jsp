@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=utf-8"%>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/views/include.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="zh-cn" class="bg-dark">
     <head>
@@ -42,7 +42,7 @@
                                     <th>描述</th>
                                     <th>是否默认角色</th>
                                     <th>是否有效</th>
-                                    <th colspan="3">操作</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -55,8 +55,7 @@
                                         <td>${role.description}</td>
                                         <td>${role.isDefault.name}</td>
                                         <td>${role.valid.name}</td>
-                                        <td><a href="${ctx}/role/input/${role.id}">修改</a></td>
-                                        <td>
+                                        <td><a href="${ctx}/role/input/${role.id}">修改</a>
                                             <c:choose>
                                                 <c:when test="${role.valid.value == 1}">
                                                     <a href="${ctx}/role/toggleValidStatus/${role.id}">禁用</a>
@@ -65,6 +64,7 @@
                                                     <a href="${ctx}/role/toggleValidStatus/${role.id}">启用</a>
                                                 </c:otherwise>
                                             </c:choose>
+                                            <a href="${ctx}/allotResource/input/${role.id}">分配资源</a>
                                         </td>
                                     </tr>
                                 </c:forEach>

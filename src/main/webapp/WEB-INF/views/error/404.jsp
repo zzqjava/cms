@@ -38,7 +38,7 @@
 <footer id="footer">
     <div class="text-center padder clearfix">
         <p>
-            <small>SuperData &copy; 2014 ChinaITer.com</small>
+            <small>CMS &copy; 2007-2014 qatang.com</small>
         </p>
     </div>
 </footer>
