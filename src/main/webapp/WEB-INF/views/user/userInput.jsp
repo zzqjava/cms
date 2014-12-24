@@ -64,49 +64,49 @@
                                 <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">密码</label>
                             <div class="col-sm-10">
                                 <input type="password" class="form-control" name="password" value="${userForm.password}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">确认密码</label>
                             <div class="col-sm-10">
                                 <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">姓名</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" value="${userForm.name}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">邮箱</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="email" value="${userForm.email}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">手机号</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="mobile" value="${userForm.mobile}">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">QQ</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="QQ" value="${userForm.QQ}">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
@@ -118,7 +118,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
@@ -130,7 +130,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button type="submit" class="btn btn-default">提交</button>
