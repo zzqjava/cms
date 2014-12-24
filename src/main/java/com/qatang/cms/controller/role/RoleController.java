@@ -1,19 +1,14 @@
 package com.qatang.cms.controller.role;
 
 import com.qatang.cms.controller.BaseController;
-import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.Role;
-import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.role.RoleForm;
-import com.qatang.cms.form.role.RoleMenuForm;
-import com.qatang.cms.service.resource.ResourceService;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.validator.IValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -37,11 +32,7 @@ public class RoleController extends BaseController {
     @Autowired
     private IValidator<RoleForm> createRoleValidator;
     @Autowired
-    private IValidator<RoleMenuForm> createRoleMenuValidator;
-    @Autowired
     private RoleService roleService;
-    @Autowired
-    private ResourceService resourceService;
 
     /*@RequiresPermissions("sys:role:list")*/
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
@@ -176,52 +167,6 @@ public class RoleController extends BaseController {
         return "redirect:/role/list" ;
     }
 
-    /*@RequiresPermissions("sys:role:queryMenu")*/
-    @RequestMapping(value = "/queryMenu/{roleId}", method = RequestMethod.GET)
-    public String queryMenu(@PathVariable String roleId, ModelMap modelMap,RoleMenuForm roleMenuForm, RedirectAttributes redirectAttributes) {
-        if (StringUtils.isEmpty(roleId)) {
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
-            return "redirect:/role/list" ;
-        }
-        //根据传入过来的角色 先判断当前角色已拥有的菜单
-        List<RoleMenu> hasExistRoleMenuList = roleService.findRoleMenuList(Long.parseLong(roleId));
-        StringBuilder stringBuilder = new StringBuilder("");
-        for (RoleMenu roleMenu : hasExistRoleMenuList) {
-            stringBuilder.append(roleMenu.getMenuId()).append(",");
-        }
-        String menuIds = !stringBuilder.equals("") ? stringBuilder.toString() : "";
-        roleMenuForm.setMenuIds(menuIds.lastIndexOf(",") > 0 ? menuIds.substring(0, menuIds.lastIndexOf(",")) : menuIds);
-        modelMap.addAttribute(roleId);
-        modelMap.addAttribute(roleMenuForm);
-        return "/role/roleMenuInput";
-    }
-
-    /*@RequiresPermissions("sys:role:createRoleMenu")*/
-    @RequestMapping(value ="/createRoleMenu", method = RequestMethod.POST)
-    public String createRoleMenu(RoleMenuForm roleMenuForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
-        try {
-            createRoleMenuValidator.validate(roleMenuForm);
-        } catch (ValidateFailedException e) {
-            logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            return "redirect:/role/queryMenu/"+roleMenuForm.getRoleId() ;
-        }
-
-        String menuIds = roleMenuForm.getMenuIds();
-        String[] menuIdsArray = menuIds.split(",");
-        for (String menuId : menuIdsArray) {
-            RoleMenu roleMenu = new RoleMenu();
-            roleMenu.setRoleId(Long.parseLong(roleMenuForm.getRoleId()));
-            roleMenu.setMenuId(Long.parseLong(menuId));
-            roleService.save(roleMenu);
-        }
-        List<RoleMenu> roleMenuList = roleService.findRoleMenuList(Long.parseLong(roleMenuForm.getRoleId()));
-        modelMap.addAttribute(roleMenuForm);
-        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "保存成功！");
-        redirectAttributes.addFlashAttribute("roleMenuList", roleMenuList);
-        return "redirect:/role/queryMenu/" + roleMenuForm.getRoleId() ;
-    }
-
     /*@RequiresPermissions("sys:role:view")*/
     @RequestMapping(value = "/view/{roleId}", method = RequestMethod.GET)
     public String view(@PathVariable String roleId, ModelMap modelMap) {
@@ -264,13 +209,5 @@ public class RoleController extends BaseController {
     public List<YesNoStatus> yesNoStatuses() {
         List<YesNoStatus> yesNoStatuses = YesNoStatus.list();
         return yesNoStatuses;
-    }
-
-    /**
-     * 获取菜单列表
-     * */
-    @ModelAttribute("menuList")
-    public List<Resource> menuList() {
-        return resourceService.getList();
     }
 }

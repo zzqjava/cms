@@ -1,6 +1,5 @@
 package com.qatang.cms;
 
-import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -68,8 +67,8 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
         Set<String> stringPermissions = new HashSet<>();
         for(Role role : roles){
             stringRoles.add(role.getName());
-            List<Resource> menus = roleService.getByRoleId(role.getId());
-            /*for(Menu menu : menus){
+            /*List<Resource> menus = roleService.getByRoleId(role.getId());
+            for(Menu menu : menus){
                 if(menu != null){
                     stringPermissions.add(menu.getAuthority());
                 }
