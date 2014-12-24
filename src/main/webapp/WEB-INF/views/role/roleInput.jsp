@@ -65,21 +65,21 @@
                                         <input type="text" class="form-control" name="name" value="${roleForm.name}" required="">
                                     </div>
                                 </div>
-                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">角色标识符</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="identifier" value="${roleForm.identifier}" required="">
                                     </div>
                                 </div>
-                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">描述</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="description" value="${roleForm.description}">
                                     </div>
                                 </div>
-                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">是否默认角色</label>
                                     <div class="col-sm-10">
@@ -96,7 +96,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">是否有效</label>
                                     <div class="col-sm-10">
@@ -110,7 +110,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="line line-dashed line-lg pull-in"></div>
+                                <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
                                         <button type="submit" class="btn btn-default" id="sub">提交</button>

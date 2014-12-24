@@ -1,4 +1,4 @@
-package com.qatang.cms.dao.role.impl;
+package com.qatang.cms.dao.impl.role;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
