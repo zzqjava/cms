@@ -374,20 +374,20 @@ public class UserController extends BaseController {
             if (id == null) {
                 int index = 0;
                 for (Role role : allRoles) {
-                    stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                    stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getName()).append("&nbsp;");
                 }
             } else {
                 List<Role> roles = userService.getByUserId(id);
                 Map<Long, String> roleIdRoleNameMap = new HashMap<>();
                 for (Role role : roles) {
-                    roleIdRoleNameMap.put(role.getId(), role.getRoleName());
+                    roleIdRoleNameMap.put(role.getId(), role.getName());
                 }
                 for (Role role : allRoles) {
                     int index = 0;
                     if (roleIdRoleNameMap.containsKey(role.getId())) {
-                        stringBuffer.append("<input type=\"checkbox\" checked=\"checked\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                        stringBuffer.append("<input type=\"checkbox\" checked=\"checked\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getName()).append("&nbsp;");
                     } else {
-                        stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"\").append(role.getId()).append(\">").append("&nbsp;").append(role.getRoleName()).append("&nbsp;");
+                        stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"\").append(role.getId()).append(\">").append("&nbsp;").append(role.getName()).append("&nbsp;");
                     }
                 }
             }

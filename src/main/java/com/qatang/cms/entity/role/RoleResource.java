@@ -9,17 +9,17 @@ import javax.persistence.*;
  * Created by zhangzq on 14-8-6.
  */
 @Entity
-@Table(name = "c_role_menu")
+@Table(name = "c_role_resource")
 @DynamicInsert
 @DynamicUpdate
-public class RoleMenu {
+public class RoleResource {
     @Id
     @GeneratedValue
     private Long id;
     @Column(name = "role_id")
     private Long roleId;
-    @Column(name = "menu_id")
-    private Long menuId;
+    @Column(name = "resource_id")
+    private Long resourceId;
 
     public Long getId() {
         return id;
@@ -37,11 +37,11 @@ public class RoleMenu {
         this.roleId = roleId;
     }
 
-    public Long getMenuId() {
-        return menuId;
+    public Long getResourceId() {
+        return resourceId;
     }
 
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
+    public void setResourceId(Long resourceId) {
+        this.resourceId = resourceId;
     }
 }

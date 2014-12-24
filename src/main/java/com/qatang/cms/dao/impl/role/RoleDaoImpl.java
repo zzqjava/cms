@@ -1,7 +1,8 @@
-package com.qatang.cms.dao.role.impl;
+package com.qatang.cms.dao.impl.role;
 
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
+import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.role.RoleForm;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +28,7 @@ public class RoleDaoImpl {
         StringBuilder hqlCount = new StringBuilder("select count(t) ");
 
         if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            hql.append(" and t.roleName like :queryRoleName");
+            hql.append(" and t.name like :queryName");
         }
         if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
             int valid = Integer.parseInt(roleForm.getQueryValid());
@@ -35,13 +36,13 @@ public class RoleDaoImpl {
                 hql.append(" and t.valid=:queryValid");
             }
         }
-        hql.append(" order by t.createdTime desc");
+        hql.append(" order by t.id asc");
         hqlCount.append(hql);
         Query q = em.createQuery(hql.toString());
         Query qc = em.createQuery(hqlCount.toString());
         if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            q.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
-            qc.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
+            q.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
+            qc.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
         }
         if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
             int valid = Integer.parseInt(roleForm.getQueryValid());
@@ -65,4 +66,12 @@ public class RoleDaoImpl {
         return new PageImpl<Role>(list, new PageRequest(pageInfo.getCurrentPage(), pageInfo.getPageSize()), count);
     }
 
+    public List<Role> findDefaultRoles() {
+        StringBuilder hql = new StringBuilder("from Role t where 1=1");
+        hql.append(" and t.isDefault =:isDefault");
+        hql.append(" order by t.id desc");
+        Query query = em.createQuery(hql.toString());
+        query.setParameter("isDefault", YesNoStatus.YES);
+        return query.getResultList();
+    }
 }

@@ -1,7 +1,5 @@
-package com.qatang.cms.dao.user.impl;
+package com.qatang.cms.dao.impl.user;
 
-import com.qatang.cms.dao.user.UserDao;
-import com.qatang.cms.dao.user.UserRoleDao;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
