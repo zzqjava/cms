@@ -1,9 +1,7 @@
 package com.qatang.cms.controller.role;
 
-import com.qatang.cms.entity.resource.Resource;
-import com.qatang.cms.entity.role.RoleMenu;
-import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.controller.BaseController;
+import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.role.RoleMenu;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -45,6 +43,19 @@ public class RoleController extends BaseController {
     @Autowired
     private ResourceService resourceService;
 
+    /*@RequiresPermissions("sys:role:list")*/
+    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
+    public String list(ModelMap modelMap, HttpServletRequest request) {
+        RoleForm roleForm;
+        if (modelMap.containsKey("queryParam")) {
+            roleForm = (RoleForm) modelMap.get("queryParam");
+        } else {
+            roleForm = new RoleForm();
+        }
+        pagination(roleForm, modelMap, request);
+        return "role/roleList";
+    }
+
     /*@RequiresPermissions("sys:role:input")*/
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
@@ -67,6 +78,7 @@ public class RoleController extends BaseController {
                 roleForm.setValid(String.valueOf(role.getValid().getValue()));
             }
             modelMap.addAttribute(roleForm);
+            modelMap.addAttribute(FORWARD_URL, "/role/list");
         }
         return "/role/roleInput";
     }
@@ -78,19 +90,6 @@ public class RoleController extends BaseController {
             currentPage = 1 + "";
         }
         roleForm.getPageInfo().setCurrentPage(Integer.parseInt(currentPage));
-        pagination(roleForm, modelMap, request);
-        return "role/roleList";
-    }
-
-    /*@RequiresPermissions("sys:role:list")*/
-    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
-    public String list(ModelMap modelMap, HttpServletRequest request) {
-        RoleForm roleForm;
-        if (modelMap.containsKey("queryParam")) {
-            roleForm = (RoleForm) modelMap.get("queryParam");
-        } else {
-            roleForm = new RoleForm();
-        }
         pagination(roleForm, modelMap, request);
         return "role/roleList";
     }
@@ -113,7 +112,6 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(RoleForm roleForm, RedirectAttributes redirectAttributes, ModelMap modelMap) {
         try {
-            //roleForm.setValid("1");
             createRoleValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage());
@@ -127,9 +125,8 @@ public class RoleController extends BaseController {
         role.setDescription(roleForm.getDescription());
         role.setIsDefault(YesNoStatus.get(Integer.parseInt(roleForm.getIsDefault())));
         role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
-        role.setIsDefault(YesNoStatus.YES);
-        role.setValid(EnableDisableStatus.ENABLE);
         role.setCreatedTime(new Date());
+        role.setUpdatedTime(new Date());
         roleService.save(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功添加角色！");
         return "redirect:/role/list";
@@ -169,8 +166,9 @@ public class RoleController extends BaseController {
         }
         Role role = roleService.getRole(Long.parseLong(roleForm.getId()));
         role.setName(roleForm.getName());
-        roleForm.setDescription(role.getDescription());
-        roleForm.setIsDefault(String.valueOf(role.getIsDefault().getValue()));
+        role.setIdentifier(roleForm.getIdentifier());
+        role.setDescription(roleForm.getDescription());
+        role.setIsDefault(YesNoStatus.get(Integer.parseInt(roleForm.getIsDefault())));
         role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
         role.setUpdatedTime(new Date());
         roleService.update(role);
@@ -224,6 +222,24 @@ public class RoleController extends BaseController {
         return "redirect:/role/queryMenu/" + roleMenuForm.getRoleId() ;
     }
 
+    /*@RequiresPermissions("sys:role:view")*/
+    @RequestMapping(value = "/view/{roleId}", method = RequestMethod.GET)
+    public String view(@PathVariable String roleId, ModelMap modelMap) {
+        Long id;
+        try {
+            id = Long.parseLong(roleId);
+        } catch (NumberFormatException e) {
+            logger.error("角色id不合法！" + e.getMessage());
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "角色id不合法！");
+            modelMap.addAttribute(FORWARD_URL, "/role/list");
+            return "failure";
+        }
+        Role role = roleService.getRole(id);
+        modelMap.addAttribute(role);
+        modelMap.addAttribute(FORWARD_URL, "/role/list");
+        return "role/roleView";
+    }
+
     /**
      * 新增与修改时候使用
      * */
@@ -239,6 +255,15 @@ public class RoleController extends BaseController {
     public List<EnableDisableStatus> queryEnableDisableStatus() {
         List<EnableDisableStatus> enableDisableStatus = EnableDisableStatus.listAll();
         return enableDisableStatus;
+    }
+
+    /**
+     * 新增与修改时候使用
+     * */
+    @ModelAttribute("yesNoStatuses")
+    public List<YesNoStatus> yesNoStatuses() {
+        List<YesNoStatus> yesNoStatuses = YesNoStatus.list();
+        return yesNoStatuses;
     }
 
     /**
