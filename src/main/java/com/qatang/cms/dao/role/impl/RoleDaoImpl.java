@@ -28,7 +28,7 @@ public class RoleDaoImpl {
         StringBuilder hqlCount = new StringBuilder("select count(t) ");
 
         if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            hql.append(" and t.roleName like :queryRoleName");
+            hql.append(" and t.name like :queryName");
         }
         if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
             int valid = Integer.parseInt(roleForm.getQueryValid());
@@ -41,8 +41,8 @@ public class RoleDaoImpl {
         Query q = em.createQuery(hql.toString());
         Query qc = em.createQuery(hqlCount.toString());
         if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            q.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
-            qc.setParameter("queryRoleName", "%" + roleForm.getQueryRoleName().trim() + "%");
+            q.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
+            qc.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
         }
         if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
             int valid = Integer.parseInt(roleForm.getQueryValid());
