@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=utf-8"%>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/views/include.jsp" %>
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
     <head>
