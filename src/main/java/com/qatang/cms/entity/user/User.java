@@ -22,6 +22,7 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private String salt;
     private String name;
     private String email;
     @Enumerated
@@ -144,5 +145,13 @@ public class User {
 
     public void setValid(EnableDisableStatus valid) {
         this.valid = valid;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
