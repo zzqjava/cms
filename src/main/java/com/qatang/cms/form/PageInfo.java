@@ -7,7 +7,7 @@ public class PageInfo {
 
     public Integer currentPage = 1;
     private Integer totalPages;
-    private Integer pageSize = 2;
+    private Integer pageSize = 20;
 
     public Integer getCurrentPage() {
         return currentPage;
