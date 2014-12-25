@@ -57,13 +57,13 @@
                                     <td>${user.valid.name}</td>
                                     <td><a href="${ctx}/user/input/${user.id}">修改</a></td>
                                     <td><a href="${ctx}/user/password/input/${user.id}">重置密码</a></td>
-                                    <td>
+                                    <td><a href="${ctx}/user/validate/${user.id}">
                                         <c:choose>
                                             <c:when test="${user.valid.value == 1}">
-                                                <a href="${ctx}/user/disable/${user.id}">禁用</a>
+                                                禁用</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <a href="${ctx}/user/enable/${user.id}">启用</a>
+                                                启用</a>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
