@@ -11,6 +11,7 @@ import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
+import com.qatang.cms.service.user.UserRoleService;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.shiro.authentication.PasswordHelper;
 import com.qatang.cms.validator.impl.user.CreateUserValidator;
@@ -49,6 +50,8 @@ public class UserController extends BaseController {
     private UpdatePasswordValidator updatePasswordValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
     @Autowired
     private RoleService roleService;
     @Autowired
@@ -231,7 +234,7 @@ public class UserController extends BaseController {
             userRole.setRoleId(roleId);
             userRoleList.add(userRole);
         }
-        userService.save(userRoleList);
+        userRoleService.save(userRoleList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "success";
     }
@@ -258,29 +261,36 @@ public class UserController extends BaseController {
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.update(user);
         List<Long> roleIdList = userForm.getRoleIdList();
-        List<Role> roleList = userService.getByUserId(id);
-        Map<Long, Role> roleMap = new HashMap<>();
-        for (Role role : roleList) {
-            roleMap.put(role.getId(), role);
+
+
+        List<UserRole> existRoleList = userRoleService.findUserRolesByUserId(id);
+        Set<Long> roleSet = new HashSet<>();
+        for (UserRole userRole : existRoleList) {
+            if (!roleSet.contains(userRole.getRoleId())) {
+                roleSet.add(userRole.getRoleId());
+            }
         }
         List<UserRole> deleteList = new ArrayList<>();
         List<UserRole> saveList = new ArrayList<>();
         for (Long roleId : roleIdList) {
-            if (!roleMap.containsKey(roleId)) {
+            if (!roleSet.contains(roleId)) {
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(roleId);
                 userRole.setUserId(id);
                 saveList.add(userRole);
             }
         }
-        userService.save(saveList);
-        for (Long roleId : roleMap.keySet()) {
+        userRoleService.save(saveList);
+        for (Long roleId : roleSet) {
             if (!roleIdList.contains(roleId)) {
-                UserRole userRole = userService.findByUserIdAndRoleId(id, roleId);
-                deleteList.add(userRole);
+                for (UserRole existUserRole : existRoleList) {
+                    if (existUserRole.getRoleId() == roleId) {
+                        deleteList.add(existUserRole);
+                    }
+                }
             }
         }
-        userService.delete(deleteList);
+        userRoleService.delete(deleteList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "success";
     }
@@ -377,7 +387,7 @@ public class UserController extends BaseController {
                     stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getName()).append("&nbsp;");
                 }
             } else {
-                List<Role> roles = userService.getByUserId(id);
+                List<Role> roles = userRoleService.findRolesByUserId(id);
                 Map<Long, String> roleIdRoleNameMap = new HashMap<>();
                 for (Role role : roles) {
                     roleIdRoleNameMap.put(role.getId(), role.getName());
