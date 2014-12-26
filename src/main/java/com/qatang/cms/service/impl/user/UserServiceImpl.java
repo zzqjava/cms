@@ -22,8 +22,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private UserRoleDao userRoleDao;
 
     @Override
     public User get(Long id) {
@@ -36,11 +34,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserRole> save(List<UserRole> userRoleList) {
-        return userRoleDao.save(userRoleList);
-    }
-
-    @Override
     public User update(User user) {
         return userDao.save(user);
     }
@@ -48,11 +41,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userDao.delete(id);
-    }
-
-    @Override
-    public void delete(List<UserRole> userRoleList) {
-        userRoleDao.delete(userRoleList);
     }
 
     @Override
@@ -70,13 +58,4 @@ public class UserServiceImpl implements UserService {
         return userDao.findAll(userForm);
     }
 
-    @Override
-    public List<Role> getByUserId(Long userId) {
-        return userRoleDao.findByUserId(userId);
-    }
-
-    @Override
-    public UserRole findByUserIdAndRoleId(Long userId, Long roleId) {
-        return userRoleDao.findByUserIdAndRoleId(userId, roleId);
-    }
 }

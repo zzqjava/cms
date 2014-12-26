@@ -52,7 +52,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-
     public List<Role> findDefaultRoles() {
         return roleDao.findDefaultRoles();
     }

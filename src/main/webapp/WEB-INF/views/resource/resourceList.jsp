@@ -34,13 +34,6 @@
             });
         })
 
-        var goPage = function(page) {
-            $("#page").val(page);
-            var url = "${ctx}/resource/list/" + page ;
-            $("#pageForm").attr("action",url);
-            $("#pageForm").submit();
-        }
-
         function input(treeLevel, parentID) {
             $("#theForm").attr("action", "${ctx}/resource/input");
             $("#treeLevel").val(treeLevel);
