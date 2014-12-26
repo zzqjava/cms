@@ -31,22 +31,9 @@
                 <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                 <li><a href="#">系统管理</a></li>
                 <li class="${ctx}/user/list"><a href="#">用户管理</a></li>
-                <li class="active">
-                    <c:choose>
-                    <c:when test="${userForm.id == null}">
-                        用户添加
-                    </c:when>
-                    <c:otherwise>
-                        用户修改
-                    </c:otherwise>
-                </c:choose></li>
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
-                </h3>
-            </div>
-            <section class="panel panel-default">
-                <header class="panel-heading font-bold">
                     <c:choose>
                         <c:when test="${userForm.id == null}">
                             用户添加
@@ -55,7 +42,9 @@
                             用户修改
                         </c:otherwise>
                     </c:choose>
-                </header>
+                </h3>
+            </div>
+            <section class="panel panel-default">
                 <div class="panel-body">
                     <form:form class="form-horizontal" action="${ctx}/user/create" method="post">
                         <div class="form-group">
@@ -110,24 +99,20 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" checked value="1"> 男
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" value="2"> 女
-                                </label>
+                                <c:forEach items="${genderList}" var="gender">
+                                    <input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if>>&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;
+                                </c:forEach>
+                                <%--<form:radiobuttons path="genderValue" items="${genderList}"/>--%>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" checked value="1"> 是
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" value="2"> 否
-                                </label>
+                                <c:forEach items="${enableDisableStatusList}" var="valid">
+                                    <input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if>>&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;
+                                </c:forEach>
+                                <%--<form:radiobuttons path="validValue" items="${enableDisableStatusList}"/>--%>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>

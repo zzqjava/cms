@@ -39,6 +39,7 @@
           <a href="#" class="pull-right m-t-xs"><small>忘记密码？</small></a>
           <button type="submit" class="btn btn-primary">登录</button>
           <div class="lines line-dashed"></div>
+          <label class="highlight_red">${errorMessage}</label>
         </form>
       </section>
     </div>
