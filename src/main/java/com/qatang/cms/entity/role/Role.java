@@ -1,6 +1,7 @@
 package com.qatang.cms.entity.role;
 
 import com.qatang.cms.enums.EnableDisableStatus;
+import com.qatang.cms.enums.YesNoStatus;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -18,10 +19,15 @@ public class Role {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(name = "role_name")
-	private String roleName;
-	@Column(name = "role_desc")
-	private String roleDesc;
+	@Column(name = "identifier")
+	private String identifier;
+	@Column(name = "name")
+	private String name;
+	@Column(name = "description")
+	private String description;
+	@Enumerated
+	@Column(name = "is_default")
+	private YesNoStatus isDefault;
 	@Enumerated
 	private EnableDisableStatus valid;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -39,20 +45,36 @@ public class Role {
 		this.id = id;
 	}
 
-	public String getRoleName() {
-		return roleName;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
-	public String getRoleDesc() {
-		return roleDesc;
+	public String getName() {
+		return name;
 	}
 
-	public void setRoleDesc(String roleDesc) {
-		this.roleDesc = roleDesc;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public YesNoStatus getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(YesNoStatus isDefault) {
+		this.isDefault = isDefault;
 	}
 
 	public EnableDisableStatus getValid() {

@@ -2,6 +2,7 @@
 <%@ taglib prefix="sitemesh" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <c:set var="SITE_NAME" scope="request" value="CMS"/>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -23,6 +24,26 @@
     <script src="${ctx}/static/js/ie/excanvas.js"></script>
     <![endif]-->
 
+    <script src="${ctx}/static/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="${ctx}/static/js/bootstrap.js"></script>
+    <script src="${ctx}/static/js/bootstrap-paginator.js"></script>
+    <!-- App -->
+    <script src="${ctx}/static/js/app.js"></script>
+    <script src="${ctx}/static/js/app.plugin.js"></script>
+    <script src="${ctx}/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="${ctx}/static/js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
+    <script src="${ctx}/static/js/charts/sparkline/jquery.sparkline.min.js"></script>
+    <script src="${ctx}/static/js/charts/flot/jquery.flot.min.js"></script>
+    <script src="${ctx}/static/js/charts/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="${ctx}/static/js/charts/flot/jquery.flot.resize.js"></script>
+    <script src="${ctx}/static/js/charts/flot/jquery.flot.grow.js"></script>
+    <script src="${ctx}/static/js/charts/flot/demo.js"></script>
+
+    <script src="${ctx}/static/js/calendar/bootstrap_calendar.js"></script>
+    <script src="${ctx}/static/js/calendar/demo.js"></script>
+
+    <script src="${ctx}/static/js/sortable/jquery.sortable.js"></script>
     <sitemesh:head/>
 </head>
 <body>
@@ -38,6 +59,38 @@
                 <i class="fa fa-cog"></i>
             </a>
         </div>
+        <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="thumb-sm avatar pull-left">
+              <img src="${ctx}/static/images/avatar.jpg">
+            </span>
+                    <shiro:principal/> <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight">
+                    <span class="arrow top"></span>
+                    <%--<li>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="profile.html">Profile</a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="badge bg-danger pull-right">3</span>
+                            Notifications
+                        </a>
+                    </li>
+                    <li>
+                        <a href="docs.html">Help</a>
+                    </li>
+                    <li class="divider"></li>--%>
+                    <li>
+                        <a href="${ctx}/signout" data-toggle="ajaxModal" >退出</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </header>
     <section>
         <section class="hbox stretch">
@@ -120,25 +173,5 @@
         </section>
     </section>
 </section>
-<script src="${ctx}/static/js/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="${ctx}/static/js/bootstrap.js"></script>
-<!-- App -->
-<script src="${ctx}/static/js/app.js"></script>
-<script src="${ctx}/static/js/app.plugin.js"></script>
-<script src="${ctx}/static/js/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="${ctx}/static/js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
-<script src="${ctx}/static/js/charts/sparkline/jquery.sparkline.min.js"></script>
-<script src="${ctx}/static/js/charts/flot/jquery.flot.min.js"></script>
-<script src="${ctx}/static/js/charts/flot/jquery.flot.tooltip.min.js"></script>
-<script src="${ctx}/static/js/charts/flot/jquery.flot.resize.js"></script>
-<script src="${ctx}/static/js/charts/flot/jquery.flot.grow.js"></script>
-<script src="${ctx}/static/js/charts/flot/demo.js"></script>
-
-<script src="${ctx}/static/js/calendar/bootstrap_calendar.js"></script>
-<script src="${ctx}/static/js/calendar/demo.js"></script>
-
-<script src="${ctx}/static/js/sortable/jquery.sortable.js"></script>
-
 </body>
 </html>
