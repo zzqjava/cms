@@ -5,6 +5,7 @@ import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.service.resource.ResourceService;
 import com.qatang.cms.service.role.RoleService;
+import com.qatang.cms.service.user.UserRoleService;
 import com.qatang.cms.service.user.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,8 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private UserRoleService userRoleService;
     @Autowired
     private ResourceService resourceService;
 
@@ -62,7 +65,7 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User user = (User)principals.getPrimaryPrincipal();
-        List<Role> roles = userService.getByUserId(user.getId());
+        List<Role> roles = userRoleService.findRolesByUserId(user.getId());
         Set<String> stringRoles = new HashSet<>();
         Set<String> stringPermissions = new HashSet<>();
         for(Role role : roles){
