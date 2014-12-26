@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=utf-8"%>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/views/include.jsp" %>
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
@@ -73,7 +73,7 @@
                                 </c:forEach>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button type="submit" class="btn btn-default">提交</button>
