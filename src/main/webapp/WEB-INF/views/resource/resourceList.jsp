@@ -4,7 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>菜单列表</title>
-    <script src="${ctx}/static/js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
         $(function(){
             //分页功能
@@ -17,6 +16,10 @@
                 onPageClicked: function (e, originalEvent, type, page) {
                     var url = "${ctx}/resource/list/" + page ;
                     $("#theForm").attr("action", url);
+                    var queryResourceName =  $("#queryResourceName").val();
+                    var queryValid =  $("#queryValid").val();
+                    $("#queryResourceNameId").val(queryResourceName);
+                    $("#queryValidId").val(queryValid);
                     $("#theForm").submit();
                 },
                 onPageChanged:null
@@ -24,17 +27,20 @@
             $('#pageDiv').bootstrapPaginator(options);
 
             //回显
-            <%--$("#queryValid option").each(function() {--%>
-                <%--if ($(this).val() == '${resourceForm.queryValid}') {--%>
-                    <%--$(this).attr("selected", "selected");--%>
-                <%--}--%>
-            <%--});--%>
+            $("#queryValid option").each(function() {
+                if ($(this).val() == '${resourceForm.queryValid}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
 
         var goPage = function(page) {
             $("#page").val(page);
+            var url = "${ctx}/resource/list/" + page ;
+            $("#pageForm").attr("action",url);
             $("#pageForm").submit();
         }
+
         function input(treeLevel, parentID) {
             $("#theForm").attr("action", "${ctx}/resource/input");
             $("#treeLevel").val(treeLevel);
@@ -48,7 +54,7 @@
             closeSuccess();
         }
         function closeSuccess() {
-            setTimeout("closeSuccessTip()",3000);
+            setTimeout("closeSuccessTip()",2000);
         }
         function closeSuccessTip(){
             $('#tipSuccess').click();
@@ -58,7 +64,7 @@
             closeError();
         }
         function closeError() {
-            setTimeout("closeErrorTip()",3000);
+            setTimeout("closeErrorTip()",2000);
         }
         function closeErrorTip(){
             $('#tipError').click();
@@ -83,6 +89,8 @@
                         <form action="${ctx}/resource/input" method="post" id="theForm" >
                             <input type="hidden" id="treeLevel" name="treeLevel" value=""/>
                             <input type="hidden" id="parentID" name="parentID" value=""/>
+                            <input type="hidden" id="queryResourceNameId" name="queryResourceName" value=""/>
+                            <input type="hidden" id="queryValidId" name="queryValid" value=""/>
                             <a href="#" class="btn btn-sm btn-default"  onclick="input('1','0')">创建资源</a>
                         </form>
                     </div>
@@ -99,30 +107,30 @@
                             ${errorMessage}
                     </div>
                 </c:if>
-                <%--<form class="form-inline" id="queryForm" action="${ctx}/resource/list" method="post">--%>
-                    <%--<div class="text-center">--%>
-                        <%--<table class="table table-hover table-striped">--%>
-                            <%--<tr>--%>
-                                <%--<td style="width: 45%">--%>
-                                    <%--<div class="input-group">--%>
-                                        <%--<span class="input-group-addon">角色名称：</span>--%>
-                                        <%--<input type="text" name="queryResourceName" id="queryResourceName" value="${resourceForm.queryResourceName}" class="form-control" placeholder="角色名称不能为空">--%>
-                                    <%--</div>--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 25%">--%>
-                                    <%--<div class="input-group">--%>
-                                        <%--<span class="input-group-addon ">是否有效：</span>--%>
-                                        <%--<form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>--%>
-                                    <%--</div>--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 5%">--%>
-                                    <%--<input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 25%"></td>--%>
-                            <%--</tr>--%>
-                        <%--</table>--%>
-                    <%--</div>--%>
-                <%--</form>--%>
+                <form class="form-inline" id="queryForm" action="${ctx}/resource/list" method="post">
+                    <div class="text-center">
+                        <table class="table table-hover table-striped">
+                            <tr>
+                                <td style="width: 45%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">资源名称：</span>
+                                        <input type="text" name="queryResourceName" id="queryResourceName" value="${resourceForm.queryResourceName}" class="form-control" placeholder="资源名称不能为空">
+                                    </div>
+                                </td>
+                                <td style="width: 25%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon ">是否有效：</span>
+                                        <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
+                                    </div>
+                                </td>
+                                <td style="width: 5%">
+                                    <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
+                                </td>
+                                <td style="width: 25%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
                 <div class="table-responsive">
                     <table class="table table-striped b-t b-light">
                         <thead>
@@ -230,7 +238,7 @@
                 </div>
                 <footer class="panel-footer">
                     <div class="row">
-                        <div class="col-sm-4 text-left text-left-xs">
+                        <div class="col-sm-12 text-right text-left-xs">
                             <ul id='pageDiv' class="pagination pagination-sm m-t-none m-b-none"></ul>
                         </div>
                     </div>
