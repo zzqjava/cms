@@ -18,7 +18,6 @@ import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,7 +99,6 @@ public class UserController extends BaseController {
     @RequiresPermissions("sys:user:input")
     @RequestMapping(value = "/input", method = RequestMethod.GET)
     public String input(ModelMap modelMap) {
-
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userInput";
     }
@@ -118,37 +116,6 @@ public class UserController extends BaseController {
             return "failure";
         }
         User user = userService.get(id);
-
-        if (StringUtils.isEmpty(user.getUsername())) {
-            logger.error("用户名为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户名为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        if (StringUtils.isEmpty(user.getName())) {
-            logger.error("用户姓名为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户姓名为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        if (StringUtils.isEmpty(user.getEmail())) {
-            logger.error("用户邮箱为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户邮箱为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        if (user.getGender() == null) {
-            logger.error("用户性别为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户性别为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        if (user.getValid() == null) {
-            logger.error("用户是否有效状态为空");
-            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户是否有效状态为空");
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
         UserForm userForm = new UserForm();
         userForm.setId(userId);
         userForm.setUsername(user.getUsername());
@@ -164,38 +131,22 @@ public class UserController extends BaseController {
         return "user/userInput";
     }
 
-    @RequiresPermissions("sys:user:disable")
-    @RequestMapping(value = "/disable/{userId}", method = RequestMethod.GET)
-    public String disable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
-        Long id;
+    @RequiresPermissions("sys:user:validate")
+    @RequestMapping(value = "validate/{id}", method = RequestMethod.GET)
+    public String validate(@PathVariable String id, RedirectAttributes redirectAttributes) {
+        Long userId;
         try {
-            id = Long.parseLong(userId);
+            userId = Long.parseLong(id);
         } catch (NumberFormatException e) {
-            logger.error("禁用用户，用户id不合法");
+            logger.error("禁用/启用用户，用户id不合法");
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "禁用用户，用户id不合法");
             redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        User user = userService.get(id);
-        user.setValid(EnableDisableStatus.DISABLE);
-        userService.update(user);
-        return "redirect:/user/list";
-    }
-
-    @RequiresPermissions("sys:user:enable")
-    @RequestMapping(value = "/enable/{userId}", method = RequestMethod.GET)
-    public String enable(@PathVariable String userId, RedirectAttributes redirectAttributes) {
-        Long id;
-        try {
-            id = Long.parseLong(userId);
-        } catch (NumberFormatException e) {
-            logger.error("启用用户，用户id不合法");
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "启用用户，用户id不合法");
-            redirectAttributes.addFlashAttribute(FORWARD_URL, "/user/list");
-            return "failure";
-        }
-        User user = userService.get(id);
-        user.setValid(EnableDisableStatus.ENABLE);
+        User user = userService.get(userId);
+        EnableDisableStatus enableDisableStatus = user.getValid();
+        enableDisableStatus = enableDisableStatus.getValue() == EnableDisableStatus.ENABLE.getValue() ? EnableDisableStatus.DISABLE : EnableDisableStatus.ENABLE;
+        user.setValid(enableDisableStatus);
         userService.update(user);
         return "redirect:/user/list";
     }
@@ -212,6 +163,13 @@ public class UserController extends BaseController {
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/userInput";
         }
+        List<Role> roleList = roleService.findDefaultRoles();
+        if (roleList == null && roleList.isEmpty()) {
+            logger.error("用户添加失败,默认角色为空");
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, "用户添加失败,默认角色为空");
+            modelMap.addAttribute(FORWARD_URL, "/user/input");
+            return "failure";
+        }
         User user = new User();
         user.setUsername(userForm.getUsername());
         user.setPassword(userForm.getPassword());
@@ -224,14 +182,10 @@ public class UserController extends BaseController {
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         passwordHelper.encryptPassword(user);
         user = userService.save(user);
-
         Long userId = user.getId();
-        List<Long> roleIdList = userForm.getRoleIdList();
         List<UserRole> userRoleList = new ArrayList<>();
-        for (Long roleId : roleIdList) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(userId);
-            userRole.setRoleId(roleId);
+        for (Role role : roleList) {
+            UserRole userRole = new UserRole(userId, role.getId());
             userRoleList.add(userRole);
         }
         userRoleService.save(userRoleList);
@@ -260,37 +214,6 @@ public class UserController extends BaseController {
         user.setUpdatedTime(new Date());
         user.setValid(EnableDisableStatus.get(Integer.parseInt(userForm.getValidValue())));
         userService.update(user);
-        List<Long> roleIdList = userForm.getRoleIdList();
-
-
-        List<UserRole> existRoleList = userRoleService.findUserRolesByUserId(id);
-        Set<Long> roleSet = new HashSet<>();
-        for (UserRole userRole : existRoleList) {
-            if (!roleSet.contains(userRole.getRoleId())) {
-                roleSet.add(userRole.getRoleId());
-            }
-        }
-        List<UserRole> deleteList = new ArrayList<>();
-        List<UserRole> saveList = new ArrayList<>();
-        for (Long roleId : roleIdList) {
-            if (!roleSet.contains(roleId)) {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(roleId);
-                userRole.setUserId(id);
-                saveList.add(userRole);
-            }
-        }
-        userRoleService.save(saveList);
-        for (Long roleId : roleSet) {
-            if (!roleIdList.contains(roleId)) {
-                for (UserRole existUserRole : existRoleList) {
-                    if (existUserRole.getRoleId() == roleId) {
-                        deleteList.add(existUserRole);
-                    }
-                }
-            }
-        }
-        userRoleService.delete(deleteList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "success";
     }
@@ -324,7 +247,9 @@ public class UserController extends BaseController {
             return "failure";
         }
         User user = userService.get(id);
+        List<Role> roleList = userRoleService.findRolesByUserId(id);
         modelMap.addAttribute(user);
+        modelMap.addAttribute(roleList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userView";
     }
@@ -373,6 +298,13 @@ public class UserController extends BaseController {
         return "success";
     }
 
+    @RequiresPermissions("sys:user:editRole")
+    @RequestMapping(value = "/role/edit", method = RequestMethod.GET)
+    public String inputRole(@PathVariable String id, ModelMap modelMap) {
+        //TODO
+        return "user/roleEdit";
+    }
+
     @RequiresPermissions("sys:user:ajaxRoles")
     @RequestMapping(value = "/ajax/roles", method = RequestMethod.POST)
     public void ajaxRoles(Long id, HttpServletResponse response) {
@@ -414,26 +346,26 @@ public class UserController extends BaseController {
     }
 
     @ModelAttribute("genderList")
-    public List<Gender> genderList() {
+    public List<Gender> getGenderList() {
         List<Gender> genderList = Gender.list();
         return genderList;
     }
 
-    @ModelAttribute("genderListAll")
-    public List<Gender> genderListAll() {
-        List<Gender> genderListAll = Gender.listAll();
-        return genderListAll;
+    @ModelAttribute("queryGenderList")
+    public List<Gender> getQueryGenderList() {
+        List<Gender> queryGenderList = Gender.listAll();
+        return queryGenderList;
     }
 
-    @ModelAttribute("validList")
-    public List<EnableDisableStatus> enableDisableStatusList() {
+    @ModelAttribute("enableDisableStatusList")
+    public List<EnableDisableStatus> getEnableDisableStatusList() {
         List<EnableDisableStatus> enableDisableStatusList = EnableDisableStatus.list();
         return enableDisableStatusList;
     }
 
-    @ModelAttribute("validListAll")
-    public List<EnableDisableStatus> enableDisableStatusListAll() {
-        List<EnableDisableStatus> enableDisableStatusListAll = EnableDisableStatus.listAll();
-        return enableDisableStatusListAll;
+    @ModelAttribute("queryEnableDisableStatusList")
+    public List<EnableDisableStatus> getQueryEnableDisableStatusList() {
+        List<EnableDisableStatus> queryEnableDisableStatusList = EnableDisableStatus.listAll();
+        return queryEnableDisableStatusList;
     }
 }
