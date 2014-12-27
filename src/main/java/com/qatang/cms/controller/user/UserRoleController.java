@@ -7,12 +7,6 @@ import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserRoleService;
-import com.qatang.cms.service.user.UserService;
-import com.qatang.cms.shiro.authentication.PasswordHelper;
-import com.qatang.cms.validator.impl.user.CreateUserValidator;
-import com.qatang.cms.validator.impl.user.QueryUserValidator;
-import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
-import com.qatang.cms.validator.impl.user.UpdateUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,22 +28,9 @@ import java.util.Set;
 @RequestMapping("/userRole")
 public class UserRoleController extends BaseController {
     @Autowired
-    private QueryUserValidator queryUserValidator;
-    @Autowired
-    private CreateUserValidator createUserValidator;
-    @Autowired
-    private UpdateUserValidator updateUserValidator;
-    @Autowired
-    private UpdatePasswordValidator updatePasswordValidator;
-    @Autowired
-    private UserService userService;
-    @Autowired
     private UserRoleService userRoleService;
     @Autowired
     private RoleService roleService;
-    @Autowired
-    private PasswordHelper passwordHelper;
-
 
     //@RequiresPermissions("sys:userRole:input")
     @RequestMapping(value = "/input/{userId}")

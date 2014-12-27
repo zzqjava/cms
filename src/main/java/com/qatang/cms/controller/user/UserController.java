@@ -296,6 +296,13 @@ public class UserController extends BaseController {
         return "success";
     }
 
+    @RequiresPermissions("sys:user:editRole")
+    @RequestMapping(value = "/role/edit", method = RequestMethod.GET)
+    public String inputRole(@PathVariable String id, ModelMap modelMap) {
+        //TODO
+        return "user/roleEdit";
+    }
+
     @RequiresPermissions("sys:user:ajaxRoles")
     @RequestMapping(value = "/ajax/roles", method = RequestMethod.POST)
     public void ajaxRoles(Long id, HttpServletResponse response) {

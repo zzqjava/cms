@@ -1,6 +1,7 @@
 package com.qatang.cms.enums.converter;
 
 import com.qatang.cms.enums.ResourcesType;
+import com.qatang.cms.enums.YesNoStatus;
 import org.springframework.core.convert.converter.Converter;
 
 import javax.persistence.AttributeConverter;
