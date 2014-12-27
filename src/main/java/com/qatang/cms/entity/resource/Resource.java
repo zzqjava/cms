@@ -3,12 +3,13 @@ package com.qatang.cms.entity.resource;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.converter.EnableDisableStatusConverter;
+import com.qatang.cms.enums.converter.ResourcesTypeConverter;
 import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Resource {
 	@Column(name = "priority")
 	private Integer priority;
 	@Enumerated
+    @Convert(converter = EnableDisableStatusConverter.class)
 	private EnableDisableStatus valid;
 	private String memo;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -41,6 +43,7 @@ public class Resource {
     private Long parentID;
     @Enumerated
     @Column(name = "type")
+    @Convert(converter = ResourcesTypeConverter.class)
     private ResourcesType type;
     @Column(name = "tree_level")
     private Integer treeLevel;
