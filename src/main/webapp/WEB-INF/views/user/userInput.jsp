@@ -100,7 +100,7 @@
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
                                 <c:forEach items="${genderList}" var="gender">
-                                    <input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if>>&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;
+                                    <input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if> value="${gender.value}">&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;
                                 </c:forEach>
                                 <%--<form:radiobuttons path="genderValue" items="${genderList}"/>--%>
                             </div>
@@ -110,7 +110,7 @@
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
                                 <c:forEach items="${enableDisableStatusList}" var="valid">
-                                    <input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if>>&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;
+                                    <input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if> value="${valid.value}">&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;
                                 </c:forEach>
                                 <%--<form:radiobuttons path="validValue" items="${enableDisableStatusList}"/>--%>
                             </div>
