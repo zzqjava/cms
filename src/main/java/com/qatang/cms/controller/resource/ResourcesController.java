@@ -54,8 +54,10 @@ public class ResourcesController extends BaseController {
 
     //    @RequiresPermissions("sys:resource:list")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
-    public String list(ModelMap modelMap, HttpServletRequest request) {
-        ResourceForm resourceForm = new ResourceForm();
+    public String list(ResourceForm resourceForm, ModelMap modelMap, HttpServletRequest request) {
+        if (resourceForm == null) {
+            resourceForm = new ResourceForm();
+        }
         pagination(resourceForm, modelMap, request);
         return "resource/resourceList";
     }
