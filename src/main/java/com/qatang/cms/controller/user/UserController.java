@@ -160,7 +160,6 @@ public class UserController extends BaseController {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(userForm);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/userInput";
         }
         List<Role> roleList = roleService.findDefaultRoles();
@@ -201,7 +200,6 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/userInput";
         }
         Long id = Long.parseLong(userForm.getId());
