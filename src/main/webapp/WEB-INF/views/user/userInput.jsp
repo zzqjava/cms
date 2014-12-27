@@ -6,19 +6,11 @@
     <title>欢迎</title>
     <script type="text/javascript">
         $(function() {
-            var id = $("#userId").val();
-            $.ajax( {
-                type : "POST",
-                url : "${ctx}/user/ajax/roles.do",
-                data : {"id": id},
-//                dataType: "json",
-                dataType: "text",
-                success : function(data) {
-//                    if (data.success) {
-//                        $("#roles").html(data.roles);
-//                    }
-                    $("#roles").html(data);
+            $("#sub").click(function () {
+                if ($("#id").val()) {
+                    $("#theForm").attr("action", "${ctx}/user/update");
                 }
+                $("#theForm").submit();
             });
         });
     </script>
@@ -46,27 +38,30 @@
             </div>
             <section class="panel panel-default">
                 <div class="panel-body">
-                    <form:form class="form-horizontal" action="${ctx}/user/create" method="post">
+                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/create" method="post">
+                        <input id="id" type="hidden" name="id" value="${userForm.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true">
                             </div>
                         </div>
-                        <div class="lines line-dashed line-lg pull-in"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">密码</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" value="${userForm.password}" required="">
+                        <c:if test="${userForm.id == null}">
+                            <div class="lines line-dashed line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="password" value="${userForm.password}" required="">
+                                </div>
                             </div>
-                        </div>
-                        <div class="lines line-dashed line-lg pull-in"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">确认密码</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
+                            <div class="lines line-dashed line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">确认密码</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
+                                </div>
                             </div>
-                        </div>
+                        </c:if>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">姓名</label>
@@ -118,7 +113,7 @@
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button type="submit" class="btn btn-default">提交</button>
+                                <button id="sub" type="button" class="btn btn-default">提交</button>
                                 <a class="btn btn-info" href="${ctx}${forwardUrl}">返回</a>
                             </div>
                         </div>

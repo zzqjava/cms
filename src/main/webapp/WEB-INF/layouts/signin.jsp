@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="${ctx}/static/css/font.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/js/calendar/bootstrap_calendar.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/static/css/custom.css" type="text/css"/>
     <script src="${ctx}/static/js/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="${ctx}/static/js/bootstrap.js"></script>
