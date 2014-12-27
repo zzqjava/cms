@@ -31,22 +31,9 @@
                 <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                 <li><a href="#">系统管理</a></li>
                 <li class="${ctx}/user/list"><a href="#">用户角色管理</a></li>
-                <li class="active">
-                    <c:choose>
-                    <c:when test="${userForm.id == null}">
-                        用户角色添加
-                    </c:when>
-                    <c:otherwise>
-                        用户角色修改
-                    </c:otherwise>
-                </c:choose></li>
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
-                </h3>
-            </div>
-            <section class="panel panel-default">
-                <header class="panel-heading font-bold">
                     <c:choose>
                         <c:when test="${userForm.id == null}">
                             用户角色添加
@@ -55,7 +42,9 @@
                             用户角色修改
                         </c:otherwise>
                     </c:choose>
-                </header>
+                </h3>
+            </div>
+            <section class="panel panel-default">
                 <div class="panel-body">
                     <form:form class="form-horizontal" action="${ctx}/userRole/update" method="post">
                         <div class="form-group">
