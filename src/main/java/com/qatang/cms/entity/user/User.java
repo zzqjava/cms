@@ -2,6 +2,8 @@ package com.qatang.cms.entity.user;
 
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
+import com.qatang.cms.enums.converter.EnableDisableStatusConverter;
+import com.qatang.cms.enums.converter.GenderConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -26,6 +28,7 @@ public class User {
     private String name;
     private String email;
     @Enumerated
+    @Convert(converter = GenderConverter.class)
     private Gender gender;
     private String mobile;
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,6 +44,7 @@ public class User {
     @Column(name = "qq")
     private String QQ;
     @Enumerated
+    @Convert(converter = EnableDisableStatusConverter.class)
     private EnableDisableStatus valid;
 
     public Long getId() {

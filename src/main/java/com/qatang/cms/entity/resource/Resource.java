@@ -3,6 +3,8 @@ package com.qatang.cms.entity.resource;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.converter.EnableDisableStatusConverter;
+import com.qatang.cms.enums.converter.ResourcesTypeConverter;
 import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -28,6 +30,7 @@ public class Resource {
 	@Column(name = "priority")
 	private Integer priority;
 	@Enumerated
+    @Convert(converter = EnableDisableStatusConverter.class)
 	private EnableDisableStatus valid;
 	private String memo;
 	@Temporal(TemporalType.TIMESTAMP)

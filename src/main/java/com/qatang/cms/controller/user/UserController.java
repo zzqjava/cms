@@ -333,10 +333,6 @@ public class UserController extends BaseController {
                     }
                 }
             }
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("success", true);
-//            jsonObject.put("roles", stringBuffer.toString());
-//            printWriter.print(jsonObject.toString());
             printWriter.write(stringBuffer.toString());
             printWriter.flush();
             printWriter.close();
