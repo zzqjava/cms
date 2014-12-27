@@ -28,6 +28,7 @@ public class Resource {
 	@Column(name = "priority")
 	private Integer priority;
 	@Enumerated
+    @Convert(converter = EnableDisableStatus.class)
 	private EnableDisableStatus valid;
 	private String memo;
 	@Temporal(TemporalType.TIMESTAMP)
