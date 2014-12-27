@@ -86,7 +86,7 @@
                                     <th>手机号</th>
                                     <th>邮箱</th>
                                     <th>是否有效</th>
-                                    <th colspan="4">操作</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -102,7 +102,7 @@
                                     <td>
                                         <a href="${ctx}/user/input/${user.id}">修改</a>
                                         <a href="${ctx}/user/password/input/${user.id}">密码管理</a>
-                                        <a href="${ctx}/user/role/${user.id}">角色管理</a>
+                                        <a href="${ctx}/userRole/input/${user.id}">角色管理</a>
                                         <a href="${ctx}/user/validate/${user.id}">
                                             <c:choose>
                                                 <c:when test="${user.valid.value == 1}">
@@ -113,8 +113,6 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </a>
-                                    </td>
-                                    <td><a href="${ctx}/userRole/input/${user.id}">角色更改</a></td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
