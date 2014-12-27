@@ -3,6 +3,7 @@ package com.qatang.cms.entity.resource;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.converter.ResourcesTypeConverter;
 import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,7 +41,7 @@ public class Resource {
     private Long parentID;
     @Enumerated
     @Column(name = "type")
-//    @Convert(converter = ResourcesTypeConverter.class)
+    @Convert(converter = ResourcesTypeConverter.class)
     private ResourcesType type;
     @Column(name = "tree_level")
     private Integer treeLevel;
