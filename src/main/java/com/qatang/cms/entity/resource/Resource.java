@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +40,7 @@ public class Resource {
     private Long parentID;
     @Enumerated
     @Column(name = "type")
+//    @Convert(converter = ResourcesTypeConverter.class)
     private ResourcesType type;
     @Column(name = "tree_level")
     private Integer treeLevel;

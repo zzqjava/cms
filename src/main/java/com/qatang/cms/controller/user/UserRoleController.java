@@ -3,12 +3,7 @@ package com.qatang.cms.controller.user;
 import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
-import com.qatang.cms.entity.user.User;
 import com.qatang.cms.entity.user.UserRole;
-import com.qatang.cms.enums.EnableDisableStatus;
-import com.qatang.cms.enums.Gender;
-import com.qatang.cms.exception.validator.ValidateFailedException;
-import com.qatang.cms.form.PageInfo;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserRoleService;
@@ -18,20 +13,18 @@ import com.qatang.cms.validator.impl.user.CreateUserValidator;
 import com.qatang.cms.validator.impl.user.QueryUserValidator;
 import com.qatang.cms.validator.impl.user.UpdatePasswordValidator;
 import com.qatang.cms.validator.impl.user.UpdateUserValidator;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JSH on 2014/6/26.
@@ -68,6 +61,7 @@ public class UserRoleController extends BaseController {
         modelMap.addAttribute(userForm);
         modelMap.addAttribute("rolesList", rolesList);
         modelMap.addAttribute("existRoles", existRoles);
+        modelMap.addAttribute(FORWARD_URL, "/user/list");
         return "user/userRoleInput";
     }
 
