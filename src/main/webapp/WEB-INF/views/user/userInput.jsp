@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true" readonly="readonly">
+                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true" <c:if test="${userForm.id != null}">readonly="readonly"</c:if>>
                             </div>
                         </div>
                         <c:if test="${userForm.id == null}">
