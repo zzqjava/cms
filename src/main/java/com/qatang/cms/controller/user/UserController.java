@@ -160,7 +160,6 @@ public class UserController extends BaseController {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(userForm);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/userInput";
         }
         List<Role> roleList = roleService.findDefaultRoles();
@@ -201,7 +200,6 @@ public class UserController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "user/userInput";
         }
         Long id = Long.parseLong(userForm.getId());
@@ -296,6 +294,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/password/reset", method = RequestMethod.GET)
     public String resetPassword() {
         return "success";
+    }
+
+    @RequiresPermissions("sys:user:editRole")
+    @RequestMapping(value = "/role/edit", method = RequestMethod.GET)
+    public String inputRole(@PathVariable String id, ModelMap modelMap) {
+        //TODO
+        return "user/roleEdit";
     }
 
     @RequiresPermissions("sys:user:ajaxRoles")
