@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhangzq on 14-7-22.
@@ -22,7 +23,7 @@ public class RoleDaoImpl {
 
     @PersistenceContext
     private EntityManager em;
-    public Page<Role> findAllPage(RoleForm roleForm){
+    public Page<Role> findAllPage(RoleForm roleForm) {
 
         StringBuilder hql = new StringBuilder("from Role t where 1=1");
         StringBuilder hqlCount = new StringBuilder("select count(t) ");
@@ -74,4 +75,12 @@ public class RoleDaoImpl {
         query.setParameter("isDefault", YesNoStatus.YES);
         return query.getResultList();
     }
-  }
+
+    public List<Role> findByIds(Set<Long> ids) {
+        StringBuilder hql = new StringBuilder("from Role r where 1 = 1");
+        hql.append(" and r.id in :ids");
+        Query query = em.createQuery(hql.toString());
+        query.setParameter("ids", ids);
+        return query.getResultList();
+    }
+}

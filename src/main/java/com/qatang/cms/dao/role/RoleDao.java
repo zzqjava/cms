@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhangzq on 2014/6/23.
@@ -20,4 +21,5 @@ public interface RoleDao extends JpaRepository<Role, Long> {
 
     public List<Role> findDefaultRoles();
 
+    public List<Role> findByIds(Set<Long> ids);
 }
