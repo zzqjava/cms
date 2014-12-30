@@ -1,11 +1,11 @@
 package com.qatang.cms;
 
-import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.entity.user.User;
 import com.qatang.cms.enums.EnableDisableStatus;
-import com.qatang.cms.service.menu.MenuService;
+import com.qatang.cms.service.resource.ResourceService;
 import com.qatang.cms.service.role.RoleService;
+import com.qatang.cms.service.user.UserRoleService;
 import com.qatang.cms.service.user.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -31,7 +30,9 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private MenuService menuService;
+    private UserRoleService userRoleService;
+    @Autowired
+    private ResourceService resourceService;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken token){
@@ -64,13 +65,13 @@ public class CmsAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User user = (User)principals.getPrimaryPrincipal();
-        List<Role> roles = userService.getByUserId(user.getId());
+        List<Role> roles = userRoleService.findRolesByUserId(user.getId());
         Set<String> stringRoles = new HashSet<>();
         Set<String> stringPermissions = new HashSet<>();
         for(Role role : roles){
-            stringRoles.add(role.getRoleName());
-            List<Menu> menus = roleService.getByRoleId(role.getId());
-            /*for(Menu menu : menus){
+            stringRoles.add(role.getName());
+            /*List<Resource> menus = roleService.getByRoleId(role.getId());
+            for(Menu menu : menus){
                 if(menu != null){
                     stringPermissions.add(menu.getAuthority());
                 }

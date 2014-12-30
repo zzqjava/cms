@@ -1,12 +1,7 @@
 package com.qatang.cms.service.impl.role;
 
-import com.qatang.cms.dao.menu.MenuDao;
 import com.qatang.cms.dao.role.RoleDao;
-import com.qatang.cms.dao.role.RoleMenuDao;
-import com.qatang.cms.entity.menu.Menu;
 import com.qatang.cms.entity.role.Role;
-import com.qatang.cms.entity.role.RoleMenu;
-import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhangzq on 2014/6/24.
@@ -26,19 +21,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDao roleDao;
-    @Autowired
-    private RoleMenuDao roleMenuDao;
-    @Autowired
-    private MenuDao menuDao;
 
     @Override
-    public Role save(Role user) {
-        return roleDao.save(user);
+    public Role save(Role role) {
+        return roleDao.save(role);
     }
 
     @Override
-    public Role update(Role user) {
-        return roleDao.save(user);
+    public Role update(Role role) {
+        return roleDao.save(role);
     }
 
     @Override
@@ -62,24 +53,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleMenu save(RoleMenu roleMenu) {
-        return roleMenuDao.save(roleMenu);
+    public List<Role> findDefaultRoles() {
+        return roleDao.findDefaultRoles();
     }
 
     @Override
-    public List<RoleMenu> findRoleMenuList(Long roleId) {
-        return roleMenuDao.findByRoleId(roleId);
-    }
-
-    @Override
-    public List<Menu> getByRoleId(Long roleId) {
-        List<RoleMenu> roleMenus = roleMenuDao.findByRoleId(roleId);
-        List<Menu> menus = new ArrayList<>();
-        if(roleMenus != null){
-            for(RoleMenu rm : roleMenus){
-                menus.add(menuDao.findOne(rm.getMenuId()));
-            }
-        }
-        return menus;
+    public List<Role> findByIds(Set<Long> ids) {
+        return roleDao.findByIds(ids);
     }
 }

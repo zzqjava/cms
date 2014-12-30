@@ -15,7 +15,7 @@ public abstract class AbstractValidator<T> implements IValidator<T> {
     protected boolean checkUsername(String username) {
         boolean flag = false;
         try {
-            String check = "^[\\u4E00-\\u9FA5\\uf900-\\ufa2d_a-zA-Z][\\u4E00-\\u9FA5\\uf900-\\ufa2d\\w]{6,32}$";
+            String check = "^[\\u4E00-\\u9FA5\\uf900-\\ufa2d_a-zA-Z][\\u4E00-\\u9FA5\\uf900-\\ufa2d\\w]{5,32}$";
             Pattern regex = Pattern.compile(check);
             Matcher matcher = regex.matcher(username);
             flag = matcher.matches();

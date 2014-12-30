@@ -1,24 +1,16 @@
 <%@page contentType="text/html; charset=utf-8"%>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/views/include.jsp" %>
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>欢迎</title>
     <script type="text/javascript">
         $(function() {
-            var id = $("#userId").val();
-            $.ajax( {
-                type : "POST",
-                url : "${ctx}/user/ajax/roles.do",
-                data : {"id": id},
-//                dataType: "json",
-                dataType: "text",
-                success : function(data) {
-//                    if (data.success) {
-//                        $("#roles").html(data.roles);
-//                    }
-                    $("#roles").html(data);
+            $("#sub").click(function () {
+                if ($("#id").val()) {
+                    $("#theForm").attr("action", "${ctx}/user/update");
                 }
+                $("#theForm").submit();
             });
         });
     </script>
@@ -31,22 +23,9 @@
                 <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                 <li><a href="#">系统管理</a></li>
                 <li class="${ctx}/user/list"><a href="#">用户管理</a></li>
-                <li class="active">
-                    <c:choose>
-                    <c:when test="${userForm.id == null}">
-                        用户添加
-                    </c:when>
-                    <c:otherwise>
-                        用户修改
-                    </c:otherwise>
-                </c:choose></li>
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
-                </h3>
-            </div>
-            <section class="panel panel-default">
-                <header class="panel-heading font-bold">
                     <c:choose>
                         <c:when test="${userForm.id == null}">
                             用户添加
@@ -55,85 +34,86 @@
                             用户修改
                         </c:otherwise>
                     </c:choose>
-                </header>
+                </h3>
+            </div>
+            <section class="panel panel-default">
                 <div class="panel-body">
-                    <form:form class="form-horizontal" action="${ctx}/user/create" method="post">
+                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/create" method="post">
+                        <input id="id" type="hidden" name="id" value="${userForm.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true">
+                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true" <c:if test="${userForm.id != null}">readonly="readonly"</c:if>>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">密码</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" value="${userForm.password}" required="">
+                        <c:if test="${userForm.id == null}">
+                            <div class="lines line-dashed line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="password" value="${userForm.password}" required="">
+                                </div>
                             </div>
-                        </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">确认密码</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
+                            <div class="lines line-dashed line-lg pull-in"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">确认密码</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
+                                </div>
                             </div>
-                        </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        </c:if>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">姓名</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" value="${userForm.name}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">邮箱</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="email" value="${userForm.email}" required="">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">手机号</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="mobile" value="${userForm.mobile}">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">QQ</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="QQ" value="${userForm.QQ}">
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" checked value="1"> 男
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" value="2"> 女
-                                </label>
+                                <c:forEach items="${genderList}" var="gender">
+                                    <input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if> value="${gender.value}">&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;
+                                </c:forEach>
+                                <%--<form:radiobuttons path="genderValue" items="${genderList}"/>--%>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" checked value="1"> 是
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" value="2"> 否
-                                </label>
+                                <c:forEach items="${enableDisableStatusList}" var="valid">
+                                    <input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if> value="${valid.value}">&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;
+                                </c:forEach>
+                                <%--<form:radiobuttons path="validValue" items="${enableDisableStatusList}"/>--%>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button type="submit" class="btn btn-default">提交</button>
+                                <button id="sub" type="button" class="btn btn-default">提交</button>
                                 <a class="btn btn-info" href="${ctx}${forwardUrl}">返回</a>
                             </div>
                         </div>
