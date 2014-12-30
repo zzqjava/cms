@@ -96,11 +96,11 @@ public class UserController extends BaseController {
         request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
     }
 
-    @RequiresPermissions("sys:user:input")
-    @RequestMapping(value = "/input", method = RequestMethod.GET)
-    public String input(ModelMap modelMap) {
+    @RequiresPermissions("sys:user:create")
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String createInput(@ModelAttribute UserForm userForm, ModelMap modelMap) {
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/userInput";
+        return "user/create";
     }
 
     @RequiresPermissions("sys:user:input")
@@ -128,7 +128,7 @@ public class UserController extends BaseController {
 
         modelMap.addAttribute(userForm);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/userInput";
+        return "user/create";
     }
 
     @RequiresPermissions("sys:user:validate")
@@ -161,7 +161,7 @@ public class UserController extends BaseController {
             modelMap.addAttribute(userForm);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "user/userInput";
+            return "user/create";
         }
         List<Role> roleList = roleService.findDefaultRoles();
         if (roleList == null && roleList.isEmpty()) {
@@ -202,7 +202,7 @@ public class UserController extends BaseController {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "user/userInput";
+            return "user/create";
         }
         Long id = Long.parseLong(userForm.getId());
         User user = userService.get(id);
