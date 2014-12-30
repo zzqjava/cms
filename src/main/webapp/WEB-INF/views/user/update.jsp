@@ -4,16 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>欢迎</title>
-    <script type="text/javascript">
-        $(function() {
-            $("#sub").click(function () {
-                if ($("#id").val()) {
-                    $("#theForm").attr("action", "${ctx}/user/update");
-                }
-                $("#theForm").submit();
-            });
-        });
-    </script>
 </head>
 <body>
 <section id="content">
@@ -26,14 +16,7 @@
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
-                    <c:choose>
-                        <c:when test="${userForm.id == null}">
-                            用户添加
-                        </c:when>
-                        <c:otherwise>
-                            用户修改
-                        </c:otherwise>
-                    </c:choose>
+                    用户添加
                 </h3>
             </div>
             <section class="panel panel-default">

@@ -24,7 +24,7 @@
                         <h3 class="m-b-none">用户管理</h3>
                     </div>
                     <header class="panel-heading">
-                        <a href="${ctx}/user/input"><button class="btn btn-sm btn-default">用户添加</button></a>
+                        <a href="${ctx}/user/create"><button class="btn btn-sm btn-default">用户添加</button></a>
                     </header>
                     <section class="panel panel-default">
                         <form class="form-inline" id="queryForm" action="${ctx}/user/list" method="post">
