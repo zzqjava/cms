@@ -247,7 +247,12 @@ public class UserController extends BaseController {
             return "failure";
         }
         User user = userService.get(id);
-        List<Role> roleList = userRoleService.findRolesByUserId(id);
+        List<UserRole> userRoleList = userRoleService.findUserRolesByUserId(id);
+        Set<Long> ids = new HashSet<>();
+        for (UserRole userRole : userRoleList) {
+            ids.add(userRole.getRoleId());
+        }
+        List<Role> roleList = roleService.findByIds(ids);
         modelMap.addAttribute(user);
         modelMap.addAttribute(roleList);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
@@ -298,13 +303,6 @@ public class UserController extends BaseController {
         return "success";
     }
 
-    @RequiresPermissions("sys:user:editRole")
-    @RequestMapping(value = "/role/edit", method = RequestMethod.GET)
-    public String inputRole(@PathVariable String id, ModelMap modelMap) {
-        //TODO
-        return "user/roleEdit";
-    }
-
     @RequiresPermissions("sys:user:ajaxRoles")
     @RequestMapping(value = "/ajax/roles", method = RequestMethod.POST)
     public void ajaxRoles(Long id, HttpServletResponse response) {
@@ -319,9 +317,14 @@ public class UserController extends BaseController {
                     stringBuffer.append("<input type=\"checkbox\" name=\"roleIdList[").append(index ++).append("]\" value=\"").append(role.getId()).append("\">").append("&nbsp;").append(role.getName()).append("&nbsp;");
                 }
             } else {
-                List<Role> roles = userRoleService.findRolesByUserId(id);
+                List<UserRole> userRoleList = userRoleService.findUserRolesByUserId(id);
+                Set<Long> ids = new HashSet<>();
+                for (UserRole userRole : userRoleList) {
+                    ids.add(userRole.getRoleId());
+                }
+                List<Role> roleList = roleService.findByIds(ids);
                 Map<Long, String> roleIdRoleNameMap = new HashMap<>();
-                for (Role role : roles) {
+                for (Role role : roleList) {
                     roleIdRoleNameMap.put(role.getId(), role.getName());
                 }
                 for (Role role : allRoles) {

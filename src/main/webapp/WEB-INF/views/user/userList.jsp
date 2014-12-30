@@ -23,58 +23,47 @@
                     <div class="m-b-md">
                         <h3 class="m-b-none">用户管理</h3>
                     </div>
-                    <%--<section class="panel panel-heading">--%>
-                        <%--<form:form class="form-horizontal" action="${ctx}/user/list" method="post">--%>
-                            <%--<div class="panel-body">--%>
-                                <%--<table class="table table-bordered">--%>
-                                    <%--<tr>--%>
-                                        <%--<td>用户名</td>--%>
-                                        <%--<td>--%>
-                                            <%--<input type="text" class="form-control" name="username" value="${userForm.username}">--%>
-                                        <%--</td>--%>
-                                        <%--<td>姓名</td>--%>
-                                        <%--<td>--%>
-                                            <%--<input type="text" class="form-control" name="name" value="${userForm.name}">--%>
-                                        <%--</td>--%>
-                                        <%--<td>性别</td>--%>
-                                        <%--<td>--%>
-                                            <%--<select name="genderValue">${genderValue}--%>
-                                                <%--<c:forEach items="${queryGenderList}" var="gender">--%>
-                                                    <%--<option value="${gender.value}" <c:if test="${gender.value == userForm.genderValue}">selected="selected"</c:if>>${gender.name}</option>--%>
-                                                <%--</c:forEach>--%>
-                                            <%--</select>--%>
-                                        <%--</td>--%>
-                                        <%--<td>邮箱</td>--%>
-                                        <%--<td>--%>
-                                            <%--<input type="text" class="form-control" name="email" value="${userForm.email}">--%>
-                                        <%--</td>--%>
-                                    <%--</tr>--%>
-                                    <%--<tr>--%>
-                                        <%--<td colspan="4">创建时间:从--%>
-                                            <%--到--%>
-                                        <%--</td>--%>
-                                        <%--<td>手机号</td>--%>
-                                        <%--<td>--%>
-                                            <%--<input type="text" class="form-control" name="mobile" value="${userForm.mobile}">--%>
-                                        <%--</td>--%>
-                                        <%--<td>QQ</td>--%>
-                                        <%--<td>--%>
-                                            <%--<input type="text" class="form-control" name="QQ" value="${userForm.QQ}">--%>
-                                        <%--</td>--%>
-                                    <%--</tr>--%>
-                                <%--</table>--%>
-                            <%--</div>--%>
-                            <%--<div>--%>
-                                <%--<button type="submit" class="btn btn-default">提交</button>--%>
-                            <%--</div>--%>
-                        <%--</form:form>--%>
-                    <%--</section>--%>
+                    <header class="panel-heading">
+                        <a href="${ctx}/user/input"><button class="btn btn-sm btn-default">用户添加</button></a>
+                    </header>
                     <section class="panel panel-default">
-                        <div class="row wrapper">
-                            <div class="col-sm-5 m-b-xs">
-                                <a href="${ctx}/user/input"><button class="btn btn-sm btn-default">用户添加</button></a>
+                        <form class="form-inline" id="queryForm" action="${ctx}/user/list" method="post">
+                            <div class="row wrapper">
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">用户名：</span>
+                                        <input type="text" name="username" id="username" value="${userForm.username}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">姓名：</span>
+                                        <input type="text" name="name" id="name" value="${userForm.name}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">邮箱：</span>
+                                        <input type="text" name="email" id="email" value="${userForm.email}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">手机号：</span>
+                                        <input type="text" name="mobile" id="mobile" value="${userForm.mobile}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon ">性别：</span>
+                                        <form:select path="queryGenderList" items="${queryGenderList}" itemValue="value" class="form-control" itemLabel="name" name="genderValue" id="genderValue"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 m-b-xs">
+                                    <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
+                                </div>
                             </div>
-                        </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table table-striped b-t b-light">
                                 <thead>
