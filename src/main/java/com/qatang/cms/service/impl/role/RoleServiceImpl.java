@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhangzq on 2014/6/24.
@@ -54,5 +55,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findDefaultRoles() {
         return roleDao.findDefaultRoles();
+    }
+
+    @Override
+    public List<Role> findByIds(Set<Long> ids) {
+        return roleDao.findByIds(ids);
     }
 }
