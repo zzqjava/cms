@@ -122,14 +122,14 @@
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单排序</label>
+                            <label class="col-sm-2 control-label">资源排序</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="priority" placeholder="${resourceForm.priority}" value="${resourceForm.priority}" required="">
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单类型</label>
+                            <label class="col-sm-2 control-label">资源类型</label>
                             <div class="col-sm-1">
                                 <select class="form-control" name="type" id="type">
                                     <c:forEach items="${resourcesTypeItems}" var="resourcesTypeItem">
@@ -151,7 +151,7 @@
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单备注</label>
+                            <label class="col-sm-2 control-label">资源备注</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" rows="3" name="memo">${resourceForm.memo}</textarea>
                             </div>
