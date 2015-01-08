@@ -88,10 +88,6 @@ INSERT INTO `c_resource` VALUES ('12', 'sys:role:del', '2', '3', '4', '2', '角�
 
 INSERT INTO `c_role` VALUES ('1', 'sys', '系统管理员', '1', '2', '1', '0000-00-00 00:00:00', '2014-12-27 19:07:03');
 
-INSERT INTO `c_user` VALUES ('1', 'qatang', '79926f441a7c8dca5a2e0711ac1d8173', 'd92d97bfab3275222b49b361a4db2b50', '唐鹏飞', 'qatang@gmail.com', '15901298088', '1', '2014-12-18 16:24:59', '2014-12-27 15:34:17', '2014-12-31 20:47:21', '2014-12-31 20:34:32', '977269167', '1');
-
-INSERT INTO `c_user_role` VALUES ('1', '1', '1');
-
 INSERT INTO `c_role_resource` VALUES ('1', '1', '1');
 INSERT INTO `c_role_resource` VALUES ('2', '1', '2');
 INSERT INTO `c_role_resource` VALUES ('3', '1', '3');
@@ -105,3 +101,6 @@ INSERT INTO `c_role_resource` VALUES ('10', '1', '10');
 INSERT INTO `c_role_resource` VALUES ('11', '1', '11');
 INSERT INTO `c_role_resource` VALUES ('12', '1', '12');
 
+INSERT INTO `c_user` VALUES ('1', 'qatang', '79926f441a7c8dca5a2e0711ac1d8173', 'd92d97bfab3275222b49b361a4db2b50', '唐鹏飞', 'qatang@gmail.com', '15901298088', '1', '2014-12-18 16:24:59', '2014-12-27 15:34:17', '2014-12-31 16:42:22', '2014-12-31 16:45:35', '977269167', '1');
+
+INSERT INTO `c_user_role` VALUES ('1', '1', '1');

@@ -77,8 +77,8 @@ public class CreateUserValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (userForm.getName().length() < 2 || userForm.getName().length() > 6) {
-            String msg = String.format("姓名长度必须在2-6个字符之间");
+        if (userForm.getName().length() < 2 || userForm.getName().length() > 32) {
+            String msg = String.format("姓名长度必须在2-32个字符之间");
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }

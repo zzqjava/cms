@@ -44,7 +44,7 @@
                                 <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-4">
-                                        <button id="sub" type="button" class="btn btn-default">提交</button>
+                                        <button id="sub" type="submit" class="btn btn-default">提交</button>
                                         <a class="btn btn-info" href="${ctx}${forwardUrl}">返回</a>
                                     </div>
                                 </div>
