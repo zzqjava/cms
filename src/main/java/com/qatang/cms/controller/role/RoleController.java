@@ -140,7 +140,7 @@ public class RoleController extends BaseController {
         role.setValid(EnableDisableStatus.get(Integer.parseInt(roleForm.getValid())));
         role.setCreatedTime(new Date());
         role.setUpdatedTime(new Date());
-        /*roleService.save(role);*/
+        roleService.save(role);
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功添加角色！");
         return "redirect:/role/list";
     }

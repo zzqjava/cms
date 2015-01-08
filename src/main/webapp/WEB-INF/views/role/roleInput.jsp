@@ -80,7 +80,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">角色名</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="name" value="${roleForm.name}" <%--required=""--%>>
+                                        <input type="text" class="form-control" name="name" value="${roleForm.name}" required="">
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
