@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
-    <title>菜单列表d</title>
+    <title>菜单列表</title>
     <script type="text/javascript">
         $(function(){
             //分页功能
