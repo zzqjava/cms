@@ -28,43 +28,40 @@ public class RoleDaoImpl {
         StringBuilder hql = new StringBuilder("from Role t where 1=1");
         StringBuilder hqlCount = new StringBuilder("select count(t) ");
 
-        if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            hql.append(" and t.name like :queryName");
+        if (StringUtils.isNotEmpty(roleForm.getName())) {
+            hql.append(" and t.name like :name");
         }
-        if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
-            int valid = Integer.parseInt(roleForm.getQueryValid());
+        if (StringUtils.isNotEmpty(roleForm.getValid())) {
+            int valid = Integer.parseInt(roleForm.getValid());
             if (valid != EnableDisableStatus.ALL.getValue()) {
-                hql.append(" and t.valid=:queryValid");
+                hql.append(" and t.valid=:valid");
             }
         }
         hql.append(" order by t.id asc");
         hqlCount.append(hql);
-        Query q = em.createQuery(hql.toString());
-        Query qc = em.createQuery(hqlCount.toString());
-        if (StringUtils.isNotEmpty(roleForm.getQueryRoleName())) {
-            q.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
-            qc.setParameter("queryName", "%" + roleForm.getQueryRoleName().trim() + "%");
+        Query query = em.createQuery(hql.toString());
+        Query queryCount = em.createQuery(hqlCount.toString());
+        if (StringUtils.isNotEmpty(roleForm.getName())) {
+            query.setParameter("name", "%" + roleForm.getName().trim() + "%");
+            queryCount.setParameter("name", "%" + roleForm.getName().trim() + "%");
         }
-        if (StringUtils.isNotEmpty(roleForm.getQueryValid())) {
-            int valid = Integer.parseInt(roleForm.getQueryValid());
+        if (StringUtils.isNotEmpty(roleForm.getValid())) {
+            int valid = Integer.parseInt(roleForm.getValid());
             if (valid != EnableDisableStatus.ALL.getValue()) {
-                q.setParameter("queryValid", EnableDisableStatus.get(valid));
-                qc.setParameter("queryValid", EnableDisableStatus.get(valid));
+                query.setParameter("valid", EnableDisableStatus.get(valid));
+                queryCount.setParameter("valid", EnableDisableStatus.get(valid));
             }
         }
 
-        long count = (Long)qc.getSingleResult();
+        long count = (Long)queryCount.getSingleResult();
         PageInfo pageInfo = roleForm.getPageInfo();
-        if (roleForm.getPageInfo() != null) {
-
-            q.setFirstResult(pageInfo.getOffset());
-            q.setMaxResults(pageInfo.getPageSize());
+        if (pageInfo.getCurrentPage() > 0) {
+            query.setFirstResult(pageInfo.getOffset());
         }
-        List list = q.getResultList();
-        if (list == null || list.isEmpty()) {
-            return null;
+        if (pageInfo.getPageSize() > 0) {
+            query.setMaxResults(pageInfo.getPageSize());
         }
-        return new PageImpl<Role>(list, new PageRequest(pageInfo.getCurrentPage(), pageInfo.getPageSize()), count);
+        return new PageImpl<Role>(query.getResultList(), new PageRequest(pageInfo.getCurrentPage(), pageInfo.getPageSize()), count);
     }
 
     public List<Role> findDefaultRoles() {

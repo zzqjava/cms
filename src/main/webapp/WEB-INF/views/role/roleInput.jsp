@@ -4,7 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
     <head>
         <title>添加角色</title>
-        <script src="${ctx}/js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript">
             $(function() {
                 $("#sub").click(function(){
@@ -18,6 +17,27 @@
                     }
                 });
             });
+            //定时关闭提示信息
+            var successMessage = '${successMessage}';
+            if (successMessage != null && successMessage != '') {
+                closeSuccess();
+            }
+            function closeSuccess() {
+                setTimeout("closeSuccessTip()",2000);
+            }
+            function closeSuccessTip(){
+                $('#tipSuccess').click();
+            }
+            var errorMessage = '${errorMessage}';
+            if (errorMessage != null && errorMessage != '') {
+                closeError();
+            }
+            function closeError() {
+                setTimeout("closeErrorTip()",2000);
+            }
+            function closeErrorTip(){
+                $('#tipError').click();
+            }
         </script>
     </head>
     <body>
@@ -27,23 +47,10 @@
                     <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
                         <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                         <li><a href="#">系统管理</a></li>
-                        <li class="${ctx}/user/list"><a href="#">角色管理</a></li>
-                        <li class="active">
-                            <c:choose>
-                            <c:when test="${roleForm.id == null}">
-                                角色添加
-                            </c:when>
-                            <c:otherwise>
-                                角色修改
-                            </c:otherwise>
-                        </c:choose></li>
+                        <li class="${ctx}/role/list"><a href="#">角色管理</a></li>
                     </ul>
                     <div class="m-b-md">
                         <h3 class="m-b-none">
-                        </h3>
-                    </div>
-                    <section class="panel panel-default">
-                        <header class="panel-heading font-bold">
                             <c:choose>
                                 <c:when test="${roleForm.id == null}">
                                     角色添加
@@ -52,17 +59,28 @@
                                     角色修改
                                 </c:otherwise>
                             </c:choose>
-                        </header>
+                        </h3>
+                    </div>
+                    <c:if test="${successMessage != null}" >
+                        <div class="alert alert-success fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                                ${successMessage}
+                        </div>
+                    </c:if>
+                    <c:if test="${errorMessage != null}" >
+                        <div class="alert alert-danger fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                                ${errorMessage}
+                        </div>
+                    </c:if>
+                    <section class="panel panel-default">
                         <div class="panel-body">
-                            <form:form class="form-horizontal" id="theform" action="${ctx}/role/create" method="post">
+                            <form:form class="form-horizontal" id="theform" action="${ctx}/role/create" method="post" commandName="roleForm">
                                 <input type="hidden" class="form-control" id="roleId" name="id" value="${roleForm.id}">
-                                <div>
-                                    <h5 style="color:red;text-align: center;">${errorMessage}</h5>
-                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">角色名</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="name" value="${roleForm.name}" required="">
+                                        <input type="text" class="form-control" name="name" value="${roleForm.name}" <%--required=""--%>>
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
@@ -83,31 +101,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">是否默认角色</label>
                                     <div class="col-sm-10">
-<%--                                        <label class="radio-inline">
-                                            <input type="radio" name="isDefault" checked value="1"> 是
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="isDefault" value="0"> 否
-                                        </label>--%>
-                                        <select class="form-control" name="isDefault">
-                                            <c:forEach items="${yesNoStatuses}" var="yesNoStatuses">
-                                                <option value="${yesNoStatuses.value}" <c:if test="${yesNoStatuses.value.toString() == roleForm.isDefault}">selected="selected"</c:if> >${yesNoStatuses.name}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <form:select path="isDefault" items="${yesNoStatuses}" class="form-control" name="isDefault" itemValue="value" itemLabel="name"/>
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">是否有效</label>
                                     <div class="col-sm-10">
-                                        <%--<form:select path="enableDisableStatus" items="${enableDisableStatus}"/>--%>
-                                        <%--<form:radiobutton path="value" items="${enableDisableStatus}" itemValue="name" class="form-control" itemLabel="name" name="valid"/>--%>
-                                        <%--<form:select path="enableDisableStatus" items="${enableDisableStatus}" itemLabel="name" itemValue="value"/>--%>
-                                        <select class="form-control" name="valid">
-                                            <c:forEach items="${enableDisableStatus}" var="enableDisableStatus">
-                                                <option value="${enableDisableStatus.value}" <c:if test="${enableDisableStatus.value.toString() == roleForm.valid}">selected="selected"</c:if> >${enableDisableStatus.name}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <form:select path="valid" items="${enableDisableStatus}" class="form-control" name="valid" itemValue="value" itemLabel="name"/>
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
