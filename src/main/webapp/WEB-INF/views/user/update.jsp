@@ -16,12 +16,12 @@
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
-                    用户添加
+                    用户修改
                 </h3>
             </div>
             <section class="panel panel-default">
                 <div class="panel-body">
-                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/create" method="post">
+                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/update" method="post">
                         <input id="id" type="hidden" name="id" value="${userForm.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
@@ -96,7 +96,7 @@
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button id="sub" type="button" class="btn btn-default">提交</button>
+                                <button id="sub" type="submit" class="btn btn-default">提交</button>
                                 <a class="btn btn-info" href="${ctx}${forwardUrl}">返回</a>
                             </div>
                         </div>
