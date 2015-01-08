@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
-    <title>菜单列表</title>
+    <title>资源列表</title>
     <script type="text/javascript">
         $(function(){
             //分页功能
@@ -129,12 +129,12 @@
                     <table class="table table-striped b-t b-light">
                         <thead>
                         <tr>
-                            <th>菜单名</th>
-                            <th>菜单链接</th>
-                            <th>菜单级别</th>
-                            <th>菜单权限</th>
-                            <th>菜单类别</th>
-                            <th>菜单排序值</th>
+                            <th>资源名</th>
+                            <th>资源链接</th>
+                            <th>资源级别</th>
+                            <th>资源权限</th>
+                            <th>资源类别</th>
+                            <th>资源排序值</th>
                             <th>是否有效</th>
                             <th>备注</th>
                             <th colspan="3">操作</th>
