@@ -128,7 +128,7 @@ public class UserController extends BaseController {
 
         modelMap.addAttribute(userForm);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/create";
+        return "user/update";
     }
 
     @RequiresPermissions("sys:user:validate")
