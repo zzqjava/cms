@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
-    <title>菜单列表</title>
+    <title>菜单列表d</title>
     <script type="text/javascript">
         $(function(){
             //分页功能
+            <c:if test="${resourceForm.pageInfo.totalPages != null}">
             var options = {
                 size:"small",
                 bootstrapMajorVersion:3,
@@ -25,7 +26,7 @@
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
-
+            </c:if>
             //回显
             $("#queryValid option").each(function() {
                 if ($(this).val() == '${resourceForm.queryValid}') {
