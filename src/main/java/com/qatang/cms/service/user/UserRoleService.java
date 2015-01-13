@@ -1,10 +1,7 @@
 package com.qatang.cms.service.user;
 
 import com.qatang.cms.entity.role.Role;
-import com.qatang.cms.entity.user.User;
 import com.qatang.cms.entity.user.UserRole;
-import com.qatang.cms.form.user.UserForm;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

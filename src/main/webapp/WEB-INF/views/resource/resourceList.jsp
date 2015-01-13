@@ -137,7 +137,7 @@
                             <th>资源排序值</th>
                             <th>是否有效</th>
                             <th>备注</th>
-                            <th colspan="3">操作</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>

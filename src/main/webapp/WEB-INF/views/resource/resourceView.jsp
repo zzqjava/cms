@@ -17,23 +17,23 @@
     <div class="text-center">
         <table class="table table-bordered">
             <tr>
-                <td>资源名</td>
+                <td>菜单名</td>
                 <td>${resource.name}</td>
             </tr>
             <tr>
-                <td>资源链接</td>
+                <td>菜单链接</td>
                 <td>${resource.url}</td>
             </tr>
             <tr>
-                <td>资源权限</td>
+                <td>菜单权限</td>
                 <td>${resource.identifier}</td>
             </tr>
             <tr>
-                <td>资源类别</td>
+                <td>菜单类别</td>
                 <td>${resource.type.name}</td>
             </tr>
             <tr>
-                <td>资源排序值</td>
+                <td>菜单排序值</td>
                 <td>${resource.priority}</td>
             </tr>
             <tr>

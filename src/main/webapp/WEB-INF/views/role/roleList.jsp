@@ -7,9 +7,28 @@
         <script type="text/javascript">
             var goPage = function(page) {
                 $("#page").val(page);
-                var url = "${ctx}/role/list/" + page ;
-                $("#pageForm").attr("action",url);
                 $("#pageForm").submit();
+            }
+            //定时关闭提示信息
+            var successMessage = '${successMessage}';
+            if (successMessage != null && successMessage != '') {
+                closeSuccess();
+            }
+            function closeSuccess() {
+                setTimeout("closeSuccessTip()",2000);
+            }
+            function closeSuccessTip(){
+                $('#tipSuccess').click();
+            }
+            var errorMessage = '${errorMessage}';
+            if (errorMessage != null && errorMessage != '') {
+                closeError();
+            }
+            function closeError() {
+                setTimeout("closeErrorTip()",2000);
+            }
+            function closeErrorTip(){
+                $('#tipError').click();
             }
         </script>
     </head>
@@ -25,19 +44,50 @@
                     <div class="m-b-md">
                         <h3 class="m-b-none">角色管理</h3>
                     </div>
-                    <section class="panel panel-default">
-                        <div class="row wrapper">
-                            <div class="col-sm-5 m-b-xs">
-                                <a href="${ctx}/role/input"> <button class="btn btn-sm btn-default">添加角色</button></a>
-                            </div>
+                    <c:if test="${successMessage != null}" >
+                        <div class="alert alert-success fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                                ${successMessage}
                         </div>
+                    </c:if>
+                    <c:if test="${errorMessage != null}" >
+                        <div class="alert alert-danger fade in">
+                            <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                                ${errorMessage}
+                        </div>
+                    </c:if>
+                    <div class="row wrapper">
+                        <div class="col-sm-5 m-b-xs">
+                            <a href="${ctx}/role/input"> <button class="btn btn-sm btn-default">添加角色</button></a>
+                        </div>
+                    </div>
+                    <section class="panel panel-default">
+                        <form class="form-inline" id="queryForm" action="${ctx}/role/list" method="post" commandName="roleForm">
+                            <div class="row wrapper">
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">角色名：</span>
+                                        <input type="text" id="name" name="name" value="${roleForm.name}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon ">是否有效：</span>
+                                        <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" id="valid" name="valid"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 m-b-xs">
+                                    <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table table-striped b-t b-light">
                                 <thead>
                                 <tr>
                                     <th>序号</th>
                                     <th>编号</th>
-                                    <th>角色名</th>
+                                    <th>角色名称</th>
                                     <th>标识符</th>
                                     <th>描述</th>
                                     <th>是否默认角色</th>
