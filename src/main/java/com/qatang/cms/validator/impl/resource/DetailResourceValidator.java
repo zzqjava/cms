@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Created by likunpeng on 2014/6/26.
  */
 @Component
-public class ResourceViewValidator extends AbstractValidator<ResourceForm> {
+public class DetailResourceValidator extends AbstractValidator<ResourceForm> {
 
     @Autowired
     private ResourceService resourceService;
