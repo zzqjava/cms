@@ -29,37 +29,40 @@
                     <section class="panel panel-default">
                         <form class="form-inline" id="queryForm" action="${ctx}/user/list" method="post">
                             <div class="row wrapper">
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">用户名：</span>
-                                        <input type="text" name="username" id="username" value="${userForm.username}" class="form-control">
+                                        <span class="input-group-addon input-sm">用户名</span>
+                                        <input type="text" style="width:75%;" name="username" id="username" value="${userForm.username}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">姓名：</span>
-                                        <input type="text" name="name" id="name" value="${userForm.name}" class="form-control">
+                                        <span class="input-group-addon input-sm">姓名</span>
+                                        <input type="text" style="width:75%;" name="name" id="name" value="${userForm.name}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">邮箱：</span>
-                                        <input type="text" name="email" id="email" value="${userForm.email}" class="form-control">
+                                        <span class="input-group-addon input-sm">邮箱</span>
+                                        <input type="text" style="width:75%;" name="email" id="email" value="${userForm.email}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">手机号：</span>
-                                        <input type="text" name="mobile" id="mobile" value="${userForm.mobile}" class="form-control">
+                                        <span class="input-group-addon input-sm">手机号</span>
+                                        <input type="text" style="width:75%;" name="mobile" id="mobile" value="${userForm.mobile}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon ">性别：</span>
-                                        <form:select path="queryGenderList" items="${queryGenderList}" itemValue="value" class="form-control" itemLabel="name" name="genderValue" id="genderValue"/>
+                                        <span class="input-group-addon input-sm">性别</span>
+                                        <form:select style="width:76px;" path="queryGenderList" items="${queryGenderList}" itemValue="value" class="form-control" itemLabel="name" name="genderValue" id="genderValue"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-1 m-b-xs">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-5 col-sm-2 m-b-xs">
                                     <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
                                 </div>
                             </div>
