@@ -58,7 +58,7 @@
                     </c:if>
                     <div class="row wrapper">
                         <div class="col-sm-5 m-b-xs">
-                            <a href="${ctx}/role/input"> <button class="btn btn-sm btn-default">添加角色</button></a>
+                            <a href="${ctx}/role/create"> <button class="btn btn-sm btn-default">添加角色</button></a>
                         </div>
                     </div>
                     <section class="panel panel-default">
@@ -100,21 +100,21 @@
                                     <tr>
                                         <td>${status.count}</td>
                                         <td>${role.id}</td>
-                                        <td><a href="${ctx}/role/view/${role.id}">${role.name}</a></td>
+                                        <td><a href="${ctx}/role/detail/${role.id}">${role.name}</a></td>
                                         <td>${role.identifier}</td>
                                         <td>${role.description}</td>
                                         <td>${role.isDefault.name}</td>
                                         <td>${role.valid.name}</td>
-                                        <td><a href="${ctx}/role/input/${role.id}">修改</a>
+                                        <td><a href="${ctx}/role/update/${role.id}">修改</a>
                                             <c:choose>
                                                 <c:when test="${role.valid.value == 1}">
-                                                    <a href="${ctx}/role/toggleValidStatus/${role.id}">禁用</a>
+                                                    <a href="${ctx}/role/validate/${role.id}">禁用</a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="${ctx}/role/toggleValidStatus/${role.id}">启用</a>
+                                                    <a href="${ctx}/role/validate/${role.id}">启用</a>
                                                 </c:otherwise>
                                             </c:choose>
-                                            <a href="${ctx}/allotResource/input/${role.id}">分配资源</a>
+                                            <a href="${ctx}/roleResource/allot/${role.id}">分配资源</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
