@@ -7,26 +7,26 @@
     <script type="text/javascript">
         $(function(){
             //分页功能
-            <c:if test="${resourceForm.pageInfo.totalPages != null}">
-            var options = {
-                size:"small",
-                bootstrapMajorVersion:3,
-                currentPage:${resourceForm.pageInfo.currentPage},
-                totalPages:${resourceForm.pageInfo.totalPages},
-                numberOfPages:10,
-                onPageClicked: function (e, originalEvent, type, page) {
-                    var url = "${ctx}/resource/list/" + page ;
-                    $("#theForm").attr("action", url);
-                    var queryResourceName =  $("#queryResourceName").val();
-                    var queryValid =  $("#queryValid").val();
-                    $("#queryResourceNameId").val(queryResourceName);
-                    $("#queryValidId").val(queryValid);
-                    $("#theForm").submit();
-                },
-                onPageChanged:null
-            }
-            $('#pageDiv').bootstrapPaginator(options);
-            </c:if>
+            <%--<c:if test="${resourceForm.pageInfo.totalPages != null}">--%>
+            <%--var options = {--%>
+                <%--size:"small",--%>
+                <%--bootstrapMajorVersion:3,--%>
+                <%--currentPage:${resourceForm.pageInfo.currentPage},--%>
+                <%--totalPages:${resourceForm.pageInfo.totalPages},--%>
+                <%--numberOfPages:10,--%>
+                <%--onPageClicked: function (e, originalEvent, type, page) {--%>
+                    <%--var url = "${ctx}/resource/list/" + page ;--%>
+                    <%--$("#theForm").attr("action", url);--%>
+                    <%--var queryResourceName =  $("#queryResourceName").val();--%>
+                    <%--var queryValid =  $("#queryValid").val();--%>
+                    <%--$("#queryResourceNameId").val(queryResourceName);--%>
+                    <%--$("#queryValidId").val(queryValid);--%>
+                    <%--$("#theForm").submit();--%>
+                <%--},--%>
+                <%--onPageChanged:null--%>
+            <%--}--%>
+            <%--$('#pageDiv').bootstrapPaginator(options);--%>
+            <%--</c:if>--%>
             //回显
             $("#queryValid option").each(function() {
                 if ($(this).val() == '${resourceForm.queryValid}') {
@@ -162,25 +162,29 @@
                                         <td>${resource.type.name}</td>
                                         <td>${resource.priority}</td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${resource.valid.value == 1}">
-                                                    <span id="status_valid_${resource.id}">有效</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span id="status_valid_${resource.id}">无效</span>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <span id="status_valid_${resource.id}">
+                                                 <c:choose>
+                                                     <c:when test="${resource.valid.value == 1}">
+                                                         有效
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         无效
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                            </span>
                                         </td>
                                         <td>
                                             <a href="${ctx}/resource/update/${resource.id}">修改</a>
-                                            <c:choose>
-                                                <c:when test="${resource.valid.value == 1}">
-                                                    <span id="status_${resource.id}"><a href="javascript://" onclick="validate('${resource.id}')">禁用</a></span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span id="status_${resource.id}"><a href="javascript://" onclick="validate('${resource.id}')">启用</a></span>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <a href="javascript://" id="status_${resource.id}" onclick="validate('${resource.id}')">
+                                                <c:choose>
+                                                    <c:when test="${resource.valid.value == 1}">
+                                                        禁用
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        启用
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
                                             <a href="${ctx}/resource/create?treeLevel=2&parentID=${resource.id}">添加子资源</a>
                                         </td>
                                     </tr>
@@ -195,26 +199,29 @@
                                             <td>${second.type.name}</td>
                                             <td>${second.priority}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${second.valid.value == 1}">
-                                                        <span id="status_valid_${second.id}">有效</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span id="status_valid_${second.id}">无效</span>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <span id="status_valid_${second.id}">
+                                                 <c:choose>
+                                                     <c:when test="${second.valid.value == 1}">
+                                                         有效
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         无效
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                                </span>
                                             </td>
 
                                             <td><a href="${ctx}/resource/update/${second.id}">修改</a>
-                                                <c:choose>
-                                                    <c:when test="${resource.valid.value == 1}">
-                                                        <span id="status_${second.id}"><a href="javascript://" onclick="validate('${second.id}')">禁用</a></span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span id="status_${second.id}"><a href="javascript://" onclick="validate('${second.id}')">启用</a></span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <%--<a href="#" onclick="create('3','${second.id}')">添加子资源</a>--%>
+                                                <a href="javascript://" id="status_${second.id}" onclick="validate('${second.id}')">
+                                                    <c:choose>
+                                                        <c:when test="${second.valid.value == 1}">
+                                                            禁用
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            启用
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </a>
                                                 <a href="${ctx}/resource/create?treeLevel=3&parentID=${second.id}" >添加子资源</a>
                                             </td>
                                         </tr>
@@ -228,24 +235,29 @@
                                             <td>${third.type.name}</td>
                                             <td>${third.priority}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${third.valid.value == 1}">
-                                                        <span id="status_valid_${third.id}">有效</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span id="status_valid_${third.id}">无效</span>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                 <span id="status_valid_${third.id}">
+                                                 <c:choose>
+                                                     <c:when test="${third.valid.value == 1}">
+                                                         有效
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         无效
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                                </span>
                                             </td>
-                                            <td><a href="${ctx}/resource/update/${third.id}">修改</a>
+                                            <td>
+                                                <a href="${ctx}/resource/update/${third.id}">修改</a>
+                                                <a href="javascript://" id="status_${third.id}" onclick="validate('${third.id}')">
                                                     <c:choose>
                                                         <c:when test="${third.valid.value == 1}">
-                                                            <span id="status_${third.id}"><a href="javascript://" onclick="validate('${third.id}')">禁用</a></span>
+                                                            禁用
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span id="status_${third.id}"><a href="javascript://" onclick="validate('${third.id}')">启用</a></span>
+                                                            启用
                                                         </c:otherwise>
                                                     </c:choose>
+                                                </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -257,11 +269,16 @@
                 </div>
                 <footer class="panel-footer">
                     <div class="row">
-                        <div class="col-sm-12 text-right text-left-xs">
-                            <ul id='pageDiv' class="pagination pagination-sm m-t-none m-b-none"></ul>
+                        <div class="col-sm-4 hidden-xs">
+                        </div>
+                        <div class="col-sm-4 text-center">
+                        </div>
+                        <div class="col-sm-4 text-right text-center-xs">
+                            ${resourceForm.pageString}
                         </div>
                     </div>
                 </footer>
+
             </section>
         </section>
     </section>
