@@ -1,4 +1,4 @@
-package com.qatang.cms.dao.resource.impl;
+package com.qatang.cms.dao.impl.resource;
 
 
 import com.qatang.cms.entity.resource.Resource;
@@ -62,7 +62,7 @@ public class ResourceDaoImpl {
                 hql.append(" and u.parentID=:parentID");
             }
             if (StringUtils.isNotEmpty(resourceForm.getQueryResourceName())) {
-                hql.append(" and u.roleName like :queryResourceName");
+                hql.append(" and u.name like :queryResourceName");
             }
             if (StringUtils.isNotEmpty(resourceForm.getQueryValid())) {
                 int valid = Integer.parseInt(resourceForm.getQueryValid());
@@ -97,6 +97,9 @@ public class ResourceDaoImpl {
             }
         }
         long count = (Long)qc.getSingleResult();
+        if (resourceForm == null) {
+            resourceForm = new ResourceForm();
+        }
         PageInfo pageInfo = resourceForm.getPageInfo();
         if (resourceForm.getPageInfo() != null) {
 

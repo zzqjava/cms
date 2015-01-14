@@ -5,6 +5,7 @@ import com.qatang.cms.form.role.RoleForm;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhangzq on 2014/6/23.
@@ -18,4 +19,5 @@ public interface RoleService {
 	public Page<Role> findAllPage(RoleForm roleForm);
 	public List<Role> findAll();
 	public List<Role> findDefaultRoles();
+	public List<Role> findByIds(Set<Long> ids);
 }

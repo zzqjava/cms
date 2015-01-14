@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=utf-8"%>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/views/include.jsp" %>
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
@@ -11,12 +11,8 @@
                 type : "POST",
                 url : "${ctx}/user/ajax/roles.do",
                 data : {"id": id},
-//                dataType: "json",
                 dataType: "text",
                 success : function(data) {
-//                    if (data.success) {
-//                        $("#roles").html(data.roles);
-//                    }
                     $("#roles").html(data);
                 }
             });
@@ -30,36 +26,25 @@
             <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                 <li><a href="#">系统管理</a></li>
-                <li class="${ctx}/user/list"><a href="#">用户角色管理</a></li>
-                <li class="active">
-                    <c:choose>
-                    <c:when test="${userForm.id == null}">
-                        用户角色添加
-                    </c:when>
-                    <c:otherwise>
-                        用户角色修改
-                    </c:otherwise>
-                </c:choose></li>
+                <li class="${ctx}/user/list"><a href="#">用户管理</a></li>
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
+                    <c:choose>
+                        <c:when test="${userForm.id == null}">
+                            角色添加
+                        </c:when>
+                        <c:otherwise>
+                            角色修改
+                        </c:otherwise>
+                    </c:choose>
                 </h3>
             </div>
             <section class="panel panel-default">
-                <header class="panel-heading font-bold">
-                    <c:choose>
-                        <c:when test="${userForm.id == null}">
-                            用户角色添加
-                        </c:when>
-                        <c:otherwise>
-                            用户角色修改
-                        </c:otherwise>
-                    </c:choose>
-                </header>
                 <div class="panel-body">
                     <form:form class="form-horizontal" action="${ctx}/userRole/update" method="post">
                         <div class="form-group">
-                            <input type="hidden" name="id" value="${userId}" />
+                            <input id="userId" type="hidden" name="id" value="${userId}" />
                             <label class="col-sm-2 control-label">角色</label>
                             <div class="col-sm-10">
                                 <c:forEach items="${rolesList}" var="role" varStatus="s">
@@ -73,7 +58,7 @@
                                 </c:forEach>
                             </div>
                         </div>
-                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button type="submit" class="btn btn-default">提交</button>

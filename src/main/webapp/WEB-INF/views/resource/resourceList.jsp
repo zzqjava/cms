@@ -4,7 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>菜单列表</title>
-    <script src="${ctx}/static/js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
         $(function(){
             //分页功能
@@ -17,6 +16,10 @@
                 onPageClicked: function (e, originalEvent, type, page) {
                     var url = "${ctx}/resource/list/" + page ;
                     $("#theForm").attr("action", url);
+                    var queryResourceName =  $("#queryResourceName").val();
+                    var queryValid =  $("#queryValid").val();
+                    $("#queryResourceNameId").val(queryResourceName);
+                    $("#queryValidId").val(queryValid);
                     $("#theForm").submit();
                 },
                 onPageChanged:null
@@ -24,17 +27,13 @@
             $('#pageDiv').bootstrapPaginator(options);
 
             //回显
-            <%--$("#queryValid option").each(function() {--%>
-                <%--if ($(this).val() == '${resourceForm.queryValid}') {--%>
-                    <%--$(this).attr("selected", "selected");--%>
-                <%--}--%>
-            <%--});--%>
+            $("#queryValid option").each(function() {
+                if ($(this).val() == '${resourceForm.queryValid}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
         })
 
-        var goPage = function(page) {
-            $("#page").val(page);
-            $("#pageForm").submit();
-        }
         function input(treeLevel, parentID) {
             $("#theForm").attr("action", "${ctx}/resource/input");
             $("#treeLevel").val(treeLevel);
@@ -48,7 +47,7 @@
             closeSuccess();
         }
         function closeSuccess() {
-            setTimeout("closeSuccessTip()",3000);
+            setTimeout("closeSuccessTip()",2000);
         }
         function closeSuccessTip(){
             $('#tipSuccess').click();
@@ -58,7 +57,7 @@
             closeError();
         }
         function closeError() {
-            setTimeout("closeErrorTip()",3000);
+            setTimeout("closeErrorTip()",2000);
         }
         function closeErrorTip(){
             $('#tipError').click();
@@ -77,65 +76,60 @@
             <div class="m-b-md">
                 <h3 class="m-b-none">资源管理</h3>
             </div>
+            <c:if test="${successMessage != null}" >
+                <div class="alert alert-success fade in">
+                    <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                        ${successMessage}
+                </div>
+            </c:if>
+            <c:if test="${errorMessage != null}" >
+                <div class="alert alert-danger fade in">
+                    <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                        ${errorMessage}
+                </div>
+            </c:if>
             <section class="panel panel-default">
-                <div class="row wrapper">
-                    <div class="col-sm-5 m-b-xs">
+                <header class="panel-heading">
                         <form action="${ctx}/resource/input" method="post" id="theForm" >
                             <input type="hidden" id="treeLevel" name="treeLevel" value=""/>
                             <input type="hidden" id="parentID" name="parentID" value=""/>
+                            <input type="hidden" id="queryResourceNameId" name="queryResourceName" value=""/>
+                            <input type="hidden" id="queryValidId" name="queryValid" value=""/>
                             <a href="#" class="btn btn-sm btn-default"  onclick="input('1','0')">创建资源</a>
                         </form>
+                </header>
+                <form class="form-inline" id="queryForm" action="${ctx}/resource/list" method="post">
+                    <div class="row wrapper">
+                        <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">资源名称：</span>
+                                        <input type="text" name="queryResourceName" id="queryResourceName" value="${resourceForm.queryResourceName}" class="form-control" placeholder="资源名称不能为空">
+                                    </div>
+                        </div>
+                        <div class="col-sm-2 m-b-xs">
+                                    <div class="input-group">
+                                        <span class="input-group-addon ">是否有效：</span>
+                                        <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
+                                    </div>
+                        </div>
+                        <div class="col-sm-1 m-b-xs">
+                                    <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
+                        </div>
                     </div>
-                </div>
-                <c:if test="${successMessage != null}" >
-                    <div class="alert alert-success fade in">
-                        <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
-                            ${successMessage}
-                    </div>
-                </c:if>
-                <c:if test="${errorMessage != null}" >
-                    <div class="alert alert-danger fade in">
-                        <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
-                            ${errorMessage}
-                    </div>
-                </c:if>
-                <%--<form class="form-inline" id="queryForm" action="${ctx}/resource/list" method="post">--%>
-                    <%--<div class="text-center">--%>
-                        <%--<table class="table table-hover table-striped">--%>
-                            <%--<tr>--%>
-                                <%--<td style="width: 45%">--%>
-                                    <%--<div class="input-group">--%>
-                                        <%--<span class="input-group-addon">角色名称：</span>--%>
-                                        <%--<input type="text" name="queryResourceName" id="queryResourceName" value="${resourceForm.queryResourceName}" class="form-control" placeholder="角色名称不能为空">--%>
-                                    <%--</div>--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 25%">--%>
-                                    <%--<div class="input-group">--%>
-                                        <%--<span class="input-group-addon ">是否有效：</span>--%>
-                                        <%--<form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>--%>
-                                    <%--</div>--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 5%">--%>
-                                    <%--<input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />--%>
-                                <%--</td>--%>
-                                <%--<td style="width: 25%"></td>--%>
-                            <%--</tr>--%>
-                        <%--</table>--%>
-                    <%--</div>--%>
-                <%--</form>--%>
+                </form>
                 <div class="table-responsive">
                     <table class="table table-striped b-t b-light">
                         <thead>
                         <tr>
-                            <th>菜单名</th>
-                            <th>菜单链接</th>
-                            <th>菜单级别</th>
-                            <th>菜单权限</th>
-                            <th>菜单类别</th>
-                            <th>菜单排序值</th>
+                            <th>资源名称</th>
+                            <th>资源链接</th>
+                            <th>资源级别</th>
+                            <th>资源权限</th>
+                            <th>资源类别</th>
+                            <th>资源排序值</th>
                             <th>是否有效</th>
                             <th>备注</th>
-                            <th colspan="3">操作</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -151,8 +145,7 @@
                                         <td>${resource.priority}</td>
                                         <td>${resource.valid.name}</td>
                                         <td>${resource.memo}</td>
-                                        <td><a href="${ctx}/resource/input/${resource.id}">修改</a></td>
-                                        <td>
+                                        <td><a href="${ctx}/resource/input/${resource.id}">修改</a>
                                             <a href="${ctx}/resource/toggleValidStatus/${resource.id}">
                                                 <c:choose>
                                                     <c:when test="${resource.valid.value == 1}">
@@ -163,8 +156,8 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </a>
+                                            <a href="#" onclick="input('2','${resource.id}')">添加子资源</a>
                                         </td>
-                                        <td><a href="#" onclick="input('2','${resource.id}')">添加子资源</a></td>
                                     </tr>
                                 </c:if>
                                 <c:forEach var="second" items="${resource.children}">
@@ -178,8 +171,7 @@
                                             <td>${second.priority}</td>
                                             <td>${second.valid.name}</td>
                                             <td>${second.memo}</td>
-                                            <td><a href="${ctx}/resource/input/${second.id}">修改</a></td>
-                                            <td>
+                                            <td><a href="${ctx}/resource/input/${second.id}">修改</a>
                                                 <a href="${ctx}/resource/toggleValidStatus/${second.id}">
                                                     <c:choose>
                                                         <c:when test="${second.valid.value == 1}">
@@ -190,8 +182,6 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </a>
-                                            </td>
-                                            <td>
                                                 <a href="#" onclick="input('3','${second.id}')">添加子资源</a>
                                             </td>
                                         </tr>
@@ -206,8 +196,7 @@
                                             <td>${third.priority}</td>
                                             <td>${third.valid.name}</td>
                                             <td>${third.memo}</td>
-                                            <td><a href="${ctx}/resource/input/${third.id}">修改</a></td>
-                                            <td>
+                                            <td><a href="${ctx}/resource/input/${third.id}">修改</a>
                                                 <a href="${ctx}/resource/toggleValidStatus/${third.id}">
                                                     <c:choose>
                                                         <c:when test="${third.valid.value == 1}">
@@ -219,7 +208,6 @@
                                                     </c:choose>
                                                 </a>
                                             </td>
-                                            <td></td>
                                         </tr>
                                     </c:forEach>
                                 </c:forEach>
@@ -230,7 +218,7 @@
                 </div>
                 <footer class="panel-footer">
                     <div class="row">
-                        <div class="col-sm-4 text-left text-left-xs">
+                        <div class="col-sm-12 text-right text-left-xs">
                             <ul id='pageDiv' class="pagination pagination-sm m-t-none m-b-none"></ul>
                         </div>
                     </div>

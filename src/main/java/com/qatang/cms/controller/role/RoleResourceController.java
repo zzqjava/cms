@@ -67,6 +67,7 @@ public class RoleResourceController extends BaseController {
         String ztrees = JSON.toJSONString(ztreeBeanList);
         model.addAttribute("ztrees",ztrees);
         model.addAttribute("roleId",roleId);
+        model.addAttribute(FORWARD_URL, "/role/list");
         return "/role/allotResource";
     }
 

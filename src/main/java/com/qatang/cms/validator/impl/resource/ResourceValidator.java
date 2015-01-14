@@ -76,11 +76,11 @@ public class ResourceValidator extends AbstractValidator<ResourceForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (StringUtils.isEmpty(resourceForm.getIdentifier())) {
-            String msg = String.format("必须填写权限");
-            logger.error(msg);
-            throw new ValidateFailedException(msg);
-        }
+//        if (StringUtils.isEmpty(resourceForm.getIdentifier())) {
+//            String msg = String.format("必须填写权限");
+//            logger.error(msg);
+//            throw new ValidateFailedException(msg);
+//        }
 		return true;
 	}
 }

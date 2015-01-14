@@ -4,24 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>欢迎</title>
-    <script type="text/javascript">
-        $(function() {
-            var id = $("#userId").val();
-            $.ajax( {
-                type : "POST",
-                url : "${ctx}/user/ajax/roles.do",
-                data : {"id": id},
-//                dataType: "json",
-                dataType: "text",
-                success : function(data) {
-//                    if (data.success) {
-//                        $("#roles").html(data.roles);
-//                    }
-                    $("#roles").html(data);
-                }
-            });
-        });
-    </script>
 </head>
 <body>
 <section id="content">
@@ -31,37 +13,32 @@
                 <li><a href="${ctx}/dashboard"><i class="fa fa-home"></i> 主页</a></li>
                 <li><a href="#">系统管理</a></li>
                 <li class="${ctx}/user/list"><a href="#">用户管理</a></li>
-                <li class="active">
-                    <c:choose>
-                    <c:when test="${userForm.id == null}">
-                        用户添加
-                    </c:when>
-                    <c:otherwise>
-                        用户修改
-                    </c:otherwise>
-                </c:choose></li>
             </ul>
             <div class="m-b-md">
                 <h3 class="m-b-none">
+                    用户添加
                 </h3>
+                <c:if test="${successMessage != null}" >
+                    <div class="alert alert-success fade in">
+                        <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                            ${successMessage}
+                    </div>
+                </c:if>
+                <c:if test="${errorMessage != null}" >
+                    <div class="alert alert-danger fade in">
+                        <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                            ${errorMessage}
+                    </div>
+                </c:if>
             </div>
             <section class="panel panel-default">
-                <header class="panel-heading font-bold">
-                    <c:choose>
-                        <c:when test="${userForm.id == null}">
-                            用户添加
-                        </c:when>
-                        <c:otherwise>
-                            用户修改
-                        </c:otherwise>
-                    </c:choose>
-                </header>
                 <div class="panel-body">
-                    <form:form class="form-horizontal" action="${ctx}/user/create" method="post">
+                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/create" method="post" commandName="userForm">
+                        <input id="id" type="hidden" name="id" value="${userForm.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true">
+                                <input type="text" class="form-control" name="username" value="${userForm.username}" autofocus="" data-required="true" />
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
@@ -110,30 +87,20 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" checked value="1"> 男
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="genderValue" value="2"> 女
-                                </label>
+                                <form:radiobuttons path="genderValue" items="${genderList}" itemValue="value" itemLabel="name"/>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" checked value="1"> 是
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="validValue" value="2"> 否
-                                </label>
+                                <form:radiobuttons path="validValue" items="${enableDisableStatusList}" itemValue="value" itemLabel="name"/>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button type="submit" class="btn btn-default">提交</button>
+                                <button id="sub" type="submit" class="btn btn-default">提交</button>
                                 <a class="btn btn-info" href="${ctx}${forwardUrl}">返回</a>
                             </div>
                         </div>
