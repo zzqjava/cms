@@ -8,7 +8,7 @@ public class PageInfo {
     private int count = 0; // 记录总数
     private int currentPage = 1; // 当前页数
     private int totalPages = 0; // 总页数
-    private int pageSize = 2; // 每页显示记录数
+    private int pageSize = 20; // 每页显示记录数
     private boolean pageFlag = true;//是否分页 ,默认为true分页 ,等于false时不分页
 
     public int getCurrentPage() {
