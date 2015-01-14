@@ -1,12 +1,12 @@
 package com.qatang.cms.controller.role;
 
-import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
+import com.qatang.cms.form.PageUtil;
 import com.qatang.cms.form.role.RoleForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.validator.IValidator;
@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +31,6 @@ import java.util.List;
  * Created by zhangzq on 14-6-25.
  */
 @Controller
-@SessionAttributes(CommonConstants.ROLE_QUERY_CONDITION_KEY)
 @RequestMapping("/role")
 public class RoleController extends BaseController {
 
@@ -45,28 +47,25 @@ public class RoleController extends BaseController {
     @RequiresPermissions("sys:role:list")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(ModelMap modelMap, HttpServletRequest request) {
-        RoleForm roleForm;
-        if (modelMap.containsKey(CommonConstants.ROLE_QUERY_CONDITION_KEY)) {
-            roleForm = (RoleForm) modelMap.get(CommonConstants.ROLE_QUERY_CONDITION_KEY);
-        } else {
-            roleForm = new RoleForm();
-        }
-        pagination(roleForm, modelMap, request);
+        RoleForm roleForm = new RoleForm();
+        pagination(roleForm, modelMap);
+        roleForm.setPageString(PageUtil.getPageString(request, roleForm.getPageInfo()));
         return "role/list";
     }
 
 	@RequiresPermissions("sys:role:list")
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String list(@ModelAttribute(CommonConstants.ROLE_QUERY_CONDITION_KEY) RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
-		try {
-			queryRoleValidator.validate(roleForm);
-		} catch (ValidateFailedException e) {
-			logger.error(e.getMessage(), e);
-			modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-			return "/role/list";
-		}
-		pagination(roleForm, modelMap, request);
-		return "role/list";
+	public String list(RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
+        try {
+            queryRoleValidator.validate(roleForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage(), e);
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            return "role/list";
+        }
+        pagination(roleForm, modelMap);
+        roleForm.setPageString(PageUtil.getPageString(request, roleForm.getPageInfo()));
+        return "role/list";
 	}
 
     @RequiresPermissions("sys:role:create")
@@ -204,7 +203,7 @@ public class RoleController extends BaseController {
         return "redirect:/role/list";
     }
 
-    private void pagination(RoleForm roleForm, ModelMap modelMap, HttpServletRequest request) {
+    private void pagination(RoleForm roleForm, ModelMap modelMap) {
         Page<Role> rolePage = roleService.findAllPage(roleForm);
         if (rolePage.getContent() != null) {
             List<Role> roleList = rolePage.getContent();
@@ -212,10 +211,10 @@ public class RoleController extends BaseController {
         }
         PageInfo pageInfo = roleForm.getPageInfo();
         pageInfo.setTotalPages(rolePage.getTotalPages());
+        pageInfo.setCount((int)rolePage.getTotalElements());
+        roleForm.setPageInfo(pageInfo);
         modelMap.addAttribute(roleForm);
-        request.getSession().setAttribute(CommonConstants.ROLE_QUERY_CONDITION_KEY, roleForm);
     }
-
 
     /**
      * 新增与修改时候使用
