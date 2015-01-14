@@ -1,5 +1,6 @@
 package com.qatang.cms.validator.impl.resource;
 
+import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.exception.validator.ValidateFailedException;
@@ -14,26 +15,26 @@ import org.springframework.stereotype.Component;
  * Created by likunpeng on 2014/6/26.
  */
 @Component
-public class ResourceValidator extends AbstractValidator<ResourceForm> {
+public class UpdateResourceValidator extends AbstractValidator<ResourceForm> {
 
     @Autowired
     private ResourceService resourceService;
 
 	public boolean validate(ResourceForm resourceForm) throws ValidateFailedException {
 		logger.info("开始验证resourceForm参数");
-		if (resourceForm == null) {
-			String msg = String.format("resourceForm参数不能为空");
-			logger.error(msg);
-			throw new ValidateFailedException(msg);
+		if (resourceForm == null || resourceForm.getId() == null) {
+            String msg = String.format("资源对象不能为空");
+            logger.error(msg);
+            throw new ValidateFailedException(msg);
 		}
 		if (StringUtils.isNotEmpty(resourceForm.getId())) {
-            try {
+			try {
                 Long.parseLong(resourceForm.getId());
-            } catch (NumberFormatException e) {
-                String msg = String.format("id字段不合法");
-                logger.error(msg);
-                throw new ValidateFailedException(msg);
-            }
+			} catch (NumberFormatException e) {
+				String msg = String.format("id字段不合法");
+				logger.error(msg);
+				throw new ValidateFailedException(msg);
+			}
 		}
 		if (StringUtils.isEmpty(resourceForm.getName())) {
 			String msg = String.format("资源名不能为空");
@@ -42,13 +43,13 @@ public class ResourceValidator extends AbstractValidator<ResourceForm> {
 		}
 
 		if (StringUtils.isNotEmpty(resourceForm.getPriority())) {
-            try {
-                Integer.valueOf(resourceForm.getPriority());
-            } catch (Exception e) {
-                String msg = String.format("资源排序值字段格式不合法");
-                logger.error(msg);
-                throw new ValidateFailedException(msg);
-            }
+			try {
+				Integer.valueOf(resourceForm.getPriority());
+			} catch (Exception e) {
+				String msg = String.format("资源排序值字段格式不合法");
+				logger.error(msg);
+				throw new ValidateFailedException(msg);
+			}
 		} else {
 			resourceForm.setPriority("0");
 		}
@@ -59,7 +60,7 @@ public class ResourceValidator extends AbstractValidator<ResourceForm> {
 		}
 		int validValue = 0;
 		try {
-			Integer.valueOf(resourceForm.getValidValue());
+			validValue = Integer.valueOf(resourceForm.getValidValue());
 		} catch (Exception e) {
 			String msg = String.format("是否有效字段格式不合法");
 			logger.error(msg);
@@ -81,6 +82,17 @@ public class ResourceValidator extends AbstractValidator<ResourceForm> {
 //            logger.error(msg);
 //            throw new ValidateFailedException(msg);
 //        }
+
+        //如果id不为空时，进行修改验证
+        if (resourceForm.getId() != null) {
+            Resource resource = resourceService.get(Long.parseLong(resourceForm.getId()));
+            if (resource == null) {
+                logger.error("根据资源id,没有查询到该资源信息！");
+                String msg = String.format("根据资源id,没有查询到该资源信息！");
+                logger.error(msg);
+                throw new ValidateFailedException(msg);
+            }
+        }
 		return true;
 	}
 }
