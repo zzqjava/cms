@@ -94,7 +94,7 @@
                                     <td>
                                         <a href="${ctx}/user/input/${user.id}">修改</a>
                                         <a href="${ctx}/user/password/input/${user.id}">密码管理</a>
-                                        <a href="${ctx}/userRole/input/${user.id}">角色管理</a>
+                                        <a href="${ctx}/userRole/allot/${user.id}">角色管理</a>
                                         <a href="${ctx}/user/validate/${user.id}">
                                             <c:choose>
                                                 <c:when test="${user.valid.value == 1}">

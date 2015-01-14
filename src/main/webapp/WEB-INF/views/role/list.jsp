@@ -60,19 +60,19 @@
             <section class="panel panel-default">
                 <form class="form-inline" id="queryForm" action="${ctx}/role/list" method="post" commandName="roleForm">
                     <div class="row wrapper">
-                        <div class="col-sm-2 m-b-xs">
+                        <div class="col-sm-4 m-b-xs">
                             <div class="input-group">
-                                <span class="input-group-addon">角色名：</span>
+                                <span class="input-group-addon input-sm">角色名</span>
                                 <input type="text" id="name" name="name" value="${roleForm.name}" class="form-control">
                             </div>
                         </div>
-                        <div class="col-sm-2 m-b-xs">
+                        <div class="col-sm-4 m-b-xs">
                             <div class="input-group">
-                                <span class="input-group-addon ">是否有效：</span>
-                                <form:select path="queryEnableDisableStatus" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" id="valid" name="valid"/>
+                                <span class="input-group-addon  input-sm">是否有效</span>
+                                <form:select path="queryEnableDisableStatus" cssStyle="width:76px" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" id="valid" name="valid"/>
                             </div>
                         </div>
-                        <div class="col-sm-1 m-b-xs">
+                        <div class="col-sm-4 m-b-xs">
                             <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
                         </div>
                     </div>
@@ -96,21 +96,21 @@
                             <tr>
                                 <td>${status.count}</td>
                                 <td>${role.id}</td>
-                                <td><a href="${ctx}/role/view/${role.id}">${role.name}</a></td>
+                                <td><a href="${ctx}/role/detail/${role.id}">${role.name}</a></td>
                                 <td>${role.identifier}</td>
                                 <td>${role.description}</td>
                                 <td>${role.isDefault.name}</td>
                                 <td>${role.valid.name}</td>
-                                <td><a href="${ctx}/role/input/${role.id}">修改</a>
+                                <td><a href="${ctx}/role/update/${role.id}">修改</a>
                                     <c:choose>
                                         <c:when test="${role.valid.value == 1}">
-                                            <a href="${ctx}/role/toggleValidStatus/${role.id}">禁用</a>
+                                            <a href="${ctx}/role/validate/${role.id}">禁用</a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="${ctx}/role/toggleValidStatus/${role.id}">启用</a>
+                                            <a href="${ctx}/role/validate/${role.id}">启用</a>
                                         </c:otherwise>
                                     </c:choose>
-                                    <a href="${ctx}/allotResource/input/${role.id}">分配资源</a>
+                                    <a href="${ctx}/roleResource/allot/${role.id}">分配资源</a>
                                 </td>
                             </tr>
                         </c:forEach>
