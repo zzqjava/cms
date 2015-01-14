@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="bg-dark">
 <head>
-    <title>菜单列表</title>
+    <title>资源列表</title>
     <script type="text/javascript">
         $(function(){
             //分页功能
+            <c:if test="${resourceForm.pageInfo.totalPages != null}">
             var options = {
                 size:"small",
                 bootstrapMajorVersion:3,
@@ -25,7 +26,7 @@
                 onPageChanged:null
             }
             $('#pageDiv').bootstrapPaginator(options);
-
+            </c:if>
             //回显
             $("#queryValid option").each(function() {
                 if ($(this).val() == '${resourceForm.queryValid}') {
@@ -34,8 +35,8 @@
             });
         })
 
-        function input(treeLevel, parentID) {
-            $("#theForm").attr("action", "${ctx}/resource/input");
+        function create(treeLevel, parentID) {
+            $("#theForm").attr("action", "${ctx}/resource/create");
             $("#treeLevel").val(treeLevel);
             $("#parentID").val(parentID);
             $("#theForm").submit();
@@ -61,6 +62,30 @@
         }
         function closeErrorTip(){
             $('#tipError').click();
+        }
+        function validate(id){
+            $.ajax({
+                url:"${ctx}/resource/validate/" + id,
+                type:"POST",
+                dataType:"json",
+                success:function(data){
+                    var status_span = $("#status_"+id);
+                    var status_valid_span = $("#status_valid_"+id);
+                    status_span.empty();
+                    status_valid_span.empty();
+                    if (data.code=="0") {
+                        if (data.status==1) {
+                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">禁用</a>';
+                            var str1 = '<span id="status_valid_' + id + '">有效</span>';
+                        } else {
+                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">开启</a>';
+                            var str1 = '<span id="status_valid_' + id + '">无效</span>';
+                        }
+                        status_span.html(str);
+                        status_valid_span.html(str1);
+                    }
+                }
+            });
         }
     </script>
 </head>
@@ -90,13 +115,7 @@
             </c:if>
             <section class="panel panel-default">
                 <header class="panel-heading">
-                        <form action="${ctx}/resource/input" method="post" id="theForm" >
-                            <input type="hidden" id="treeLevel" name="treeLevel" value=""/>
-                            <input type="hidden" id="parentID" name="parentID" value=""/>
-                            <input type="hidden" id="queryResourceNameId" name="queryResourceName" value=""/>
-                            <input type="hidden" id="queryValidId" name="queryValid" value=""/>
-                            <a href="#" class="btn btn-sm btn-default"  onclick="input('1','0')">创建资源</a>
-                        </form>
+                    <a href="${ctx}/resource/create?treeLevel=1&parentID=0" class="btn btn-sm btn-default">创建资源</a>
                 </header>
                 <form class="form-inline" id="queryForm" action="${ctx}/resource/list" method="post">
                     <div class="row wrapper">
@@ -128,7 +147,6 @@
                             <th>资源类别</th>
                             <th>资源排序值</th>
                             <th>是否有效</th>
-                            <th>备注</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -137,76 +155,97 @@
                             <c:forEach var="resource" items="${resourceList}">
                                 <c:if test="${resource.treeLevel == 1}">
                                     <tr>
-                                        <td><a href="${ctx}/resource/view/${resource.id}">${resource.name}</a></td>
+                                        <td><a href="${ctx}/resource/detail/${resource.id}">${resource.name}</a></td>
                                         <td>${resource.url}</td>
                                         <td>${resource.treeLevel}</td>
                                         <td>${resource.identifier}</td>
                                         <td>${resource.type.name}</td>
                                         <td>${resource.priority}</td>
-                                        <td>${resource.valid.name}</td>
-                                        <td>${resource.memo}</td>
-                                        <td><a href="${ctx}/resource/input/${resource.id}">修改</a>
-                                            <a href="${ctx}/resource/toggleValidStatus/${resource.id}">
-                                                <c:choose>
-                                                    <c:when test="${resource.valid.value == 1}">
-                                                        禁用
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        启用
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </a>
-                                            <a href="#" onclick="input('2','${resource.id}')">添加子资源</a>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${resource.valid.value == 1}">
+                                                    <span id="status_valid_${resource.id}">有效</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span id="status_valid_${resource.id}">无效</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <a href="${ctx}/resource/update/${resource.id}">修改</a>
+                                            <c:choose>
+                                                <c:when test="${resource.valid.value == 1}">
+                                                    <span id="status_${resource.id}"><a href="javascript://" onclick="validate('${resource.id}')">禁用</a></span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span id="status_${resource.id}"><a href="javascript://" onclick="validate('${resource.id}')">启用</a></span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <a href="${ctx}/resource/create?treeLevel=2&parentID=${resource.id}">添加子资源</a>
                                         </td>
                                     </tr>
                                 </c:if>
                                 <c:forEach var="second" items="${resource.children}">
                                     <c:if test="${second.treeLevel == 2}">
                                         <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/view/${second.id}">${second.name}</a></td>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/detail/${second.id}">${second.name}</a></td>
                                             <td>${second.url}</td>
                                             <td>${second.treeLevel}</td>
                                             <td>${second.identifier}</td>
                                             <td>${second.type.name}</td>
                                             <td>${second.priority}</td>
-                                            <td>${second.valid.name}</td>
-                                            <td>${second.memo}</td>
-                                            <td><a href="${ctx}/resource/input/${second.id}">修改</a>
-                                                <a href="${ctx}/resource/toggleValidStatus/${second.id}">
-                                                    <c:choose>
-                                                        <c:when test="${second.valid.value == 1}">
-                                                            禁用
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            启用
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </a>
-                                                <a href="#" onclick="input('3','${second.id}')">添加子资源</a>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${second.valid.value == 1}">
+                                                        <span id="status_valid_${second.id}">有效</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span id="status_valid_${second.id}">无效</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+
+                                            <td><a href="${ctx}/resource/update/${second.id}">修改</a>
+                                                <c:choose>
+                                                    <c:when test="${resource.valid.value == 1}">
+                                                        <span id="status_${second.id}"><a href="javascript://" onclick="validate('${second.id}')">禁用</a></span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span id="status_${second.id}"><a href="javascript://" onclick="validate('${second.id}')">启用</a></span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <%--<a href="#" onclick="create('3','${second.id}')">添加子资源</a>--%>
+                                                <a href="${ctx}/resource/create?treeLevel=3&parentID=${second.id}" >添加子资源</a>
                                             </td>
                                         </tr>
                                     </c:if>
                                     <c:forEach var="third" items="${second.children}">
                                         <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/view/${third.id}">${third.name}</a></td>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/detail/${third.id}">${third.name}</a></td>
                                             <td>${third.url}</td>
                                             <td>${third.treeLevel}</td>
                                             <td>${third.identifier}</td>
                                             <td>${third.type.name}</td>
                                             <td>${third.priority}</td>
-                                            <td>${third.valid.name}</td>
-                                            <td>${third.memo}</td>
-                                            <td><a href="${ctx}/resource/input/${third.id}">修改</a>
-                                                <a href="${ctx}/resource/toggleValidStatus/${third.id}">
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${third.valid.value == 1}">
+                                                        <span id="status_valid_${third.id}">有效</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span id="status_valid_${third.id}">无效</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td><a href="${ctx}/resource/update/${third.id}">修改</a>
                                                     <c:choose>
                                                         <c:when test="${third.valid.value == 1}">
-                                                            禁用
+                                                            <span id="status_${third.id}"><a href="javascript://" onclick="validate('${third.id}')">禁用</a></span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            启用
+                                                            <span id="status_${third.id}"><a href="javascript://" onclick="validate('${third.id}')">启用</a></span>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
