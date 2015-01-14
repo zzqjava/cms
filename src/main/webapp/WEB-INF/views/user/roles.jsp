@@ -4,20 +4,6 @@
 <html lang="zh-CN" class="bg-dark">
 <head>
     <title>欢迎</title>
-    <script type="text/javascript">
-        $(function() {
-            var id = $("#userId").val();
-            $.ajax( {
-                type : "POST",
-                url : "${ctx}/user/ajax/roles.do",
-                data : {"id": id},
-                dataType: "text",
-                success : function(data) {
-                    $("#roles").html(data);
-                }
-            });
-        });
-    </script>
 </head>
 <body>
 <section id="content">

@@ -9,9 +9,9 @@ import java.util.*;
  * Created by qatang on 14-6-12.
  */
 public enum Gender {
-    ALL("全部"),
-    MALE("男"),
-    FEMALE("女");
+    ALL(-1, "全部"),
+    MALE(0, "男"),
+    FEMALE(1, "女");
 
     private static Logger logger = LoggerFactory.getLogger(Gender.class);
 
@@ -36,8 +36,10 @@ public enum Gender {
     }
 
     private String name;
+    private int value;
 
-    private Gender(String name){
+    private Gender(int value, String name){
+        this.value = value;
         this.name = name;
     }
 
@@ -45,8 +47,8 @@ public enum Gender {
         return name;
     }
 
-    public int getValue(){
-        return this.ordinal();
+    public int getValue() {
+        return value;
     }
 
     public static Gender get(int value){

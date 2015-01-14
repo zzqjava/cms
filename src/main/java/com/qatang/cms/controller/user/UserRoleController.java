@@ -33,8 +33,8 @@ public class UserRoleController extends BaseController {
     private RoleService roleService;
 
     //@RequiresPermissions("sys:userRole:input")
-    @RequestMapping(value = "/input/{userId}")
-    public String input(@PathVariable Long userId, ModelMap modelMap) {
+    @RequestMapping(value = "/update/{userId}", method = RequestMethod.GET)
+    public String update(@PathVariable Long userId, ModelMap modelMap) {
         List<Role> existRoles = userRoleService.findRolesByUserId(userId);
         List<Role> rolesList = roleService.findAll();
         UserForm userForm = new UserForm();
@@ -43,7 +43,7 @@ public class UserRoleController extends BaseController {
         modelMap.addAttribute("rolesList", rolesList);
         modelMap.addAttribute("existRoles", existRoles);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/userRoleInput";
+        return "user/roles";
     }
 
     //@RequiresPermissions("sys:userRole:update")
