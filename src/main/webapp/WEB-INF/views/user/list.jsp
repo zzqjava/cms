@@ -132,6 +132,30 @@
                                 </tbody>
                             </table>
                         </div>
+                        <%--<footer class="panel-footer">--%>
+                            <%--<div class="row">--%>
+                                <%--<div class="col-sm-4 hidden-xs">--%>
+                                <%--</div>--%>
+                                <%--<div class="col-sm-4 text-center">--%>
+                                <%--</div>--%>
+                                <%--<div class="col-sm-4 text-right text-center-xs">--%>
+                                    <%--<form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">--%>
+                                        <%--<input id="page" type="hidden" name="pageInfo.currentPage">--%>
+                                        <%--<ul class="pagination pagination-sm m-t-none m-b-none">--%>
+                                            <%--<c:if test="${userForm.pageInfo.currentPage > 1}">--%>
+                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});"><i class="fa fa-chevron-left"></i></a></li>--%>
+                                            <%--</c:if>--%>
+                                            <%--<c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">--%>
+                                                <%--<li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>--%>
+                                            <%--</c:forEach>--%>
+                                            <%--<c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">--%>
+                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});"><i class="fa fa-chevron-right"></i></a></li>--%>
+                                            <%--</c:if>--%>
+                                        <%--</ul>--%>
+                                    <%--</form>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                        <%--</footer>--%>
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-4 hidden-xs">
@@ -139,20 +163,7 @@
                                 <div class="col-sm-4 text-center">
                                 </div>
                                 <div class="col-sm-4 text-right text-center-xs">
-                                    <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
-                                        <input id="page" type="hidden" name="pageInfo.currentPage">
-                                        <ul class="pagination pagination-sm m-t-none m-b-none">
-                                            <c:if test="${userForm.pageInfo.currentPage > 1}">
-                                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});"><i class="fa fa-chevron-left"></i></a></li>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
-                                                <li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>
-                                            </c:forEach>
-                                            <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
-                                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});"><i class="fa fa-chevron-right"></i></a></li>
-                                            </c:if>
-                                        </ul>
-                                    </form>
+                                    ${userForm.pageString}
                                 </div>
                             </div>
                         </footer>

@@ -11,6 +11,7 @@ import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.Gender;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
+import com.qatang.cms.form.PageUtil;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserRoleService;
@@ -23,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
@@ -33,7 +37,7 @@ import java.util.*;
  * Created by JSH on 2014/6/26.
  */
 @Controller
-@SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
+//@SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
 @RequestMapping("/user")
 public class UserController extends BaseController {
     @Autowired
@@ -64,7 +68,9 @@ public class UserController extends BaseController {
         } else {
             userForm = new UserForm();
         }
-        pagination(userForm, modelMap, request);
+        pagination(userForm, modelMap);
+        userForm.setPageString(PageUtil.getPageString(request, userForm.getPageInfo()));
+//        pagination(userForm, modelMap, request);
         return "user/list";
     }
 
@@ -79,7 +85,9 @@ public class UserController extends BaseController {
             modelMap.addAttribute(FORWARD_URL, "/user/list");
             return "failure";
         }
-        pagination(userForm, modelMap, request);
+        pagination(userForm, modelMap);
+        userForm.setPageString(PageUtil.getPageString(request, userForm.getPageInfo()));
+//        pagination(userForm, modelMap, request);
         return "user/list";
     }
 
@@ -311,16 +319,29 @@ public class UserController extends BaseController {
         return "user/passwordForget";
     }
 
-    private void pagination(UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
-        Page<User> page = userService.getAll(userForm);
-        if (page.getContent() != null) {
-            List<User> userList = page.getContent();
+//    private void pagination(UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
+//        Page<User> page = userService.getAll(userForm);
+//        if (page.getContent() != null) {
+//            List<User> userList = page.getContent();
+//            modelMap.addAttribute(userList);
+//        }
+//        PageInfo pageInfo = userForm.getPageInfo();
+//        pageInfo.setTotalPages(page.getTotalPages());
+//        modelMap.addAttribute(userForm);
+//        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
+//    }
+
+    private void pagination(UserForm userForm, ModelMap modelMap) {
+        Page<User> userPage = userService.getAll(userForm);
+        if (userPage.getContent() != null) {
+            List<User> userList = userPage.getContent();
             modelMap.addAttribute(userList);
         }
         PageInfo pageInfo = userForm.getPageInfo();
-        pageInfo.setTotalPages(page.getTotalPages());
+        pageInfo.setTotalPages(userPage.getTotalPages());
+        pageInfo.setCount((int) userPage.getTotalElements());
+        userForm.setPageInfo(pageInfo);
         modelMap.addAttribute(userForm);
-        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
     }
 
     @ModelAttribute("genderList")
