@@ -8,6 +8,14 @@
     <decorator name="signin" page="signin.jsp">
         <pattern>/signin</pattern>
     </decorator>
+
+	<decorator name="signup" page="signin.jsp">
+		<pattern>/signup</pattern>
+	</decorator>
+
+	<decorator name="signupSuccess" page="signin.jsp">
+		<pattern>/signupSuccess</pattern>
+	</decorator>
 	
 	<decorator name="default" page="default.jsp">
 		<pattern>/*</pattern>

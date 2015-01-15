@@ -44,7 +44,7 @@ public class UserRoleController extends BaseController {
         modelMap.addAttribute("rolesList", rolesList);
         modelMap.addAttribute("existRoles", existRoles);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/userRoleInput";
+        return "user/roles";
     }
 
     @RequiresPermissions("sys:userRole:allot")

@@ -8,6 +8,30 @@
             var goPage = function(page) {
                 $("#page").val(page);
                 $("#pageForm").submit();
+            };
+            function validate (id) {
+                $.ajax({
+                    url:"${ctx}/user/validate/" + id,
+                    type:"POST",
+                    dataType:"json",
+                    success:function (data) {
+                        var valid = $("#valid_" + id);
+                        var validate = $("#validate_" + id);
+                        valid.empty();
+                        validate.empty();
+                        if (data.success) {
+                            if (data.enableDisableStatus == 1) {
+                                var validStr = '无效';
+                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="validate(' + id + ')">启用</a>';
+                            } else if (data.enableDisableStatus == 0) {
+                                var validStr = '有效';
+                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="validate(' + id + ')">禁用</a>';
+                            }
+                            valid.html(validStr);
+                            validate.html(validateStr);
+                        }
+                    }
+                });
             }
         </script>
     </head>
@@ -85,19 +109,19 @@
                                 <c:forEach items="${userList}" var="user" varStatus="status">
                                 <tr>
                                     <td>${status.count}</td>
-                                    <td><a href="${ctx}/user/view/${user.id}">${user.username}</a></td>
+                                    <td><a href="${ctx}/user/detail/${user.id}">${user.username}</a></td>
                                     <td>${user.name}</td>
                                     <td>${user.gender.name}</td>
                                     <td>${user.mobile}</td>
                                     <td>${user.email}</td>
-                                    <td>${user.valid.name}</td>
+                                    <td id="valid_${user.id}"><span></span>${user.valid.name}</td>
                                     <td>
-                                        <a href="${ctx}/user/input/${user.id}">修改</a>
-                                        <a href="${ctx}/user/password/input/${user.id}">密码管理</a>
-                                        <a href="${ctx}/userRole/allot/${user.id}">角色管理</a>
-                                        <a href="${ctx}/user/validate/${user.id}">
+                                        <a href="${ctx}/user/update/${user.id}">修改</a>
+                                        <a href="${ctx}/user/password/reset/${user.id}">密码重置</a>
+                                        <a href="${ctx}/userRole/update/${user.id}">角色管理</a>
+                                        <a id="validate_${user.id}" class="validate" style="cursor:pointer;" onclick="validate(${user.id})">
                                             <c:choose>
-                                                <c:when test="${user.valid.value == 1}">
+                                                <c:when test="${user.valid.value == 0}">
                                                     禁用
                                                 </c:when>
                                                 <c:otherwise>
@@ -105,11 +129,36 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </a>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
                         </div>
+                        <%--<footer class="panel-footer">--%>
+                            <%--<div class="row">--%>
+                                <%--<div class="col-sm-4 hidden-xs">--%>
+                                <%--</div>--%>
+                                <%--<div class="col-sm-4 text-center">--%>
+                                <%--</div>--%>
+                                <%--<div class="col-sm-4 text-right text-center-xs">--%>
+                                    <%--<form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">--%>
+                                        <%--<input id="page" type="hidden" name="pageInfo.currentPage">--%>
+                                        <%--<ul class="pagination pagination-sm m-t-none m-b-none">--%>
+                                            <%--<c:if test="${userForm.pageInfo.currentPage > 1}">--%>
+                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});"><i class="fa fa-chevron-left"></i></a></li>--%>
+                                            <%--</c:if>--%>
+                                            <%--<c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">--%>
+                                                <%--<li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>--%>
+                                            <%--</c:forEach>--%>
+                                            <%--<c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">--%>
+                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});"><i class="fa fa-chevron-right"></i></a></li>--%>
+                                            <%--</c:if>--%>
+                                        <%--</ul>--%>
+                                    <%--</form>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                        <%--</footer>--%>
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-4 hidden-xs">
@@ -117,20 +166,7 @@
                                 <div class="col-sm-4 text-center">
                                 </div>
                                 <div class="col-sm-4 text-right text-center-xs">
-                                    <form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">
-                                        <input id="page" type="hidden" name="pageInfo.currentPage">
-                                        <ul class="pagination pagination-sm m-t-none m-b-none">
-                                            <c:if test="${userForm.pageInfo.currentPage > 1}">
-                                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});"><i class="fa fa-chevron-left"></i></a></li>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">
-                                                <li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>
-                                            </c:forEach>
-                                            <c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">
-                                                <li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});"><i class="fa fa-chevron-right"></i></a></li>
-                                            </c:if>
-                                        </ul>
-                                    </form>
+                                    ${userForm.pageString}
                                 </div>
                             </div>
                         </footer>

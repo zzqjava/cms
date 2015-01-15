@@ -18,10 +18,22 @@
                 <h3 class="m-b-none">
                     用户修改
                 </h3>
+                <c:if test="${successMessage != null}" >
+                    <div class="alert alert-success fade in">
+                        <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                            ${successMessage}
+                    </div>
+                </c:if>
+                <c:if test="${errorMessage != null}" >
+                    <div class="alert alert-danger fade in">
+                        <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                            ${errorMessage}
+                    </div>
+                </c:if>
             </div>
             <section class="panel panel-default">
                 <div class="panel-body">
-                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/update" method="post">
+                    <form:form id="theForm" class="form-horizontal" action="${ctx}/user/update" method="post" commandName="userForm">
                         <input id="id" type="hidden" name="id" value="${userForm.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名</label>
@@ -77,20 +89,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <c:forEach items="${genderList}" var="gender">
-                                    <input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if> value="${gender.value}">&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;
-                                </c:forEach>
-                                <%--<form:radiobuttons path="genderValue" items="${genderList}"/>--%>
+                                <form:radiobuttons path="genderValue" items="${genderList}" itemValue="value" itemLabel="name" delimiter="&nbsp;"/>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
-                                <c:forEach items="${enableDisableStatusList}" var="valid">
-                                    <input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if> value="${valid.value}">&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;
-                                </c:forEach>
-                                <%--<form:radiobuttons path="validValue" items="${enableDisableStatusList}"/>--%>
+                                <form:radiobuttons path="validValue" items="${enableDisableStatusList}" itemValue="value" itemLabel="name" delimiter="&nbsp;"/>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>

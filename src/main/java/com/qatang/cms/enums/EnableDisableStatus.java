@@ -9,9 +9,9 @@ import java.util.*;
  * Created by zhangzq on 2014/6/23.
  */
 public enum EnableDisableStatus {
-    ALL("全部"),
-    ENABLE("有效"),
-    DISABLE("无效");
+    ALL(-1, "全部"),
+    ENABLE(0, "有效"),
+    DISABLE(1, "无效");
     private static Logger logger = LoggerFactory.getLogger(EnableDisableStatus.class);
 
     private static final Map<Integer, EnableDisableStatus> _MAP = new HashMap<Integer, EnableDisableStatus>();
@@ -35,8 +35,10 @@ public enum EnableDisableStatus {
     }
 
     private String name;
+    private int value;
 
-    private EnableDisableStatus(String name){
+    private EnableDisableStatus(int value, String name) {
+        this.value = value;
         this.name = name;
     }
 
@@ -45,7 +47,7 @@ public enum EnableDisableStatus {
     }
 
     public int getValue(){
-        return this.ordinal();
+        return value;
     }
 
     public static EnableDisableStatus get(int value){
