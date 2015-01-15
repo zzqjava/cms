@@ -31,11 +31,11 @@
                 var nodes=treeObj.getCheckedNodes(true),
                         v="";
                 for(var i=0;i<nodes.length;i++){
-                    v+=nodes[i].name + ",";
-                    resourceIds +=  nodes[i].id;
-                    if(i != nodes.length - 1){
-                        resourceIds +=  ",";
-                    }
+                        v+=nodes[i].name + ",";
+                        resourceIds +=  nodes[i].id;
+                        if(i != nodes.length - 1){
+                            resourceIds +=  ",";
+                        }
                 }
                 $('#resourceIds').val(resourceIds);
             });
@@ -61,7 +61,7 @@
                     分配资源
                 </header>
                 <div class="panel-body">
-                    <form:form class="form-horizontal" id="theform" action="${ctx}/allotResource/save" method="post">
+                    <form:form class="form-horizontal" id="theform" action="${ctx}/roleResource/allot" method="post">
                         <input type="hidden" class="form-control" id="roleId" name="roleId" value="${roleId}">
                         <input type="hidden" id="resourceIds" name="resourceIds" value="${resourceIds}"/>
                         <div class="form-group">

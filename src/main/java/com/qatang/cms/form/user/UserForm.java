@@ -12,7 +12,6 @@ public class UserForm extends AbstractPagingForm {
     private String errorMessage;
     private String username;
     private String password;
-    private String plainPassword;
     private String newPassword;
     private String conPassword;
     private String captcha;
@@ -45,14 +44,6 @@ public class UserForm extends AbstractPagingForm {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getPlainPassword() {
-        return plainPassword;
-    }
-
-    public void setPlainPassword(String plainPassword) {
-        this.plainPassword = plainPassword;
     }
 
     public void setPassword(String password) {

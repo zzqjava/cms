@@ -26,7 +26,7 @@ import java.util.List;
  * Created by zhangzq on 14-6-25.
  */
 @Controller
-@RequestMapping("/allotResource")
+@RequestMapping("/roleResource")
 public class RoleResourceController extends BaseController {
     @Autowired
     private IValidator<RoleResourceForm> createRoleResourceValidator;
@@ -35,8 +35,8 @@ public class RoleResourceController extends BaseController {
     @Autowired
     private ResourceService resourceService;
 
-    /*@RequiresPermissions("sys:allotResource:input")*/
-    @RequestMapping(value = "/input/{roleId}", method = RequestMethod.GET)
+    //@RequiresPermissions("sys:roleResource:allot")
+    @RequestMapping(value = "/allot/{roleId}", method = RequestMethod.GET)
     public String allotResource(@PathVariable Long roleId, Model model, RedirectAttributes redirectAttributes) {
         if (roleId == null) {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "传入的角色id为null！");
@@ -71,8 +71,8 @@ public class RoleResourceController extends BaseController {
         return "/role/allotResource";
     }
 
-    /*@RequiresPermissions("sys:role:createRoleResource")*/
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    //@RequiresPermissions("sys:roleResource:allot")
+    @RequestMapping(value = "/allot", method = RequestMethod.POST)
     public String manageAllotResource(RoleResourceForm roleResourceForm, Model model, RedirectAttributes redirectAttributes) {
         try {
             createRoleResourceValidator.validate(roleResourceForm);

@@ -16,6 +16,18 @@
                     </ul>
                     <div class="m-b-md">
                         <h3 class="m-b-none">密码修改</h3>
+                        <c:if test="${successMessage != null}" >
+                            <div class="alert alert-success fade in">
+                                <a class="close" data-dismiss="alert" href="#" id="tipSuccess">×</a>
+                                    ${successMessage}
+                            </div>
+                        </c:if>
+                        <c:if test="${errorMessage != null}" >
+                            <div class="alert alert-danger fade in">
+                                <a class="close" data-dismiss="alert" href="#" id="tipError">×</a>
+                                    ${errorMessage}
+                            </div>
+                        </c:if>
                     </div>
                     <section class="panel panel-default">
                         <div class="panel-body">
@@ -24,21 +36,21 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">旧密码</label>
                                     <div class="col-sm-8">
-                                        <input type="password" class="form-control" name="password" autofocus="" required="">
+                                        <input type="password" class="form-control" name="password" value="${userForm.password}" autofocus="" required="">
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">新密码</label>
                                     <div class="col-sm-8">
-                                        <input type="password" class="form-control" name="newPassword" required="">
+                                        <input type="password" class="form-control" name="newPassword" value="${userForm.newPassword}" required="">
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">确认密码</label>
                                     <div class="col-sm-8">
-                                        <input type="password" class="form-control" name="conPassword" required="">
+                                        <input type="password" class="form-control" name="conPassword" value="${userForm.conPassword}" required="">
                                     </div>
                                 </div>
                                 <div class="lines line-dashed line-lg pull-in"></div>

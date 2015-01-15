@@ -50,7 +50,7 @@ public class UserRealm extends AuthorizingRealm {
         List<UserRole> userRoles = userRoleService.findUserRolesByUserId(user.getId());
         List<Role> roleList = new ArrayList<>();
         for(UserRole ur : userRoles){
-            roleList.add(roleService.getRole(ur.getId()));
+            roleList.add(roleService.getRole(ur.getRoleId()));
         }
 
         Set<String> roleStrs = new HashSet<>();
