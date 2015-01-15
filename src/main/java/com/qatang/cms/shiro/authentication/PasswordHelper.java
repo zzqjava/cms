@@ -23,6 +23,11 @@ public class PasswordHelper {
         this.hashIterations = hashIterations;
     }
 
+    public boolean validatePassword(String inputPassword, User user) {
+        String inputPasswordHashValue = AuthenticatorUtils.generateHashValue(algorithmName, inputPassword, this.getSalt(user), hashIterations).toString();
+        return user.getPassword().equals(inputPasswordHashValue);
+    }
+
     public void encryptPassword(User user) {
         String randomSalt = AuthenticatorUtils.generateRandomSaltValue();
         user.setSalt(randomSalt);

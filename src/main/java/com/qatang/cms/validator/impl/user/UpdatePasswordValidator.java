@@ -4,6 +4,7 @@ import com.qatang.cms.entity.user.User;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
+import com.qatang.cms.shiro.authentication.PasswordHelper;
 import com.qatang.cms.validator.AbstractValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Component;
 public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordHelper passwordHelper;
+
     @Override
     public boolean validate(UserForm userForm) throws ValidateFailedException {
         logger.info("开始验证userForm参数");
@@ -54,7 +59,7 @@ public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
             logger.error(msg);
             throw new ValidateFailedException(msg);
         }
-        if (!DigestUtils.md5Hex(userForm.getPassword()).equals(user.getPassword())) {
+        if (!passwordHelper.validatePassword(userForm.getPassword(), user)) {
             String msg = String.format("旧密码输入错误，请重新输入");
             logger.error(msg);
             throw new ValidateFailedException(msg);
