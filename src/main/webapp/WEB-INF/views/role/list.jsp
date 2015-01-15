@@ -5,6 +5,15 @@
 <head>
     <title>角色列表</title>
     <script type="text/javascript">
+        $(function(){
+            //回显
+            $("#valid option").each(function() {
+                if ($(this).val() == '${roleForm.valid}') {
+                    $(this).attr("selected", "selected");
+                }
+            });
+        })
+
         //定时关闭提示信息
         var successMessage = '${successMessage}';
         if (successMessage != null && successMessage != '') {
