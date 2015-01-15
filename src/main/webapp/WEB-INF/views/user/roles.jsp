@@ -28,7 +28,7 @@
             </div>
             <section class="panel panel-default">
                 <div class="panel-body">
-                    <form:form class="form-horizontal" action="${ctx}/userRole/update" method="post">
+                    <form:form class="form-horizontal" action="${ctx}/userRole/allot" method="post">
                         <div class="form-group">
                             <input id="userId" type="hidden" name="id" value="${userId}" />
                             <label class="col-sm-2 control-label">角色</label>

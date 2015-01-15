@@ -7,6 +7,7 @@ import com.qatang.cms.entity.user.UserRole;
 import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.role.RoleService;
 import com.qatang.cms.service.user.UserRoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,10 +32,9 @@ public class UserRoleController extends BaseController {
     private UserRoleService userRoleService;
     @Autowired
     private RoleService roleService;
-
-    //@RequiresPermissions("sys:userRole:input")
-    @RequestMapping(value = "/update/{userId}", method = RequestMethod.GET)
-    public String update(@PathVariable Long userId, ModelMap modelMap) {
+    @RequiresPermissions("sys:userRole:allot")
+    @RequestMapping(value = "/allot/{userId}", method = RequestMethod.GET)
+    public String input(@PathVariable Long userId, ModelMap modelMap) {
         List<Role> existRoles = userRoleService.findRolesByUserId(userId);
         List<Role> rolesList = roleService.findAll();
         UserForm userForm = new UserForm();
@@ -46,8 +46,8 @@ public class UserRoleController extends BaseController {
         return "user/roles";
     }
 
-    //@RequiresPermissions("sys:userRole:update")
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequiresPermissions("sys:userRole:allot")
+    @RequestMapping(value = "/allot", method = RequestMethod.POST)
     public String update(UserForm userForm, ModelMap modelMap) {
 
         Long userId = Long.parseLong(userForm.getId());
