@@ -12,7 +12,7 @@
                     $(this).attr("selected", "selected");
                 }
             });
-        })
+        });
 
         //定时关闭提示信息
         var successMessage = '${successMessage}';
