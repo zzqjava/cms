@@ -115,7 +115,7 @@
                                     <td>
                                         <a href="${ctx}/user/update/${user.id}">修改</a>
                                         <a href="${ctx}/user/password/reset/${user.id}">密码重置</a>
-                                        <a href="${ctx}/userRole/update/${user.id}">角色管理</a>
+                                        <a href="${ctx}/userRole/allot/${user.id}">角色管理</a>
                                         <a id="validate_${user.id}" class="validate" style="cursor:pointer;" onclick="validate(${user.id})">
                                             <c:choose>
                                                 <c:when test="${user.valid.value == 0}">
