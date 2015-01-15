@@ -5,27 +5,52 @@
 <head>
     <title>角色列表</title>
     <script type="text/javascript">
-            //定时关闭提示信息
-            var successMessage = '${successMessage}';
-            if (successMessage != null && successMessage != '') {
-                closeSuccess();
-            }
-            function closeSuccess() {
-                setTimeout("closeSuccessTip()",2000);
-            }
-            function closeSuccessTip(){
-                $('#tipSuccess').click();
-            }
-            var errorMessage = '${errorMessage}';
-            if (errorMessage != null && errorMessage != '') {
-                closeError();
-            }
-            function closeError() {
-                setTimeout("closeErrorTip()",2000);
-            }
-            function closeErrorTip(){
-                $('#tipError').click();
-            }
+        //定时关闭提示信息
+        var successMessage = '${successMessage}';
+        if (successMessage != null && successMessage != '') {
+            closeSuccess();
+        }
+        function closeSuccess() {
+            setTimeout("closeSuccessTip()",2000);
+        }
+        function closeSuccessTip(){
+            $('#tipSuccess').click();
+        }
+        var errorMessage = '${errorMessage}';
+        if (errorMessage != null && errorMessage != '') {
+            closeError();
+        }
+        function closeError() {
+            setTimeout("closeErrorTip()",2000);
+        }
+        function closeErrorTip(){
+            $('#tipError').click();
+        }
+
+        function validate(id){
+            $.ajax({
+                url:"${ctx}/role/validate/" + id,
+                type:"POST",
+                dataType:"json",
+                success:function(data){
+                    var status_span = $("#status_"+id);
+                    var status_valid_span = $("#status_valid_"+id);
+                    status_span.empty();
+                    status_valid_span.empty();
+                    if (data.code=="0") {
+                        if (data.status==1) {
+                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">禁用</a>';
+                            var str1 = '<span id="status_valid_' + id + '">有效</span>';
+                        } else {
+                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">开启</a>';
+                            var str1 = '<span id="status_valid_' + id + '">无效</span>';
+                        }
+                        status_span.html(str);
+                        status_valid_span.html(str1);
+                    }
+                }
+            });
+        }
         </script>
 </head>
 <body>
@@ -100,16 +125,38 @@
                                 <td>${role.identifier}</td>
                                 <td>${role.description}</td>
                                 <td>${role.isDefault.name}</td>
-                                <td>${role.valid.name}</td>
+                                <%--<td>${role.valid.name}</td>--%>
+                                <td>
+                                    <span id="status_valid_${role.id}">
+                                         <c:choose>
+                                             <c:when test="${role.valid.value == 1}">
+                                                 有效
+                                             </c:when>
+                                             <c:otherwise>
+                                                 无效
+                                             </c:otherwise>
+                                         </c:choose>
+                                    </span>
+                                </td>
                                 <td><a href="${ctx}/role/update/${role.id}">修改</a>
-                                    <c:choose>
+<%--                                    <c:choose>
                                         <c:when test="${role.valid.value == 1}">
                                             <a href="${ctx}/role/validate/${role.id}">禁用</a>
                                         </c:when>
                                         <c:otherwise>
                                             <a href="${ctx}/role/validate/${role.id}">启用</a>
                                         </c:otherwise>
-                                    </c:choose>
+                                    </c:choose>--%>
+                                    <a href="javascript://" id="status_${role.id}" onclick="validate('${role.id}')">
+                                        <c:choose>
+                                            <c:when test="${role.valid.value == 1}">
+                                                禁用
+                                            </c:when>
+                                            <c:otherwise>
+                                                启用
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </a>
                                     <a href="${ctx}/roleResource/allot/${role.id}">分配资源</a>
                                 </td>
                             </tr>
