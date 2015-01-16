@@ -41,6 +41,18 @@
                 <td>${resource.valid.name}</td>
             </tr>
             <tr>
+                <td>创建时间</td>
+                <td>${resource.createdTime}</td>
+            </tr>
+            <tr>
+                <td>最后一次更新时间</td>
+                <td>${resource.updatedTime}</td>
+            </tr>
+            <tr>
+                <td>path</td>
+                <td>${resource.path}</td>
+            </tr>
+            <tr>
                 <td>备注</td>
                 <td>${resource.memo}</td>
             </tr>

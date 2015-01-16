@@ -45,7 +45,6 @@ public class ResourcesController extends BaseController {
     @Autowired
     private IValidator<ResourceForm> queryResourceValidator;
 
-
     @Autowired
     private ResourceService resourceService;
 
@@ -75,19 +74,15 @@ public class ResourcesController extends BaseController {
     }
 
     private void pagination(ResourceForm resourceForm, ModelMap modelMap) {
-        resourceForm.setTreeLevel("1");
-        resourceForm.setParentID("0");
         Page<Resource> resourcePage = resourceService.findAllPage(resourceForm);
         if (resourcePage != null && resourcePage.getContent() != null) {
-            List<Resource> roleList = resourcePage.getContent();
-            modelMap.addAttribute(roleList);
+            List<Resource> resourceList = resourcePage.getContent();
+            modelMap.addAttribute(resourceList);
             PageInfo pageInfo = resourceForm.getPageInfo();
             pageInfo.setTotalPages(resourcePage.getTotalPages());
             pageInfo.setCount((int)resourcePage.getTotalElements());
             resourceForm.setPageInfo(pageInfo);
         }
-        resourceForm.setTreeLevel("1");
-        resourceForm.setParentID("0");
         modelMap.addAttribute(resourceForm);
     }
 
@@ -171,7 +166,12 @@ public class ResourcesController extends BaseController {
             if (parentResource != null) {
                 parentResource.setHasChildren(YesNoStatus.YES);
                 resourceService.update(parentResource);
+                resource.setPath(parentResource.getPath() + Resource.SPRIT + resource.getId());
+                resourceService.update(resource);
             }
+        } else {
+            resource.setPath(Resource.SPRIT + resource.getId());
+            resourceService.update(resource);
         }
         redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功添加资源！");
         return "redirect:/resource/list";
@@ -205,9 +205,9 @@ public class ResourcesController extends BaseController {
         return "redirect:/resource/list" ;
     }
 
-    @RequiresPermissions("sys:resource:validate")
-    @RequestMapping(value = "/validate/{resourceId}", method = RequestMethod.POST)
-    public String validate(@PathVariable String resourceId,  PrintWriter printWriter) {
+    @RequiresPermissions("sys:resource:switchStatus")
+    @RequestMapping(value = "/switchStatus/{resourceId}", method = RequestMethod.POST)
+    public String switchStatus(@PathVariable String resourceId,  PrintWriter printWriter) {
         JSONObject rs = new JSONObject();
         ResourceForm resourceForm = new ResourceForm();
         resourceForm.setId(resourceId);

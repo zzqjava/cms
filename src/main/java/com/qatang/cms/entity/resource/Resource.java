@@ -22,6 +22,9 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 public class Resource {
+
+    public final static String SPRIT = "/";
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -52,6 +55,7 @@ public class Resource {
     @Enumerated
 	@Convert(converter = YesNoStatusConverter.class)
     private YesNoStatus hasChildren;
+    private String path;    //用来分组排序
 
     @Transient
     private List<Resource> children;
@@ -166,5 +170,13 @@ public class Resource {
 
     public void setChildren(List<Resource> children) {
         this.children = children;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
