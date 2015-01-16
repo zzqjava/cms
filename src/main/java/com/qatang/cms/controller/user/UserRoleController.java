@@ -32,7 +32,6 @@ public class UserRoleController extends BaseController {
     private UserRoleService userRoleService;
     @Autowired
     private RoleService roleService;
-
     @RequiresPermissions("sys:userRole:allot")
     @RequestMapping(value = "/allot/{userId}", method = RequestMethod.GET)
     public String input(@PathVariable Long userId, ModelMap modelMap) {
@@ -44,7 +43,7 @@ public class UserRoleController extends BaseController {
         modelMap.addAttribute("rolesList", rolesList);
         modelMap.addAttribute("existRoles", existRoles);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/userRoleInput";
+        return "user/roles";
     }
 
     @RequiresPermissions("sys:userRole:allot")
