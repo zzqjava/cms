@@ -23,8 +23,16 @@
                                 <table class="table table-striped b-t b-light">
                                     <tbody>
                                     <tr>
+                                        <td>编码</td>
+                                        <td>${user.id}</td>
+                                    </tr>
+                                    <tr>
                                         <td>用户名</td>
                                         <td>${user.username}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>密码</td>
+                                        <td>${user.password}</td>
                                     </tr>
                                     <tr>
                                         <td>姓名</td>
@@ -57,6 +65,22 @@
                                     <tr>
                                         <td>是否有效</td>
                                         <td>${user.valid.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>创建时间</td>
+                                        <td>${user.createdTime}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>更新时间</td>
+                                        <td>${user.updatedTime}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>本次登录时间</td>
+                                        <td>${user.loginTime}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>上次登录时间</td>
+                                        <td>${user.lastLoginTime}</td>
                                     </tr>
                                     </tbody>
                                 </table>

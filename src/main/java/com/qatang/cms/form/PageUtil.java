@@ -90,7 +90,7 @@ public class PageUtil {
 		}
 		
 		sb.append("<input name='pageInfo.currentPage' id='formPage' class='formPageInput' onchange='changePage(this.value)' type='text' style='width:40px;' value='"+ pageInfo.getCurrentPage() +"' />页");
-		sb.append("<input type='button' onclick='jumpPageSub()' value=' GO ' />");
+		sb.append("<button class=\"btn btn-sm btn-default\" onclick=\"jumpPageSub()\">GO</button>");
 		sb.append("</form>");
 		
 		return sb.toString();

@@ -25,7 +25,7 @@ import java.util.Date;
 @SessionAttributes(CommonConstants.KAPTCHA_SESSION_KEY)
 public class SignupController extends BaseController {
     @Autowired
-    private IValidator<UserForm> registerValidator;
+    private IValidator<UserForm> signupValidator;
     @Autowired
     private UserService userService;
     @Autowired
@@ -40,7 +40,7 @@ public class SignupController extends BaseController {
     public String signup(UserForm userForm, @ModelAttribute(CommonConstants.KAPTCHA_SESSION_KEY) String captchaExpected, RedirectAttributes redirectAttributes) {
         userForm.setCaptchaExpected(captchaExpected);
         try {
-            registerValidator.validate(userForm);
+            signupValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());

@@ -86,7 +86,10 @@
                     </li>
                     <li class="divider"></li>--%>
                     <li>
-                        <a href="${ctx}/signout" data-toggle="ajaxModal" >退出</a>
+                        <a href="${ctx}/user/password/update/" data-toggle="ajaxModal">修改密码</a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/signout" data-toggle="ajaxModal">退出</a>
                     </li>
                 </ul>
             </li>
@@ -104,56 +107,28 @@
                             <!-- nav -->
                             <nav class="nav-primary hidden-xs">
                                 <ul class="nav">
-<%--                                    <c:forEach items="${menuBeans}" var="menuBean">
+                                    <c:forEach items="${resourceListForMenu}" var="resourceParent">
                                         <li class="active">
                                             <a href="index.html"   class="active">
                                                 <i class="fa fa-dashboard icon">
                                                     <b class="bg-danger"></b>
                                                 </i>
-                                                <span>${menuBean.menu.name}</span>
+                                                <span>${resourceParent.name}</span>
                                             </a>
-                                            <c:if test="${menuBean.subMenus != null}">
+                                            <c:if test="${resourceParent.children != null}">
                                                 <ul class="nav lt">
-                                                    <c:forEach items="${menuBean.subMenus}" var="menu">
+                                                    <c:forEach items="${resourceParent.children}" var="resource">
                                                         <li >
-                                                            <a href="${ctx}${menu.url}" >
+                                                            <a href="${ctx}${resource.url}" >
                                                                 <i class="fa fa-angle-right"></i>
-                                                                <span>${menu.name}</span>
+                                                                <span>${resource.name}</span>
                                                             </a>
                                                         </li>
                                                     </c:forEach>
                                                 </ul>
                                             </c:if>
                                         </li>
-                                    </c:forEach>--%>
-                                    <li class="active">
-                                        <a href="index.html"   class="active">
-                                            <i class="fa fa-dashboard icon">
-                                                <b class="bg-danger"></b>
-                                            </i>
-                                            <span>系统管理</span>
-                                        </a>
-                                        <ul class="nav lt">
-                                            <li >
-                                                <a href="${ctx}/user/list" >
-                                                    <i class="fa fa-angle-right"></i>
-                                                    <span>用户管理</span>
-                                                </a>
-                                            </li>
-                                            <li >
-                                                <a href="${ctx}/resource/list" >
-                                                    <i class="fa fa-angle-right"></i>
-                                                    <span>资源管理</span>
-                                                </a>
-                                            </li>
-                                            <li >
-                                                <a href="${ctx}/role/list" >
-                                                    <i class="fa fa-angle-right"></i>
-                                                    <span>角色管理</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    </c:forEach>
                                 </ul>
                             </nav>
                             <!-- / nav -->

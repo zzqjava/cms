@@ -1,9 +1,16 @@
 package com.qatang.cms.controller;
 
 import com.qatang.cms.constants.CommonConstants;
+import com.qatang.cms.entity.resource.Resource;
+import com.qatang.cms.entity.role.Role;
+import com.qatang.cms.entity.role.RoleResource;
 import com.qatang.cms.entity.user.User;
+import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.user.UserForm;
+import com.qatang.cms.service.resource.ResourceService;
+import com.qatang.cms.service.role.RoleResourceService;
+import com.qatang.cms.service.user.UserRoleService;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.shiro.SecurityUtils;
@@ -20,7 +27,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by qatang on 14-6-5.
@@ -32,6 +39,9 @@ public class SigninController extends BaseController {
     private IValidator<UserForm> signinValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ResourceService resourceService;
+
 
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
     public String signinPage() {
@@ -48,8 +58,12 @@ public class SigninController extends BaseController {
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             return "redirect:/signin";
         }
-
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userForm.getUsername(), userForm.getPassword());
+        if (userForm.getRememberMe() == null) {
+            usernamePasswordToken.setRememberMe(false);
+        } else {
+            usernamePasswordToken.setRememberMe(true);
+        }
 
         Subject subject = SecurityUtils.getSubject();
 
@@ -69,6 +83,28 @@ public class SigninController extends BaseController {
         user.setLastLoginTime(user.getLoginTime());
         user.setLoginTime(new Date());
         userService.update(user);
+        List<Resource> tempList = resourceService.query(user.getId(), ResourcesType.MENU);
+        List<Resource> resourceList = new ArrayList<>();
+        Map<Long, Resource> resourceListMap = new LinkedHashMap<>();
+        if (tempList != null) {
+            for (Resource resource : tempList) {
+                if (resource.getParentID() == 0) {
+                    resource.setChildren(new ArrayList<Resource>());
+                    resourceListMap.put(resource.getId(), resource);
+                }
+            }
+            for (Resource resource : tempList) {
+                if (resource.getParentID() != 0) {
+                    if (resourceListMap.get(resource.getParentID()) != null) {
+                        resourceListMap.get(resource.getParentID()).getChildren().add(resource);
+                    }
+                }
+            }
+        }
+        for (Long key : resourceListMap.keySet()) {
+            resourceList.add(resourceListMap.get(key));
+        }
+        request.getSession().setAttribute(CommonConstants.RESOURCES_SESSION_KEY, resourceList);
         return "redirect:/dashboard";
     }
 }
