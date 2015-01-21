@@ -11,7 +11,7 @@
             };
             function switchStatus (id) {
                 $.ajax({
-                    url:"${ctx}/user/switch/status/" + id,
+                    url:"${ctx}/user/switchStatus/" + id,
                     type:"POST",
                     dataType:"json",
                     success:function (data) {

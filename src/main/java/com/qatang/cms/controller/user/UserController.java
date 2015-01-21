@@ -187,7 +187,7 @@ public class UserController extends BaseController {
     }
 
     @RequiresPermissions("sys:user:switchStatus")
-    @RequestMapping(value = "/switch/status/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/switchStatus/{id}", method = RequestMethod.POST)
     public @ResponseBody
     String switchStatus(@PathVariable String id) {
         Long userId;

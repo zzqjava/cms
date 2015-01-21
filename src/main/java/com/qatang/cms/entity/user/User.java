@@ -28,7 +28,6 @@ public class User implements Serializable {
     private String salt;
     private String name;
     private String email;
-    @Enumerated
     @Convert(converter = GenderConverter.class)
     private Gender gender;
     private String mobile;
@@ -44,7 +43,6 @@ public class User implements Serializable {
     private Date lastLoginTime;
     @Column(name = "qq")
     private String QQ;
-    @Enumerated
     @Convert(converter = EnableDisableStatusConverter.class)
     private EnableDisableStatus valid;
 
