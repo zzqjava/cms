@@ -5,9 +5,9 @@ package com.qatang.cms.constants;
  */
 public class CommonConstants {
     public final static String USER_SESSION_KEY = "user_session_key";
+    public final static String RESOURCES_SESSION_KEY = "resources_session_key";
     public final static String KAPTCHA_SESSION_KEY = com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
     public final static String QUERY_CONDITION_KEY = "query_condition_key";
-	public final static String ROLE_QUERY_CONDITION_KEY = "role_query_condition_key";
     public final static String CURRENT_USER = "user";
 
     /**

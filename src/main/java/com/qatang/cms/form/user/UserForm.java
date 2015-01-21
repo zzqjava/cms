@@ -25,6 +25,7 @@ public class UserForm extends AbstractPagingForm {
     private String orderType;
     private String sortType;
     private List<Long> roleIdList;
+    private Boolean rememberMe;
 
     public String getId() {
         return id;
@@ -160,5 +161,13 @@ public class UserForm extends AbstractPagingForm {
 
     public void setRoleIdList(List<Long> roleIdList) {
         this.roleIdList = roleIdList;
+    }
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(Boolean rememberMe) {
+        this.rememberMe = rememberMe;
     }
 }

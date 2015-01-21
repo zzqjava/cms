@@ -31,7 +31,7 @@
                     </div>
                     <section class="panel panel-default">
                         <div class="panel-body">
-                            <form class="form-horizontal" action="${ctx}/user/password/update" method="post">
+                            <form class="form-horizontal" action="${ctx}/user/password/change" method="post">
                                 <input type="hidden" name="id" value="${userForm.id}">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">旧密码</label>

@@ -87,7 +87,7 @@ INSERT INTO `c_resource` VALUES (9, 'sys:role:create', 2, 3, 4, 2, '角色添加
 INSERT INTO `c_resource` VALUES (10, 'sys:role:update', 2, 3, 4, 2, '角色修改', '/role/update', 0, 1, '', '2014-12-31 16:47:01', '2015-1-16 14:02:00', '/1/4/10');
 INSERT INTO `c_resource` VALUES (11, 'sys:user:list', 2, 3, 2, 2, '用户列表', '/user/list', 0, 1, '', '2015-1-8 10:44:04', '2015-1-16 14:02:06', '/1/2/11');
 INSERT INTO `c_resource` VALUES (12, 'sys:user:detail', 2, 3, 2, 2, '用户查看', '/user/detail', 0, 1, '', '2015-1-14 16:19:22', '2015-1-16 14:02:11', '/1/2/12');
-INSERT INTO `c_resource` VALUES (13, 'sys:user:switchStatus', 2, 3, 2, 2, '启用/禁用', '/user/switch/status', 0, 1, '', '2015-1-14 17:01:13', '2015-1-16 14:02:16', '/1/2/13');
+INSERT INTO `c_resource` VALUES (13, 'sys:user:switchStatus', 2, 3, 2, 2, '启用/禁用', '/user/switchStatus', 0, 1, '', '2015-1-14 17:01:13', '2015-1-16 14:02:16', '/1/2/13');
 INSERT INTO `c_resource` VALUES (14, 'sys:user:changePassword', 2, 3, 2, 2, '修改密码', '/user/password/change', 0, 1, '', '2015-1-14 17:14:25', '2015-1-16 14:02:21', '/1/2/14');
 INSERT INTO `c_resource` VALUES (15, 'sys:user:forgetPassword', 2, 3, 2, 2, '忘记密码', '/password/forget', 0, 1, '', '2015-1-14 17:15:02', '2015-1-16 14:02:26', '/1/2/15');
 INSERT INTO `c_resource` VALUES (16, 'sys:user:resetPassword', 2, 3, 2, 2, '重置密码', '/password/reset', 0, 1, '', '2015-1-14 17:15:28', '2015-1-16 14:02:32', '/1/2/16');
@@ -100,8 +100,8 @@ INSERT INTO `c_resource` VALUES (22, 'sys:userRole:allot', 2, 3, 2, 2, '分配�
 INSERT INTO `c_resource` VALUES (23, 'sys:roleResource:allot', 2, 3, 3, 2, '分配资源', '/roleResource/allot', 0, 1, '', '2015-1-14 18:22:10', '2015-1-16 14:03:08', '/1/3/23');
 INSERT INTO `c_resource` VALUES (24, 'sys:role:detail', 2, 3, 4, 2, ' 角色查看', '/role/detail', 0, 1, '', '2015-1-14 18:22:56', '2015-1-16 14:03:14', '/1/4/24');
 
-INSERT INTO `c_role` VALUES ('1', '', '系统管理员', '系统管理员', '2', '1', '0000-00-00 00:00:00', '2014-12-27 19:07:03');
-INSERT INTO `c_role` VALUES ('2', '', '普通用户', '普通用户', '1', '1', '2014-12-24 11:30:14', '2014-12-24 20:45:00');
+INSERT INTO `c_role` VALUES ('1', 'system', '系统管理员', '系统管理员', '2', '1', '0000-00-00 00:00:00', '2014-12-27 19:07:03');
+INSERT INTO `c_role` VALUES ('2', 'common', '普通用户', '普通用户', '1', '1', '2014-12-24 11:30:14', '2014-12-24 20:45:00');
 
 INSERT INTO `c_user` VALUES ('1', 'qatang', '79926f441a7c8dca5a2e0711ac1d8173', 'd92d97bfab3275222b49b361a4db2b50', '唐鹏飞', 'qatang@gmail.com', '15901298088', '1', '2014-12-18 16:24:59', '2014-12-27 15:34:17', '2015-01-14 18:54:51', '2015-01-14 18:51:56', '977269167', '1');
 
