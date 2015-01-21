@@ -2,6 +2,7 @@ package com.qatang.cms.service.impl.resource;
 
 import com.qatang.cms.dao.resource.ResourceDao;
 import com.qatang.cms.entity.resource.Resource;
+import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.form.resource.ResourceForm;
 import com.qatang.cms.service.resource.ResourceService;
@@ -118,5 +119,10 @@ public class ResourceServiceImpl implements ResourceService {
             }
         }
         return page;
+    }
+
+    @Override
+    public List<Resource> query(Long userId, ResourcesType resourcesType) {
+        return resourceDao.query(userId, resourcesType);
     }
 }
