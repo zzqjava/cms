@@ -107,7 +107,7 @@
                         <div class="col-sm-2 m-b-xs">
                                     <div class="input-group">
                                         <span class="input-group-addon input-sm">是否有效</span>
-                                        <form:select path="queryEnableDisableStatus" cssStyle="width:76px;" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
+                                        <form:select path="queryEnableDisableStatus" cssStyle="width:100px;" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
                                     </div>
                         </div>
                         <div class="col-sm-1 m-b-xs">
