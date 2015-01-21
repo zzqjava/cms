@@ -44,7 +44,6 @@ public class ResourcesController extends BaseController {
     private IValidator<ResourceForm> detailResourceValidator;
     @Autowired
     private IValidator<ResourceForm> queryResourceValidator;
-
     @Autowired
     private ResourceService resourceService;
 
