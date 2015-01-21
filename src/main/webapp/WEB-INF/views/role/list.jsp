@@ -38,7 +38,7 @@
 
         function validate(id){
             $.ajax({
-                url:"${ctx}/role/validate/" + id,
+                url:"${ctx}/role/switchStatus/" + id,
                 type:"POST",
                 dataType:"json",
                 success:function(data){
