@@ -86,10 +86,10 @@
                     </li>
                     <li class="divider"></li>--%>
                     <li>
-                        <a href="${ctx}/user/password/update/" data-toggle="ajaxModal">修改密码</a>
+                        <a href="${ctx}/user/password/change/">修改密码</a>
                     </li>
                     <li>
-                        <a href="${ctx}/signout" data-toggle="ajaxModal">退出</a>
+                        <a href="${ctx}/signout">退出</a>
                     </li>
                 </ul>
             </li>

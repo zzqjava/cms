@@ -9,23 +9,24 @@
                 $("#page").val(page);
                 $("#pageForm").submit();
             };
-            function validate (id) {
+            function switchStatus (id) {
                 $.ajax({
-                    url:"${ctx}/user/validate/" + id,
+                    url:"${ctx}/user/switch/status/" + id,
                     type:"POST",
                     dataType:"json",
                     success:function (data) {
-                        var valid = $("#valid_" + id);
-                        var validate = $("#validate_" + id);
-                        valid.empty();
-                        validate.empty();
-                        if (data.success) {
-                            if (data.enableDisableStatus == 1) {
+                        if (data != null) {
+                            var value = parseInt(data, 10);
+                            var valid = $("#valid_" + id);
+                            var validate = $("#validate_" + id);
+                            valid.empty();
+                            validate.empty();
+                            if (value == 0) {
                                 var validStr = '无效';
-                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="validate(' + id + ')">启用</a>';
-                            } else if (data.enableDisableStatus == 0) {
+                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="switchStatus(' + id + ')">启用</a>';
+                            } else if (value == 1) {
                                 var validStr = '有效';
-                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="validate(' + id + ')">禁用</a>';
+                                var validateStr = '<a id="validate_' + id + '" class="validate" style="cursor:pointer;" onclick="switchStatus(' + id + ')">禁用</a>';
                             }
                             valid.html(validStr);
                             validate.html(validateStr);
@@ -53,37 +54,39 @@
                     <section class="panel panel-default">
                         <form class="form-inline" id="queryForm" action="${ctx}/user/list" method="post">
                             <div class="row wrapper">
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">用户名：</span>
-                                        <input type="text" name="username" id="username" value="${userForm.username}" class="form-control">
+                                        <span class="input-group-addon input-sm">用户名：</span>
+                                        <input type="text" style="width:75%;" name="username" id="username" value="${userForm.username}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">姓名：</span>
-                                        <input type="text" name="name" id="name" value="${userForm.name}" class="form-control">
+                                        <span class="input-group-addon input-sm">姓名：</span>
+                                        <input type="text" style="width:75%;" name="name" id="name" value="${userForm.name}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">邮箱：</span>
-                                        <input type="text" name="email" id="email" value="${userForm.email}" class="form-control">
+                                        <span class="input-group-addon input-sm">邮箱：</span>
+                                        <input type="text" style="width:75%;" name="email" id="email" value="${userForm.email}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon">手机号：</span>
-                                        <input type="text" name="mobile" id="mobile" value="${userForm.mobile}" class="form-control">
+                                        <span class="input-group-addon input-sm">手机号：</span>
+                                        <input type="text" style="width:75%;" name="mobile" id="mobile" value="${userForm.mobile}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 m-b-xs">
+                                <div class="col-sm-4 m-b-xs">
                                     <div class="input-group">
-                                        <span class="input-group-addon ">性别：</span>
-                                        <form:select path="queryGenderList" items="${queryGenderList}" itemValue="value" class="form-control" itemLabel="name" name="genderValue" id="genderValue"/>
+                                        <span class="input-group-addon input-sm">性别：</span>
+                                        <form:select style="width:80px;" path="queryGenderList" items="${queryGenderList}" itemValue="value" class="form-control" itemLabel="name" name="genderValue" id="genderValue"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-1 m-b-xs">
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-5 col-sm-2 m-b-xs">
                                     <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
                                 </div>
                             </div>
@@ -116,9 +119,9 @@
                                         <a href="${ctx}/user/update/${user.id}">修改</a>
                                         <a href="${ctx}/user/password/reset/${user.id}">密码重置</a>
                                         <a href="${ctx}/userRole/allot/${user.id}">角色管理</a>
-                                        <a id="validate_${user.id}" class="validate" style="cursor:pointer;" onclick="validate(${user.id})">
+                                        <a id="validate_${user.id}" class="validate" style="cursor:pointer;" onclick="switchStatus(${user.id})">
                                             <c:choose>
-                                                <c:when test="${user.valid.value == 0}">
+                                                <c:when test="${user.valid.value == 1}">
                                                     禁用
                                                 </c:when>
                                                 <c:otherwise>
@@ -132,30 +135,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <%--<footer class="panel-footer">--%>
-                            <%--<div class="row">--%>
-                                <%--<div class="col-sm-4 hidden-xs">--%>
-                                <%--</div>--%>
-                                <%--<div class="col-sm-4 text-center">--%>
-                                <%--</div>--%>
-                                <%--<div class="col-sm-4 text-right text-center-xs">--%>
-                                    <%--<form id="pageForm" class="form-inline" action="${ctx}/user/list" method="post">--%>
-                                        <%--<input id="page" type="hidden" name="pageInfo.currentPage">--%>
-                                        <%--<ul class="pagination pagination-sm m-t-none m-b-none">--%>
-                                            <%--<c:if test="${userForm.pageInfo.currentPage > 1}">--%>
-                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage - 1});"><i class="fa fa-chevron-left"></i></a></li>--%>
-                                            <%--</c:if>--%>
-                                            <%--<c:forEach begin="1" end="${userForm.pageInfo.totalPages}" var="i">--%>
-                                                <%--<li><a onclick="goPage(${i});" style="cursor:pointer;<c:if test="${userForm.pageInfo.currentPage == i}"> background-color:#EEE;</c:if>">${i}</a></li>--%>
-                                            <%--</c:forEach>--%>
-                                            <%--<c:if test="${userForm.pageInfo.currentPage < userForm.pageInfo.totalPages}">--%>
-                                                <%--<li><a style="cursor:pointer;" onclick="goPage(${userForm.pageInfo.currentPage + 1});"><i class="fa fa-chevron-right"></i></a></li>--%>
-                                            <%--</c:if>--%>
-                                        <%--</ul>--%>
-                                    <%--</form>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                        <%--</footer>--%>
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-4 hidden-xs">

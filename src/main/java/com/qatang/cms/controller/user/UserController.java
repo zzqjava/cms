@@ -1,7 +1,5 @@
 package com.qatang.cms.controller.user;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.qatang.cms.constants.CommonConstants;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
@@ -24,20 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
 import java.util.*;
 
 /**
  * Created by JSH on 2014/6/26.
  */
 @Controller
-//@SessionAttributes(CommonConstants.QUERY_CONDITION_KEY)
 @RequestMapping("/user")
 public class UserController extends BaseController {
     @Autowired
@@ -47,7 +40,7 @@ public class UserController extends BaseController {
     @Autowired
     private UpdateUserValidator updateUserValidator;
     @Autowired
-    private UpdatePasswordValidator updatePasswordValidator;
+    private ChangePasswordValidator changePasswordValidator;
     @Autowired
     private ResetPasswordValidator resetPasswordValidator;
     @Autowired
@@ -70,7 +63,6 @@ public class UserController extends BaseController {
         }
         pagination(userForm, modelMap);
         userForm.setPageString(PageUtil.getPageString(request, userForm.getPageInfo()));
-//        pagination(userForm, modelMap, request);
         return "user/list";
     }
 
@@ -87,7 +79,6 @@ public class UserController extends BaseController {
         }
         pagination(userForm, modelMap);
         userForm.setPageString(PageUtil.getPageString(request, userForm.getPageInfo()));
-//        pagination(userForm, modelMap, request);
         return "user/list";
     }
 
@@ -195,20 +186,15 @@ public class UserController extends BaseController {
         return "success";
     }
 
-    @RequiresPermissions("sys:user:validate")
-    @RequestMapping(value = "validate/{id}", method = RequestMethod.POST)
-    public String validate(@PathVariable String id, PrintWriter printWriter) {
-        JSONObject jsonObject = new JSONObject();
+    @RequiresPermissions("sys:user:switchStatus")
+    @RequestMapping(value = "/switch/status/{id}", method = RequestMethod.POST)
+    public @ResponseBody
+    String switchStatus(@PathVariable String id) {
         Long userId;
         try {
             userId = Long.parseLong(id);
         } catch (NumberFormatException e) {
             logger.error("禁用/启用用户，用户id不合法");
-            jsonObject.put("success", false);
-            jsonObject.put("message", e.getMessage());
-            printWriter.write(JSON.toJSONString(jsonObject));
-            printWriter.flush();
-            printWriter.close();
             return null;
         }
         User user = userService.get(userId);
@@ -216,12 +202,8 @@ public class UserController extends BaseController {
         enableDisableStatus = enableDisableStatus.getValue() == EnableDisableStatus.ENABLE.getValue() ? EnableDisableStatus.DISABLE : EnableDisableStatus.ENABLE;
         user.setValid(enableDisableStatus);
         userService.update(user);
-        jsonObject.put("success", true);
-        jsonObject.put("enableDisableStatus", enableDisableStatus.getValue());
-        printWriter.write(JSON.toJSONString(jsonObject));
-        printWriter.flush();
-        printWriter.close();
-        return null;
+        String value = String.valueOf(enableDisableStatus.getValue());
+        return value;
     }
 
     @RequiresPermissions("sys:user:detail")
@@ -249,27 +231,27 @@ public class UserController extends BaseController {
         return "user/detail";
     }
 
-    @RequiresPermissions("sys:user:updatePassword")
-    @RequestMapping(value = "/password/update", method = RequestMethod.GET)
-    public String updatePasswordGet(UserForm userForm, ModelMap modelMap) {
+    @RequiresPermissions("sys:user:changePassword")
+    @RequestMapping(value = "/password/change", method = RequestMethod.GET)
+    public String changePasswordGet(UserForm userForm, ModelMap modelMap) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String userId = String.valueOf(user.getId());
         userForm.setId(userId);
         modelMap.addAttribute(userForm);
         modelMap.addAttribute(FORWARD_URL, "/user/list");
-        return "user/passwordUpdate";
+        return "user/passwordChange";
     }
 
-    @RequiresPermissions("sys:user:updatePassword")
-    @RequestMapping(value = "/password/update", method = RequestMethod.POST)
-    public String updatePasswordPost(UserForm userForm, ModelMap modelMap) {
+    @RequiresPermissions("sys:user:changePassword")
+    @RequestMapping(value = "/password/change", method = RequestMethod.POST)
+    public String changePasswordPost(UserForm userForm, ModelMap modelMap) {
         try {
-            updatePasswordValidator.validate(userForm);
+            changePasswordValidator.validate(userForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             modelMap.addAttribute(FORWARD_URL, "/user/list");
-            return "user/passwordUpdate";
+            return "user/passwordChange";
         }
         Long id = Long.parseLong(userForm.getId());
         User user = userService.get(id);
@@ -318,18 +300,6 @@ public class UserController extends BaseController {
         modelMap.addAttribute(FORWARD_URL, "/signin");
         return "user/passwordForget";
     }
-
-//    private void pagination(UserForm userForm, ModelMap modelMap, HttpServletRequest request) {
-//        Page<User> page = userService.getAll(userForm);
-//        if (page.getContent() != null) {
-//            List<User> userList = page.getContent();
-//            modelMap.addAttribute(userList);
-//        }
-//        PageInfo pageInfo = userForm.getPageInfo();
-//        pageInfo.setTotalPages(page.getTotalPages());
-//        modelMap.addAttribute(userForm);
-//        request.getSession().setAttribute(CommonConstants.QUERY_CONDITION_KEY, userForm);
-//    }
 
     private void pagination(UserForm userForm, ModelMap modelMap) {
         Page<User> userPage = userService.getAll(userForm);

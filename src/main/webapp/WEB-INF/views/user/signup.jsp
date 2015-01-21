@@ -25,19 +25,19 @@
         <form action="${ctx}/signup" method="post" class="panel-body wrapper-lg">
           <div class="form-group">
             <label class="control-label">账户</label>
-            <input type="text" placeholder="账户名" name="username" class="form-control input-lg">
+            <input type="text" placeholder="账户名" name="username" class="form-control input-lg" value="${userForm.username}">
           </div>
           <div class="form-group">
             <label class="control-label">邮箱</label>
-            <input type="text" placeholder="邮箱" name="email" class="form-control input-lg">
+            <input type="text" placeholder="邮箱" name="email" class="form-control input-lg" value="${userForm.email}">
           </div>
           <div class="form-group">
             <label class="control-label">密码</label>
-            <input type="password" id="password" name="password" placeholder="密码" class="form-control input-lg">
+            <input type="password" id="password" name="password" placeholder="密码" class="form-control input-lg" value="${userForm.password}">
           </div>
           <div class="form-group">
             <label class="control-label">确认密码</label>
-            <input type="password" id="conPassword" name="conPassword" placeholder="确认密码" class="form-control input-lg">
+            <input type="password" id="conPassword" name="conPassword" placeholder="确认密码" class="form-control input-lg" value="${userForm.conPassword}">
           </div>
           <div class="form-group">
             <label class="control-label">验证码</label>
