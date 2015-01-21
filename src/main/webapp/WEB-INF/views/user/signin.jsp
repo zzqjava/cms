@@ -36,6 +36,9 @@
             <input type="text" id="captcha" name="captcha" autofocus="" required="" placeholder="验证码" class="form-control input-lg">
             <img class="img-thumbnail" id="captchaImg" title="看不清？点击图片刷新"/>
           </div>
+          <div class="form-group">
+            <input type="checkbox" value="true" name="rememberMe">记住我
+          </div>
           <a href="${ctx}/signin" class="pull-right m-t-xs"><small>忘记密码？</small></a>
           <button type="submit" class="btn btn-primary">登录</button>
           <a href="${ctx}/signup" class="btn btn-primary">注册</a>
