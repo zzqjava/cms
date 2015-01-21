@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="zh-cn">
 <head>
-    <title>菜单管理</title>
+    <title>资源管理</title>
     <script type="text/javascript">
         $(function(){
             //回显
@@ -36,7 +36,7 @@
             closeSuccess();
         }
         function closeSuccess() {
-            setTimeout("closeSuccessTip()",3000);
+            setTimeout("closeSuccessTip()",2000);
         }
         function closeSuccessTip(){
             $('#tipSuccess').click();
@@ -46,7 +46,7 @@
             closeError();
         }
         function closeError() {
-            setTimeout("closeErrorTip()",3000);
+            setTimeout("closeErrorTip()",2000);
         }
         function closeErrorTip(){
             $('#tipError').click();
@@ -62,26 +62,12 @@
                 <li><a href="#">系统管理</a></li>
                 <li class="${ctx}/user/list"><a href="#">资源管理</a></li>
                 <li class="active">
-                    <c:choose>
-                        <c:when test="${resourceForm.id == null}">
-                            添加资源
-                        </c:when>
-                        <c:otherwise>
-                            修改资源
-                        </c:otherwise>
-                    </c:choose>
+                    修改资源
                 </li>
             </ul>
             <section class="panel panel-default">
                 <header class="panel-heading font-bold">
-                    <c:choose>
-                        <c:when test="${resourceForm.id == null}">
-                            添加资源
-                        </c:when>
-                        <c:otherwise>
-                            修改资源
-                        </c:otherwise>
-                    </c:choose>
+                    修改资源
                 </header>
                 <c:if test="${successMessage != null}" >
                     <div class="alert alert-success fade in">
@@ -122,14 +108,14 @@
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单排序</label>
+                            <label class="col-sm-2 control-label">资源排序</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="priority" placeholder="${resourceForm.priority}" value="${resourceForm.priority}" required="">
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单类型</label>
+                            <label class="col-sm-2 control-label">资源类型</label>
                             <div class="col-sm-1">
                                 <select class="form-control" name="type" id="type">
                                     <c:forEach items="${resourcesTypeItems}" var="resourcesTypeItem">
@@ -151,7 +137,7 @@
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单备注</label>
+                            <label class="col-sm-2 control-label">资源备注</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" rows="3" name="memo">${resourceForm.memo}</textarea>
                             </div>
@@ -159,14 +145,7 @@
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <c:choose>
-                                    <c:when test="${resourceForm.id == null}">
-                                        <button class="btn btn-default" id="sub" name="sub" onclick="save()" type="button" data-complete-text="正在提交...">添加</button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button class="btn btn-default" id="sub" name="sub" onclick="update()" type="button" data-complete-text="正在提交...">修改</button>
-                                    </c:otherwise>
-                                </c:choose>
+                                <button class="btn btn-default" id="sub" name="sub" onclick="update()" type="button" data-complete-text="正在提交...">修改</button>
                                 <a class="btn btn-default" href="${ctx}${forwardUrl}">返回</a>
                             </div>
                         </div>

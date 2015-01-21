@@ -1,5 +1,7 @@
 package com.qatang.cms.controller.role;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.role.Role;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -178,29 +181,44 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("sys:role:validate")
-    @RequestMapping(value = "/validate/{roleId}", method = RequestMethod.GET)
-    public String toggleValidStatus(@PathVariable String roleId, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/validate/{roleId}", method = RequestMethod.POST)
+    public String validate(@PathVariable String roleId, PrintWriter printWriter) {
+        JSONObject rs = new JSONObject();
         RoleForm roleForm = new RoleForm();
         roleForm.setId(roleId);
         try {
             roleFormTypeConverterValidator.validate(roleForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            redirectAttributes.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            return "redirect:/role/list";
+            rs.put("code", "1");
+            rs.put("message", e.getMessage());
+            printWriter.write(JSON.toJSONString(rs));
+            printWriter.flush();
+            printWriter.close();
+            return null;
         }
         Role role = roleService.getRole(Long.parseLong(roleId));
         if (role == null) {
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, "要切换状态的角色对象不存在！");
+            rs.put("code", "1");
+            rs.put("message", "要切换状态的角色对象不存在！");
+            printWriter.write(JSON.toJSONString(rs));
+            printWriter.flush();
+            printWriter.close();
+            return null;
         }
         if (role.getValid().getValue() == EnableDisableStatus.ENABLE.getValue()) {
             role.setValid(EnableDisableStatus.DISABLE);
         } else if (role.getValid().getValue() == EnableDisableStatus.DISABLE.getValue()) {
             role.setValid(EnableDisableStatus.ENABLE);
         }
+        rs.put("status",role.getValid().getValue());
         roleService.update(role);
-        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功切换角色的状态！");
-        return "redirect:/role/list";
+        rs.put("message", "成功切换角色的状态！");
+        rs.put("code", "0");
+        printWriter.write(JSON.toJSONString(rs));
+        printWriter.flush();
+        printWriter.close();
+        return null;
     }
 
     private void pagination(RoleForm roleForm, ModelMap modelMap) {

@@ -1,5 +1,7 @@
 package com.qatang.cms.controller.resource;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.qatang.cms.controller.BaseController;
 import com.qatang.cms.entity.resource.Resource;
 import com.qatang.cms.enums.EnableDisableStatus;
@@ -7,10 +9,12 @@ import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.enums.YesNoStatus;
 import com.qatang.cms.exception.validator.ValidateFailedException;
 import com.qatang.cms.form.PageInfo;
+import com.qatang.cms.form.PageUtil;
 import com.qatang.cms.form.resource.ResourceForm;
 import com.qatang.cms.service.resource.ResourceService;
 import com.qatang.cms.validator.IValidator;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -32,70 +37,78 @@ import java.util.*;
 public class ResourcesController extends BaseController {
 
     @Autowired
-    private IValidator<ResourceForm> resourceValidator;
+    private IValidator<ResourceForm> createResourceValidator;
     @Autowired
-    private IValidator<ResourceForm> resourceUpdateValidator;
+    private IValidator<ResourceForm> updateResourceValidator;
     @Autowired
-    private IValidator<ResourceForm> resourceViewValidator;
+    private IValidator<ResourceForm> detailResourceValidator;
+    @Autowired
+    private IValidator<ResourceForm> queryResourceValidator;
+
 
     @Autowired
     private ResourceService resourceService;
 
-    //    @RequiresPermissions("sys:resource:list")
-    @RequestMapping(value = "/list/{currentPage}", method = RequestMethod.POST)
-    public String list(@PathVariable String currentPage, ResourceForm resourceForm, ModelMap modelMap, HttpServletRequest request) {
-        if (currentPage == null || "".equals(currentPage) || Integer.parseInt(currentPage) < 1) {
-            currentPage = 1 + "";
-        }
-        resourceForm.getPageInfo().setCurrentPage(Integer.parseInt(currentPage));
-        pagination(resourceForm, modelMap, request);
-        return "resource/resourceList";
+    @RequiresPermissions("sys:resource:list")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(ModelMap modelMap, HttpServletRequest request) {
+        ResourceForm resourceForm = new ResourceForm();
+        //只查第一级资源
+        pagination(resourceForm, modelMap);
+        resourceForm.setPageString(PageUtil.getPageString(request, resourceForm.getPageInfo()));
+        return "resource/list";
     }
 
-    //    @RequiresPermissions("sys:resource:list")
-    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequiresPermissions("sys:resource:list")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     public String list(ResourceForm resourceForm, ModelMap modelMap, HttpServletRequest request) {
+        try {
+            queryResourceValidator.validate(resourceForm);
+        } catch (ValidateFailedException e) {
+            logger.error(e.getMessage(), e);
+            modelMap.addAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            return "resource/list";
+        }
+        pagination(resourceForm, modelMap);
+        resourceForm.setPageString(PageUtil.getPageString(request, resourceForm.getPageInfo()));
+        return "resource/list";
+    }
+
+    private void pagination(ResourceForm resourceForm, ModelMap modelMap) {
+        resourceForm.setTreeLevel("1");
+        resourceForm.setParentID("0");
+        Page<Resource> resourcePage = resourceService.findAllPage(resourceForm);
+        if (resourcePage != null && resourcePage.getContent() != null) {
+            List<Resource> roleList = resourcePage.getContent();
+            modelMap.addAttribute(roleList);
+            PageInfo pageInfo = resourceForm.getPageInfo();
+            pageInfo.setTotalPages(resourcePage.getTotalPages());
+            pageInfo.setCount((int)resourcePage.getTotalElements());
+            resourceForm.setPageInfo(pageInfo);
+        }
+        resourceForm.setTreeLevel("1");
+        resourceForm.setParentID("0");
+        modelMap.addAttribute(resourceForm);
+    }
+
+    @RequiresPermissions("sys:resource:create")
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String create(ResourceForm resourceForm, ModelMap modelMap) {
         if (resourceForm == null) {
             resourceForm = new ResourceForm();
         }
-        pagination(resourceForm, modelMap, request);
-        return "resource/resourceList";
-    }
-
-    private void pagination (ResourceForm resourceForm, ModelMap modelMap, HttpServletRequest request) {
-        //只查第一级资源
-        resourceForm.setTreeLevel("1");
-        resourceForm.setParentID("0");
-
-        Page<Resource> resourcePage = resourceService.findAllPage(resourceForm);
-        if (resourcePage != null) {
-            if (resourcePage.getContent() != null) {
-                List<Resource> resourceList = resourcePage.getContent();
-                modelMap.addAttribute(resourceList);
-            }
-            PageInfo pageInfo = resourceForm.getPageInfo();
-            pageInfo.setTotalPages(resourcePage.getTotalPages());
-        }
-        resourceForm.setTreeLevel("1");
-        resourceForm.setParentID("0");
-        modelMap.addAttribute(resourceForm);
-    }
-
-    //    @RequiresPermissions("sys:resource:input")
-    @RequestMapping(value = "/input")
-    public String input(ResourceForm resourceForm, ModelMap modelMap) {
         modelMap.addAttribute(resourceForm);
         modelMap.addAttribute(FORWARD_URL, "/resource/list");
-        return "/resource/resourceInput";
+        return "/resource/create";
     }
 
-    //    @RequiresPermissions("sys:resource:input")
-    @RequestMapping(value = "/input/{resourceId}", method = RequestMethod.GET)
-    public String input(@PathVariable String resourceId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    @RequiresPermissions("sys:resource:update")
+    @RequestMapping(value = "/update/{resourceId}", method = RequestMethod.GET)
+    public String update(@PathVariable String resourceId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         ResourceForm resourceForm = new ResourceForm();
         resourceForm.setId(resourceId);
         try {
-            resourceViewValidator.validate(resourceForm);
+            detailResourceValidator.validate(resourceForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
@@ -118,14 +131,14 @@ public class ResourcesController extends BaseController {
         resourceForm.setIdentifier(resource.getIdentifier());
         modelMap.addAttribute(resourceForm);
         modelMap.addAttribute(FORWARD_URL, "/resource/list");
-        return "/resource/resourceInput";
+        return "/resource/update";
     }
 
-    //    @RequiresPermissions("sys:resource:create")
+    @RequiresPermissions("sys:resource:create")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(ResourceForm resourceForm, RedirectAttributes redirectAttributes) {
         try {
-            resourceValidator.validate(resourceForm);
+            createResourceValidator.validate(resourceForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             if (resourceForm != null && resourceForm.getId() != null) {
@@ -133,7 +146,7 @@ public class ResourcesController extends BaseController {
             }
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
             redirectAttributes.addFlashAttribute("resourceForm", resourceForm);
-            return "redirect:/resource/input";
+            return "redirect:/resource/create";
         }
         Resource resource = new Resource();
         resource.setName(resourceForm.getName());
@@ -164,17 +177,17 @@ public class ResourcesController extends BaseController {
         return "redirect:/resource/list";
     }
 
-    //   @RequiresPermissions("sys:resource:update")
+    @RequiresPermissions("sys:resource:update")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(ResourceForm resourceForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    public String update(ResourceForm resourceForm, RedirectAttributes redirectAttributes) {
         if (StringUtils.isNotEmpty(resourceForm.getId())) {
             try {
-                resourceUpdateValidator.validate(resourceForm);
+                updateResourceValidator.validate(resourceForm);
             } catch (ValidateFailedException e) {
                 logger.error(e.getMessage(), e);
                 redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
                 redirectAttributes.addFlashAttribute("resourceForm", resourceForm);
-                return "redirect:/resource/input";
+                return "redirect:/resource/update/" + resourceForm.getId();
             }
             Long id = Long.parseLong(resourceForm.getId());
             Resource resource = resourceService.get(id);
@@ -192,17 +205,22 @@ public class ResourcesController extends BaseController {
         return "redirect:/resource/list" ;
     }
 
-    //    @RequiresPermissions("sys:resource:toggleValidStatus")
-    @RequestMapping(value = "/toggleValidStatus/{resourceId}", method = RequestMethod.GET)
-    public String toggleValidStatus(@PathVariable String resourceId, RedirectAttributes redirectAttributes) {
+    @RequiresPermissions("sys:resource:validate")
+    @RequestMapping(value = "/validate/{resourceId}", method = RequestMethod.POST)
+    public String validate(@PathVariable String resourceId,  PrintWriter printWriter) {
+        JSONObject rs = new JSONObject();
         ResourceForm resourceForm = new ResourceForm();
         resourceForm.setId(resourceId);
         try {
-            resourceViewValidator.validate(resourceForm);
+            detailResourceValidator.validate(resourceForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
-            return "redirect:/resource/list";
+            rs.put("code", "1");
+            rs.put("message", e.getMessage());
+            printWriter.write(JSON.toJSONString(rs));
+            printWriter.flush();
+            printWriter.close();
+            return null;
         }
         Resource resource = resourceService.get(Long.parseLong(resourceForm.getId()));
         if (resource.getValid().getValue() == EnableDisableStatus.ENABLE.getValue()) {
@@ -210,18 +228,23 @@ public class ResourcesController extends BaseController {
         } else if (resource.getValid().getValue() == EnableDisableStatus.DISABLE.getValue()) {
             resource.setValid(EnableDisableStatus.ENABLE);
         }
+        rs.put("status",resource.getValid().getValue());
         resourceService.update(resource);
-        redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE_KEY, "成功切换资源的状态！");
-        return "redirect:/resource/list";
+        rs.put("message", "成功切换资源的状态！");
+        rs.put("code", "0");
+        printWriter.write(JSON.toJSONString(rs));
+        printWriter.flush();
+        printWriter.close();
+        return null;
     }
 
-    //    @RequiresPermissions("sys:resource:view")
-    @RequestMapping(value = "/view/{resourceId}", method = RequestMethod.GET)
-    public String view(@PathVariable String resourceId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    @RequiresPermissions("sys:resource:detail")
+    @RequestMapping(value = "/detail/{resourceId}", method = RequestMethod.GET)
+    public String detail(@PathVariable String resourceId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         ResourceForm resourceForm = new ResourceForm();
         resourceForm.setId(resourceId);
         try {
-            resourceViewValidator.validate(resourceForm);
+            detailResourceValidator.validate(resourceForm);
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
@@ -230,7 +253,7 @@ public class ResourcesController extends BaseController {
         Resource resource = resourceService.get(Long.parseLong(resourceForm.getId()));
         modelMap.addAttribute(resource);
         modelMap.addAttribute(FORWARD_URL, "/resource/list");
-        return "resource/resourceView";
+        return "resource/detail";
     }
 
     /**

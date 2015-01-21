@@ -87,14 +87,20 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <form:radiobuttons path="genderValue" items="${genderList}" itemValue="value" itemLabel="name"/>
+                                <form:radiobuttons path="genderValue" items="${genderList}" itemValue="value" itemLabel="name" delimiter="&nbsp;"/>
+                                <%--<c:forEach items="${genderList}" var="gender">--%>
+                                    <%--<input type="radio" name="genderValue" <c:if test="${gender.value == userForm.genderValue}">checked="checked"</c:if> value="${gender.value}">&nbsp;&nbsp;${gender.name}&nbsp;&nbsp;--%>
+                                <%--</c:forEach>--%>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否有效</label>
                             <div class="col-sm-10">
-                                <form:radiobuttons path="validValue" items="${enableDisableStatusList}" itemValue="value" itemLabel="name"/>
+                                <form:radiobuttons path="validValue" items="${enableDisableStatusList}" itemValue="value" itemLabel="name" delimiter="&nbsp;"/>
+                                <%--<c:forEach items="${enableDisableStatusList}" var="valid">--%>
+                                    <%--<input type="radio" name="validValue" <c:if test="${valid.value == userForm.validValue}">checked="checked"</c:if> value="${valid.value}">&nbsp;&nbsp;${valid.name}&nbsp;&nbsp;--%>
+                                <%--</c:forEach>--%>
                             </div>
                         </div>
                         <div class="lines line-dashed line-lg pull-in"></div>
