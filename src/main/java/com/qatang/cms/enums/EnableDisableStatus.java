@@ -10,8 +10,8 @@ import java.util.*;
  */
 public enum EnableDisableStatus {
     ALL(-1, "全部"),
-    ENABLE(0, "有效"),
-    DISABLE(1, "无效");
+    ENABLE(1, "有效"),
+    DISABLE(0, "无效");
     private static Logger logger = LoggerFactory.getLogger(EnableDisableStatus.class);
 
     private static final Map<Integer, EnableDisableStatus> _MAP = new HashMap<Integer, EnableDisableStatus>();

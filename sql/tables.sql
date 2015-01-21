@@ -59,8 +59,10 @@ CREATE TABLE `c_resource` (
   `memo` varchar(32) NULL DEFAULT '',
   `created_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `path` varchar(500) NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `idx_resource_name` (`name`),
+  KEY `idx_path` (`path`),
   KEY `idx_resource_created_time` (`created_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

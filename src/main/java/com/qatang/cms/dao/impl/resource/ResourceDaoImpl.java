@@ -55,7 +55,7 @@ public class ResourceDaoImpl {
         StringBuilder hqlCount = new StringBuilder("select count(u) ");
 
         if (resourceForm != null) {
-            if (StringUtils.isNotEmpty(resourceForm.getTreeLevel())) {
+            if (StringUtils.isNotEmpty(resourceForm.getTreeLevel()) && !"0".equals(resourceForm.getTreeLevel())) {
                 hql.append(" and u.treeLevel=:treeLevel");
             }
             if (StringUtils.isNotEmpty(resourceForm.getParentID())) {
@@ -71,12 +71,12 @@ public class ResourceDaoImpl {
                 }
             }
         }
-        hql.append(" order by u.parentID,u.priority");
+        hql.append(" order by u.path,u.priority");
         hqlCount.append(hql);
         Query q = em.createQuery(hql.toString());
         Query qc = em.createQuery(hqlCount.toString());
         if (resourceForm != null) {
-            if (StringUtils.isNotEmpty(resourceForm.getTreeLevel())) {
+            if (StringUtils.isNotEmpty(resourceForm.getTreeLevel()) && !"0".equals(resourceForm.getTreeLevel())) {
                 q.setParameter("treeLevel", Integer.parseInt(resourceForm.getTreeLevel()));
                 qc.setParameter("treeLevel", Integer.parseInt(resourceForm.getTreeLevel()));
             }
