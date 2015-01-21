@@ -180,9 +180,9 @@ public class RoleController extends BaseController {
         return "role/view";
     }
 
-    @RequiresPermissions("sys:role:validate")
-    @RequestMapping(value = "/validate/{roleId}", method = RequestMethod.POST)
-    public String validate(@PathVariable String roleId, PrintWriter printWriter) {
+    @RequiresPermissions("sys:role:switchStatus")
+    @RequestMapping(value = "/switchStatus/{roleId}", method = RequestMethod.POST)
+    public String switchStatus(@PathVariable String roleId, PrintWriter printWriter) {
         JSONObject rs = new JSONObject();
         RoleForm roleForm = new RoleForm();
         roleForm.setId(roleId);
