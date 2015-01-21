@@ -1,45 +1,55 @@
-<%@page contentType="text/html; charset=utf-8"%>
+<%@page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/views/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="zh-cn">
+<!DOCTYPE html>
+<html lang="zh-cn" class="">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>欢迎</title>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="keywords" content="" />
-    <meta http-equiv="description" content="" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
-	<link rel="stylesheet" href="${ctx}/css/main.css">
-	<script src="${ctx}/js/jquery-1.11.1.min.js"></script>
-	<script src="${ctx}/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <title>${SITE_NAME} | unauthorized</title>
+    <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="${ctx}/static/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/static/css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/static/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/static/css/font.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/static/css/app.css" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="${ctx}/static/js/ie/html5shiv.js"></script>
+    <script src="${ctx}/static/js/ie/respond.min.js"></script>
+    <script src="${ctx}/static/js/ie/excanvas.js"></script>
+    <![endif]-->
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">后台管理系统</a>
-		</div>
-	</div>
-</div>
+<section id="content">
+    <div class="row m-n">
+        <div class="col-sm-4 col-sm-offset-4">
+            <div class="text-center m-b-lg">
+                <h1 class="h text-white animated fadeInDownBig">未授权</h1>
+            </div>
+            <div class="list-group m-b-sm bg-white m-b-lg">
+                <a href="${ctx}/" class="list-group-item">
+                    <i class="fa fa-chevron-right icon-muted"></i>
+                    <i class="fa fa-fw fa-home icon-muted"></i> 返回主页
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+<footer id="footer">
+    <div class="text-center padder clearfix">
+        <p>
+            <small>CMS &copy; 2007-2014 qatang.com</small>
+        </p>
+    </div>
+</footer>
+<!-- / footer -->
+<script src="${ctx}/static/js/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="${ctx}/static/js/bootstrap.js"></script>
+<!-- App -->
+<script src="${ctx}/static/js/app.js"></script>
+<script src="${ctx}/static/js/app.plugin.js"></script>
+<script src="${ctx}/static/js/slimscroll/jquery.slimscroll.min.js"></script>
 
-<div class="container">
-	<div class="login-box text-center" >
-		<div class="login-single-panel-header">
-            <c:choose>
-                <c:when test="${successMessage == null}">
-                    <h3>未授权</h3>
-                </c:when>
-                <c:otherwise>
-                    <h3>${successMessage}</h3>
-                </c:otherwise>
-            </c:choose>
-            <a class="btn btn-primary btn-sm" href="${ctx}${forwardUrl}">返回列表</a>
-		</div>
-	</div>
-</div>
-<div class="text-center bottom">
-	Copyright &copy; 2007-2014 qatang.com All rights reserved.
-</div>
 </body>
 </html>

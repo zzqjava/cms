@@ -42,9 +42,9 @@
         function closeErrorTip(){
             $('#tipError').click();
         }
-        function validate(id){
+        function switchStatus(id){
             $.ajax({
-                url:"${ctx}/resource/validate/" + id,
+                url:"${ctx}/resource/switchStatus/" + id,
                 type:"POST",
                 dataType:"json",
                 success:function(data){
@@ -54,10 +54,10 @@
                     status_valid_span.empty();
                     if (data.code=="0") {
                         if (data.status==1) {
-                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">禁用</a>';
+                            var str = '<a href="javascript://" onclick="switchStatus(\'' + id + '\');">禁用</a>';
                             var str1 = '<span id="status_valid_' + id + '">有效</span>';
                         } else {
-                            var str = '<a href="javascript://" onclick="validate(\'' + id + '\');">开启</a>';
+                            var str = '<a href="javascript://" onclick="switchStatus(\'' + id + '\');">开启</a>';
                             var str1 = '<span id="status_valid_' + id + '">无效</span>';
                         }
                         status_span.html(str);
@@ -107,7 +107,7 @@
                         <div class="col-sm-2 m-b-xs">
                                     <div class="input-group">
                                         <span class="input-group-addon input-sm">是否有效</span>
-                                        <form:select path="queryEnableDisableStatus" cssStyle="width:76px;" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
+                                        <form:select path="queryEnableDisableStatus" cssStyle="width:100px;" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" name="queryValid" id="queryValid"/>
                                     </div>
                         </div>
                         <div class="col-sm-1 m-b-xs">
@@ -132,115 +132,46 @@
                         <tbody>
                         <c:if test="${resourceList != null && resourceList.size() > 0}">
                             <c:forEach var="resource" items="${resourceList}">
-                                <c:if test="${resource.treeLevel == 1}">
-                                    <tr>
-                                        <td><a href="${ctx}/resource/detail/${resource.id}">${resource.name}</a></td>
-                                        <td>${resource.url}</td>
-                                        <td>${resource.treeLevel}</td>
-                                        <td>${resource.identifier}</td>
-                                        <td>${resource.type.name}</td>
-                                        <td>${resource.priority}</td>
-                                        <td>
-                                            <span id="status_valid_${resource.id}">
-                                                 <c:choose>
-                                                     <c:when test="${resource.valid.value == 1}">
-                                                         有效
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                         无效
-                                                     </c:otherwise>
-                                                 </c:choose>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="${ctx}/resource/update/${resource.id}">修改</a>
-                                            <a href="javascript://" id="status_${resource.id}" onclick="validate('${resource.id}')">
-                                                <c:choose>
-                                                    <c:when test="${resource.valid.value == 1}">
-                                                        禁用
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        启用
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </a>
+                                <tr>
+                                    <td>
+                                        <c:if test="${resource.treeLevel == 2}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </c:if>
+                                        <c:if test="${resource.treeLevel == 3}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </c:if>
+                                        <a href="${ctx}/resource/detail/${resource.id}">${resource.name}</a>
+                                    </td>
+                                    <td>${resource.url}</td>
+                                    <td>${resource.treeLevel}</td>
+                                    <td>${resource.identifier}</td>
+                                    <td>${resource.type.name}</td>
+                                    <td>${resource.priority}</td>
+                                    <td>
+                                        <span id="status_valid_${resource.id}">
+                                            ${resource.valid.name}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="${ctx}/resource/update/${resource.id}">修改</a>
+                                        <a href="javascript://" id="status_${resource.id}" onclick="switchStatus('${resource.id}')">
+                                            <c:choose>
+                                                <c:when test="${resource.valid.value == 1}">
+                                                    禁用
+                                                </c:when>
+                                                <c:otherwise>
+                                                    启用
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </a>
+                                        <c:if test="${resource.treeLevel == 1}">
                                             <a href="${ctx}/resource/create?treeLevel=2&parentID=${resource.id}">添加子资源</a>
-                                        </td>
-                                    </tr>
-                                </c:if>
-                                <c:forEach var="second" items="${resource.children}">
-                                    <c:if test="${second.treeLevel == 2}">
-                                        <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/detail/${second.id}">${second.name}</a></td>
-                                            <td>${second.url}</td>
-                                            <td>${second.treeLevel}</td>
-                                            <td>${second.identifier}</td>
-                                            <td>${second.type.name}</td>
-                                            <td>${second.priority}</td>
-                                            <td>
-                                                <span id="status_valid_${second.id}">
-                                                 <c:choose>
-                                                     <c:when test="${second.valid.value == 1}">
-                                                         有效
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                         无效
-                                                     </c:otherwise>
-                                                 </c:choose>
-                                                </span>
-                                            </td>
-
-                                            <td><a href="${ctx}/resource/update/${second.id}">修改</a>
-                                                <a href="javascript://" id="status_${second.id}" onclick="validate('${second.id}')">
-                                                    <c:choose>
-                                                        <c:when test="${second.valid.value == 1}">
-                                                            禁用
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            启用
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </a>
-                                                <a href="${ctx}/resource/create?treeLevel=3&parentID=${second.id}" >添加子资源</a>
-                                            </td>
-                                        </tr>
-                                    </c:if>
-                                    <c:forEach var="third" items="${second.children}">
-                                        <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/resource/detail/${third.id}">${third.name}</a></td>
-                                            <td>${third.url}</td>
-                                            <td>${third.treeLevel}</td>
-                                            <td>${third.identifier}</td>
-                                            <td>${third.type.name}</td>
-                                            <td>${third.priority}</td>
-                                            <td>
-                                                 <span id="status_valid_${third.id}">
-                                                 <c:choose>
-                                                     <c:when test="${third.valid.value == 1}">
-                                                         有效
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                         无效
-                                                     </c:otherwise>
-                                                 </c:choose>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a href="${ctx}/resource/update/${third.id}">修改</a>
-                                                <a href="javascript://" id="status_${third.id}" onclick="validate('${third.id}')">
-                                                    <c:choose>
-                                                        <c:when test="${third.valid.value == 1}">
-                                                            禁用
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            启用
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:forEach>
+                                        </c:if>
+                                        <c:if test="${resource.treeLevel == 2}">
+                                            <a href="${ctx}/resource/create?treeLevel=3&parentID=${resource.id}">添加子资源</a>
+                                        </c:if>
+                                    </td>
+                                </tr>
                             </c:forEach>
                         </c:if>
                         </tbody>

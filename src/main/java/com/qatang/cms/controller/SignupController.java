@@ -44,6 +44,7 @@ public class SignupController extends BaseController {
         } catch (ValidateFailedException e) {
             logger.error(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(ERROR_MESSAGE_KEY, e.getMessage());
+            redirectAttributes.addFlashAttribute(userForm);
             return "redirect:/signup";
         }
         User user = new User();

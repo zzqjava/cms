@@ -1,6 +1,7 @@
 package com.qatang.cms.service.resource;
 
 import com.qatang.cms.entity.resource.Resource;
+import com.qatang.cms.enums.ResourcesType;
 import com.qatang.cms.form.resource.ResourceForm;
 import org.springframework.data.domain.Page;
 
@@ -54,4 +55,12 @@ public interface ResourceService {
      * 分页信息
      * */
     public Page<Resource> findAllPage(ResourceForm menuForm);
+
+	/**
+	 * 根据userId查询资源
+	 * @param userId
+	 * @param resourcesType
+	 * @return
+	 */
+	public List<Resource> query(Long userId, ResourcesType resourcesType);
 }

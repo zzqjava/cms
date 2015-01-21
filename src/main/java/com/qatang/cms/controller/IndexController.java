@@ -14,6 +14,6 @@ import java.util.Set;
 public class IndexController {
     @RequestMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/dashboard";
     }
 }
