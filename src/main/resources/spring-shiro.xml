@@ -42,7 +42,7 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/signin"/>
-        <property name="unauthorizedUrl" value="/WEB-INF/views/unauthorized.jsp"/>
+        <property name="unauthorizedUrl" value="/error/unauthorized"/>
         <property name="filterChainDefinitions">
             <value>
                 /js/** = anon
