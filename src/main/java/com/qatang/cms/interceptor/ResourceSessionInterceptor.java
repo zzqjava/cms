@@ -25,7 +25,7 @@ public class ResourceSessionInterceptor extends HandlerInterceptorAdapter {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CacheManager cacheManager;
+    private CacheManager cacheManager;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
