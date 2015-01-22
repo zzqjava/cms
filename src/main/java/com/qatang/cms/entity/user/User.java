@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Date;
 @Table(name = "c_user")
 @DynamicInsert
 @DynamicUpdate
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -27,7 +28,6 @@ public class User {
     private String salt;
     private String name;
     private String email;
-    @Enumerated
     @Convert(converter = GenderConverter.class)
     private Gender gender;
     private String mobile;
@@ -43,7 +43,6 @@ public class User {
     private Date lastLoginTime;
     @Column(name = "qq")
     private String QQ;
-    @Enumerated
     @Convert(converter = EnableDisableStatusConverter.class)
     private EnableDisableStatus valid;
 

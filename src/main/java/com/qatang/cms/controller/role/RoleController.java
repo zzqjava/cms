@@ -73,13 +73,13 @@ public class RoleController extends BaseController {
 
     @RequiresPermissions("sys:role:create")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String input(@ModelAttribute RoleForm roleForm, ModelMap modelMap) {
+    public String create(@ModelAttribute RoleForm roleForm, ModelMap modelMap) {
         //是否默认角色默认为“否”
         roleForm.setIsDefault(String.valueOf(YesNoStatus.NO.getValue()));
         roleForm.setValid(String.valueOf(EnableDisableStatus.ENABLE.getValue()));
         modelMap.addAttribute(roleForm);
         modelMap.addAttribute(FORWARD_URL, "/role/list");
-        return "/role/input";
+        return "/role/create";
     }
 
     @RequiresPermissions("sys:role:create")
@@ -111,7 +111,7 @@ public class RoleController extends BaseController {
 
     @RequiresPermissions("sys:role:update")
     @RequestMapping(value = "/update/{roleId}", method = RequestMethod.GET)
-    public String input(@PathVariable String roleId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable String roleId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         RoleForm roleForm = new RoleForm();
         roleForm.setId(roleId);
         try {
@@ -133,7 +133,7 @@ public class RoleController extends BaseController {
         roleForm.setValid(String.valueOf(role.getValid().getValue()));
         modelMap.addAttribute(roleForm);
         modelMap.addAttribute(FORWARD_URL, "/role/list");
-        return "/role/input";
+        return "/role/update";
     }
 
     @RequiresPermissions("sys:role:update")
@@ -180,9 +180,9 @@ public class RoleController extends BaseController {
         return "role/view";
     }
 
-    @RequiresPermissions("sys:role:validate")
-    @RequestMapping(value = "/validate/{roleId}", method = RequestMethod.POST)
-    public String validate(@PathVariable String roleId, PrintWriter printWriter) {
+    @RequiresPermissions("sys:role:switchStatus")
+    @RequestMapping(value = "/switchStatus/{roleId}", method = RequestMethod.POST)
+    public String switchStatus(@PathVariable String roleId, PrintWriter printWriter) {
         JSONObject rs = new JSONObject();
         RoleForm roleForm = new RoleForm();
         roleForm.setId(roleId);

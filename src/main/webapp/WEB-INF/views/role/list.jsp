@@ -38,7 +38,7 @@
 
         function validate(id){
             $.ajax({
-                url:"${ctx}/role/validate/" + id,
+                url:"${ctx}/role/switchStatus/" + id,
                 type:"POST",
                 dataType:"json",
                 success:function(data){
@@ -96,17 +96,17 @@
                     <div class="row wrapper">
                         <div class="col-sm-4 m-b-xs">
                             <div class="input-group">
-                                <span class="input-group-addon input-sm">角色名</span>
-                                <input type="text" id="name" name="name" value="${roleForm.name}" class="form-control">
+                                <span class="input-group-addon input-sm">角色名称</span>
+                                <input type="text" style="width:80%;" id="name" name="name" value="${roleForm.name}" class="form-control">
                             </div>
                         </div>
-                        <div class="col-sm-4 m-b-xs">
+                        <div class="col-sm-2 m-b-xs">
                             <div class="input-group">
                                 <span class="input-group-addon  input-sm">是否有效</span>
                                 <form:select path="queryEnableDisableStatus" cssStyle="width:76px" items="${queryEnableDisableStatus}" itemValue="value" class="form-control" itemLabel="name" id="valid" name="valid"/>
                             </div>
                         </div>
-                        <div class="col-sm-4 m-b-xs">
+                        <div class="col-sm-6 m-b-xs">
                             <input class="btn btn-sm btn-default" id="query" name="query" type="submit" value="查询" />
                         </div>
                     </div>

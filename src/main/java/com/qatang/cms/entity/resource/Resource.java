@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,10 @@ import java.util.List;
 @Table(name = "c_resource")
 @DynamicInsert
 @DynamicUpdate
-public class Resource {
+public class Resource implements Serializable {
+
+    public final static String SPRIT = "/";
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -29,7 +33,7 @@ public class Resource {
 	private String url;
 	@Column(name = "priority")
 	private Integer priority;
-	@Enumerated
+
     @Convert(converter = EnableDisableStatusConverter.class)
 	private EnableDisableStatus valid;
 	private String memo;
@@ -42,16 +46,19 @@ public class Resource {
 
     @Column(name = "parent_id")
     private Long parentID;
-    @Enumerated
+
     @Column(name = "type")
+    @Convert(converter = ResourcesTypeConverter.class)
     private ResourcesType type;
+
     @Column(name = "tree_level")
     private Integer treeLevel;
     private String identifier;
     @Column(name = "has_children")
-    @Enumerated
+
 	@Convert(converter = YesNoStatusConverter.class)
     private YesNoStatus hasChildren;
+    private String path;    //用来分组排序
 
     @Transient
     private List<Resource> children;
@@ -166,5 +173,13 @@ public class Resource {
 
     public void setChildren(List<Resource> children) {
         this.children = children;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

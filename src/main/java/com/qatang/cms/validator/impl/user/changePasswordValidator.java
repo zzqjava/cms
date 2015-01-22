@@ -6,7 +6,6 @@ import com.qatang.cms.form.user.UserForm;
 import com.qatang.cms.service.user.UserService;
 import com.qatang.cms.shiro.authentication.PasswordHelper;
 import com.qatang.cms.validator.AbstractValidator;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  * Created by JSH on 2014/7/6.
  */
 @Component
-public class UpdatePasswordValidator extends AbstractValidator<UserForm> {
+public class ChangePasswordValidator extends AbstractValidator<UserForm> {
     @Autowired
     private UserService userService;
 
