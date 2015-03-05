@@ -51,14 +51,7 @@
                     </ul>
                     <div class="m-b-md">
                         <h3 class="m-b-none">
-                            <c:choose>
-                                <c:when test="${roleForm.id == null}">
-                                    角色添加
-                                </c:when>
-                                <c:otherwise>
-                                    角色修改
-                                </c:otherwise>
-                            </c:choose>
+                            角色添加
                         </h3>
                     </div>
                     <c:if test="${successMessage != null}" >

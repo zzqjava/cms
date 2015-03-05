@@ -2,6 +2,8 @@ package com.qatang.cms.entity.role;
 
 import com.qatang.cms.enums.EnableDisableStatus;
 import com.qatang.cms.enums.YesNoStatus;
+import com.qatang.cms.enums.converter.EnableDisableStatusConverter;
+import com.qatang.cms.enums.converter.YesNoStatusConverter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -25,10 +27,10 @@ public class Role {
 	private String name;
 	@Column(name = "description")
 	private String description;
-	@Enumerated
 	@Column(name = "is_default")
+	@Convert(converter = YesNoStatusConverter.class)
 	private YesNoStatus isDefault;
-	@Enumerated
+	@Convert(converter = EnableDisableStatusConverter.class)
 	private EnableDisableStatus valid;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_time", updatable = false)
